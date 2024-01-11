@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        connection:
+          dialect : org.hibernate.dialect.PostgreSQL95Dialect
+  datasource:
+    password: 28072004
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/course_work
