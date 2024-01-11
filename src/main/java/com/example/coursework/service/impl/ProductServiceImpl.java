@@ -13,16 +13,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
     ProductRepository repository;
     ProductMapper mapper;
     @Override
-    @Transactional
     public ProductDto save(ProductDto dto, MultipartFile file)  {
         ProductEntity entity = mapper.toEntity(dto);
         try {
@@ -33,5 +34,10 @@ public class ProductServiceImpl implements ProductService {
         ProductEntity save = repository.save(entity);
 
         return mapper.toDto(save);
+    }
+
+    @Override
+    public List<ProductDto> findAll() {
+        return mapper.toDtos(repository.findAll());
     }
 }

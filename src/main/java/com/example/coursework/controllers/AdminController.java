@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -21,10 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminController {
     ProductServiceImpl productService;
 
-
     @GetMapping
-    public String getAdminPage(){
-        return "admin";
+    public ModelAndView getAdminPage(){
+        return new ModelAndView("admin").addObject("products",productService.findAll());
     }
     @PostMapping("/save")
     public String save(ProductDto dto,

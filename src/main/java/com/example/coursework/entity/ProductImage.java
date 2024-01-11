@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Base64;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -23,4 +25,8 @@ public class ProductImage {
 
     @ManyToOne
     private ProductEntity product;
+
+    public String getImageFromBytes(){
+        return Base64.getEncoder().encodeToString(image);
+    }
 }
