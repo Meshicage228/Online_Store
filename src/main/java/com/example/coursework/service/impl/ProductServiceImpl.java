@@ -54,11 +54,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductEntity> findAll(Integer page, Integer size, ProductSearchDto search) {
-        if (nonNull(search)) {
-            Specification<ProductEntity> specification = createSpecification(search);
-            return repository.findAll(specification, PageRequest.of(page - 1, size));
-        }
-        return repository.findAll(PageRequest.of(page - 1, size));
+        Specification<ProductEntity> specification = createSpecification(search);
+        return repository.findAll(specification, PageRequest.of(page - 1, size));
     }
 
     @Override
@@ -71,7 +68,6 @@ public class ProductServiceImpl implements ProductService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
             mapper.update(product, entity);
         });
     }
@@ -87,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
                 predicates.add(builder.like(root.get("title"), "%" + title + "%"));
             }
             if (nonNull(price)) {
-                predicates.add(builder.equal(root.get("price"), price));
+                predicates.add(builder.le(root.get("price"), price));
             }
 
             Predicate[] array = predicates.toArray(Predicate[]::new);
