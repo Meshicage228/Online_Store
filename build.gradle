@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.0'
 
     // Web
 //    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
@@ -56,11 +57,14 @@ dependencies {
     // Validation
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation group: 'org.hibernate', name: 'hibernate-validator', version: '8.0.1.Final'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.0'
 
     //Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // For db
+    implementation 'org.flywaydb:flyway-core'
+
 }
 
 dependencyManagement {

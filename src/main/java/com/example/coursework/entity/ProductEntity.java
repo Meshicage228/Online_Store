@@ -23,7 +23,7 @@ public class ProductEntity {
     private Float price;
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
     private List<ProductImage> images;
 
     public void addImage(byte[] image){
@@ -36,7 +36,5 @@ public class ProductEntity {
                 .build();
 
         images.add(newImage);
-
-        System.out.println("after adding");
     }
 }

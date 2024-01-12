@@ -1,10 +1,7 @@
 package com.example.coursework.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Base64;
 
@@ -21,9 +18,10 @@ public class ProductImage {
     private Integer id;
 
     @Lob
-    byte[] image;
+    private byte[] image;
 
     @ManyToOne
+    @ToString.Exclude
     private ProductEntity product;
 
     public String getImageFromBytes(){
