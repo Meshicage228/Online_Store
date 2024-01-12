@@ -6,12 +6,14 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{css/adminPage.css}" type="text/css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -23,13 +25,16 @@
                     <a class="nav-link" href="#">Link</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
                         Dropdown
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Action</a></li>
                         <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
                 </li>
@@ -44,15 +49,31 @@
         </div>
     </div>
 </nav>
-<div class="list-group">
-    <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
-        The current button
-    </button>
-    <button type="button" class="list-group-item list-group-item-action">A second button item</button>
-    <button type="button" class="list-group-item list-group-item-action">A third button item</button>
-    <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>
-    <button type="button" class="list-group-item list-group-item-action" disabled>A disabled button item</button>
+
+<div class="navigator">
+    <div class="list-group" style="width: 210px; height: 100%; border-radius: 0px">
+        <button type="button" class="list-group-item list-group-item-action"><a
+                th:href="@{/admin/products/{page}/{size}(page = 1, size = 10)}">Все товары</a></button>
+
+        <button type="button" class="list-group-item list-group-item-action" th:href="@{/admin/}"><a
+                href="#">Все пользователи</a></button>
+
+        <button type="button" class="list-group-item list-group-item-action" th:href="@{/admin/}"><a
+                href="#">Заказы</a></button>
+
+        <button type="button" class="list-group-item list-group-item-action" th:href="@{/admin/}"><a
+                href="#">Создать товар</a></button>
+    </div>
 </div>
+
+<form th:action="@{/admin/createProduct/save}" th:method="post" enctype="multipart/form-data">
+    <input name="id" placeholder="id" type="text">
+    <input name="title" placeholder="title" type="text">
+    <input name="price" placeholder="price">
+    <input name="description" placeholder="decr" type="text">
+    <input type="file" placeholder="choose image" name="file">
+    <button type="submit">SAVE</button>
+</form>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>

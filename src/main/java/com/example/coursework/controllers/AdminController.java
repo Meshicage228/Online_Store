@@ -3,7 +3,6 @@ package com.example.coursework.controllers;
 import com.example.coursework.domain.ProductSearchDto;
 import com.example.coursework.dto.ProductDto;
 import com.example.coursework.entity.ProductEntity;
-import com.example.coursework.mappers.ProductMapper;
 import com.example.coursework.service.impl.ProductServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -28,15 +25,19 @@ import java.util.stream.Stream;
 public class AdminController {
     ProductServiceImpl productService;
 
-    @GetMapping
+    @GetMapping("/admin")
     public String adminPage(){
-        return "storePage";
+        return "redirect:/admin/products/1/5";
+    }
+    @GetMapping("/createProduct")
+    public String createProductPage(){
+        return "createProductAdmin";
     }
     @PutMapping("/update")
     public String update(ProductDto dto,
                          @RequestParam("file") MultipartFile file){
         productService.update(dto, file);
-        return "admin";
+        return "createProductAdmin";
     }
    /* @PatchMapping("/imageUpdate")
     public String updateImage(@RequestParam("id") Integer id,
@@ -49,7 +50,7 @@ public class AdminController {
                                 ProductSearchDto search){
         Integer pageNumber = page.orElse(1);
         Integer sizePage = size.orElse(5);
-        ModelAndView modelAndView = new ModelAndView("result");
+        ModelAndView modelAndView = new ModelAndView("adminPage");
         Page<ProductEntity> pageContent = productService.findAll(pageNumber, sizePage, search);
         modelAndView.addObject("totalPage", pageContent);
         int totalPages = pageContent.getTotalPages();
@@ -62,10 +63,10 @@ public class AdminController {
 
         return modelAndView;
     }
-    @PostMapping("/save")
+    @PostMapping("/createProduct/save")
     public String save(ProductDto dto,
                        @RequestParam(value = "file") MultipartFile file){
         productService.save(dto, file);
-        return "redirect:/admin";
+        return "redirect:/admin/createProduct";
     }
 }

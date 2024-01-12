@@ -10,6 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainPageController {
     @GetMapping
     public ModelAndView getMainPage(){
-        return new ModelAndView("storePage");
+        return new ModelAndView("adminPage");
     }
 }
