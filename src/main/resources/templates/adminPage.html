@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<form class="form-inline my-2 my-lg-0" th:action="@{/admin/products/{page}/{size}(page = 1, size = 5)}">
+<form class="form-inline my-2 my-lg-0" th:action="@{/admin/products/{page}/{size}(page = 1, size = 5)}" th:method="get">
     <input class="form-control mr-sm-2" type="text" aria-label="Search" placeholder="title" name="title">
     <input type="range" min="0" max="1000" oninput="this.nextElementSibling.value = this.value" name="price">
     <output th:value="1000">1000</output>
@@ -104,6 +104,7 @@
                 <p class="card-text" th:text="${prod.description}"></p>
                 <p class="card-text" th:text="${prod.price}"></p>
             </div>
+            <button type="button"><a th:href="@{/admin/products/{id}(id = ${prod.id})}">Изменить</a></button>
         </div>
     </div>
 </div>
@@ -117,7 +118,8 @@
         <li class="page-item" aria-current="page" th:each="iterPage : ${countPages}">
             <a th:href="@{/admin/products/{page}/{size}(page = ${iterPage}, size = ${totalPage.size})}"
                th:text="${iterPage}"
-               th:class="'page-link ' + ${totalPage.number == iterPage - 1 ? 'active' : ''}">
+               th:class="'page-link ' + ${totalPage.number == iterPage - 1 ? 'active' : ''}"
+               th:method="get">
             </a>
         </li>
         <li class="page-item">

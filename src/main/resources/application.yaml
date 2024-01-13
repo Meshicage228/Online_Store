@@ -2,6 +2,9 @@ server:
   port: 8080
 spring:
   mvc:
+    hidden-method:
+      filter:
+        enabled: true
     view:
       prefix: /templates/
       suffix: .html
