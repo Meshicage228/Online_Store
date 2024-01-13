@@ -4,6 +4,7 @@ import com.example.coursework.domain.ProductSearchDto;
 import com.example.coursework.dto.ProductDto;
 import com.example.coursework.entity.ProductEntity;
 import com.example.coursework.mappers.ProductMapper;
+import com.example.coursework.repository.ImageRepository;
 import com.example.coursework.repository.ProductRepository;
 import com.example.coursework.service.ProductService;
 import jakarta.persistence.criteria.Predicate;
@@ -11,24 +12,17 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.util.Predicates;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.thymeleaf.util.Validate.notNull;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -36,8 +30,9 @@ import static org.thymeleaf.util.Validate.notNull;
 @Service
 @Transactional
 public class ProductServiceImpl implements ProductService {
-    ProductRepository repository;
+    ProductRepository productRepository;
     ProductMapper mapper;
+    ImageRepository imageRepository;
 
     @Override
     public ProductDto save(ProductDto dto, MultipartFile file) {
@@ -47,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ProductEntity save = repository.save(entity);
+        ProductEntity save = productRepository.save(entity);
 
         return mapper.toDto(save);
     }
@@ -55,21 +50,43 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductEntity> findAll(Integer page, Integer size, ProductSearchDto search) {
         Specification<ProductEntity> specification = createSpecification(search);
-        return repository.findAll(specification, PageRequest.of(page - 1, size));
+        return productRepository.findAll(specification, PageRequest.of(page - 1, size));
     }
 
     @Override
-    public void update(ProductDto dto, MultipartFile file) {
-        Optional<ProductEntity> byId = repository.findById(dto.getId());
-        byId.ifPresent(product -> {
-            ProductEntity entity = mapper.toEntity(dto);
+    public void update(Integer idImage, MultipartFile file) {
+        imageRepository.findById(idImage).ifPresentOrElse(image -> {
             try {
-                entity.addImage(file.getBytes());
+                image.setImage(file.getBytes());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            mapper.update(product, entity);
-        });
+        }, () -> new RuntimeException());
+    }
+
+    @Override
+    public ProductDto update(Integer id, ProductDto dto) {
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        ProductEntity updated = mapper.update(productEntity, mapper.toEntity(dto));
+        return mapper.toDto(updated);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        productRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteImage(Integer id) {
+        imageRepository.deleteByHand(id);
+    }
+
+    @Override
+    public ProductDto getById(Integer id) {
+        ProductEntity productEntity = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException());
+
+        return mapper.toDto(productEntity);
     }
 
     private Specification<ProductEntity> createSpecification(ProductSearchDto dto) {

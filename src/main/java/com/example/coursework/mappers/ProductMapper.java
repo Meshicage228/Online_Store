@@ -35,7 +35,9 @@ public interface ProductMapper {
     List<ProductEntity> toEntities (List<ProductDto> dtos);
 
     @Mapping(target = "id", ignore = true)
-    void update(@MappingTarget ProductEntity target, ProductEntity source);
+    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "creationTime", ignore = true)
+    ProductEntity update(@MappingTarget ProductEntity target, ProductEntity source);
 
 /*    default String EncodeImageToString(ProductEntity entity){
         return Base64.getEncoder().encodeToString(entity.getImages());
