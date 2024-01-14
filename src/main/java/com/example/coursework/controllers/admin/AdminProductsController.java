@@ -1,5 +1,6 @@
 package com.example.coursework.controllers.admin;
 
+import com.example.coursework.clients.AdminClient;
 import com.example.coursework.domain.ProductSearchDto;
 import com.example.coursework.dto.ProductDto;
 import com.example.coursework.entity.ProductEntity;
@@ -22,7 +23,7 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("*/products")
 public class AdminProductsController {
-    ProductServiceImpl service;
+    AdminClient adminClient;
 
     @GetMapping("/{page}/{size}")
     public ModelAndView getPage(@PathVariable(value = "page") Integer page,
@@ -30,7 +31,7 @@ public class AdminProductsController {
                                 ProductSearchDto search) {
 
         ModelAndView modelAndView = new ModelAndView("adminPage");
-        Page<ProductEntity> pageContent = service.findAll(page, size, search);
+        Page<ProductEntity> pageContent = adminClient.findAll(page, size, search);
         modelAndView.addObject("totalPage", pageContent);
         int totalPages = pageContent.getTotalPages();
         if (totalPages > 0) {
@@ -44,36 +45,42 @@ public class AdminProductsController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView changePage(@PathVariable("id") Integer id) {
-        ProductDto dto = service.getById(id);
+    public ModelAndView getById(@PathVariable("id") Integer id) {
+        ProductDto dto = adminClient.findProductById(id);
         return new ModelAndView("productChangeAdmin").addObject("toChange", dto);
     }
 
     @PutMapping("/{id}/change")
     public ModelAndView update(@PathVariable("id") Integer id,
                                ProductDto dto) {
-        ProductDto updated = service.update(id, dto);
+        ProductDto updated = adminClient.update(id, dto);
         return new ModelAndView("redirect:/admin/products/" + id).addObject("toChange", updated);
     }
     @DeleteMapping("/{id}/delete")
     public String deleteProduct(@PathVariable("id")Integer id){
-        service.delete(id);
+        adminClient.deleteProduct(id);
         return "redirect:/admin";
     }
-    @DeleteMapping("{product_id}/image/{image_id}/delete")
+    @DeleteMapping("/{product_id}/image/{image_id}/delete")
     public String deleteImage(@PathVariable("product_id")Integer productId,
                               @PathVariable("image_id")Integer imageId){
-        service.deleteImage(imageId);
+        adminClient.deleteImage(imageId);
         return "redirect:/admin/products/" + productId;
     }
 
-    @PatchMapping("{product_id}/image/{image_id}/update")
+    @PatchMapping("/{product_id}/image/{image_id}/update")
     public ModelAndView updatePicture(@PathVariable("product_id") Integer idProduct,
                                       @PathVariable("image_id") Integer idImage,
                                       @RequestParam("newImage") MultipartFile file){
         if(file.getSize() != 0) {
-            service.update(idImage, file);
+            adminClient.updatePicture(idImage, file);
         }
         return new ModelAndView("redirect:/admin/products/" + idProduct);
+    }
+    @PostMapping("/save")
+    public String save(ProductDto dto,
+                       @RequestParam(value = "file") MultipartFile file){
+        adminClient.save(dto, file);
+        return "redirect:/admin/createProduct";
     }
 }

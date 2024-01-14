@@ -20,3 +20,9 @@ spring:
     password: 28072004
     username: postgres
     url: jdbc:postgresql://localhost:5432/course_work
+app:
+  clients:
+    admin:
+      name: admin-client
+      url: 127.0.0.1:8081
+      product-path: /products
