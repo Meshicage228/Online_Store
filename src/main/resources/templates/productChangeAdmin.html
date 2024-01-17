@@ -71,7 +71,7 @@
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner">
                     <div th:each="photo, number : ${toChange.getImages()}">
-                        <img th:src="@{'data:image/png;base64,'+${photo.getImageFromBytes()}}" alt="product"
+                        <img th:src="@{'data:image/png;base64,'+${photo.getConvertedImage()}}" alt="product"
                              style="height: 125px; width: 59px"
                              class="d-block w-100">
                         <form th:action="@{/admin/products/{id_product}/image/{id_image}/update(id_product = ${toChange.id}, id_image = ${photo.id})}"

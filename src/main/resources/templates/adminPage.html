@@ -80,7 +80,7 @@
                 <div class="carousel-inner">
                     <div th:each="photo, number : ${prod.getImages()}">
                         <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">
-                            <img th:src="@{'data:image/png;base64,'+${photo.getImageFromBytes()}}" alt="product"
+                            <img th:src="@{'data:image/png;base64,'+${photo.getConvertedImage()}}" alt="product"
                                  style="height: 125px; width: 59px"
                                  class="d-block w-100">
                         </div>
