@@ -1,6 +1,10 @@
 server:
   port: 8080
 spring:
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
   mvc:
     hidden-method:
       filter:
@@ -23,6 +27,13 @@ spring:
 app:
   clients:
     admin:
-      name: admin-client
+      name: forAdmin-feign
       url: 127.0.0.1:8081
       product-path: /products
+feign:
+  okhttp:
+    enabled: true
+  client:
+    config:
+      user-client:
+        loggerLevel : full

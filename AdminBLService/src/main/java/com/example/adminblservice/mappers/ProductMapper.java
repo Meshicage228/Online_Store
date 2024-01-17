@@ -12,7 +12,8 @@ import java.util.List;
 
 
 @Mapper(
-        componentModel = "spring"
+        componentModel = "spring",
+        uses = ProductImageMapper.class
 )
 public interface ProductMapper {
     @Mappings({

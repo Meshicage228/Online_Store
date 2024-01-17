@@ -1,10 +1,7 @@
 package com.example.coursework.controllers.admin;
 
 import com.example.coursework.clients.AdminClient;
-import com.example.coursework.domain.ProductSearchDto;
 import com.example.coursework.dto.ProductDto;
-import com.example.coursework.entity.ProductEntity;
-import com.example.coursework.service.impl.ProductServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,10 +25,12 @@ public class AdminProductsController {
     @GetMapping("/{page}/{size}")
     public ModelAndView getPage(@PathVariable(value = "page") Integer page,
                                 @PathVariable(value = "size") Integer size,
-                                ProductSearchDto search) {
+                                @RequestParam(value = "title", required = false) String title,
+                                @RequestParam(value = "price", required = false)Float price) {
 
         ModelAndView modelAndView = new ModelAndView("adminPage");
-        Page<ProductEntity> pageContent = adminClient.findAll(page, size, search);
+        Page<ProductDto> pageContent = adminClient.getPage(page, size, title, price);
+
         modelAndView.addObject("totalPage", pageContent);
         int totalPages = pageContent.getTotalPages();
         if (totalPages > 0) {
@@ -77,10 +76,9 @@ public class AdminProductsController {
         }
         return new ModelAndView("redirect:/admin/products/" + idProduct);
     }
-    @PostMapping("/save")
-    public String save(ProductDto dto,
-                       @RequestParam(value = "file") MultipartFile file){
-        adminClient.save(dto, file);
+    @PostMapping(value = "/save")
+    public String save(ProductDto dto){
+        adminClient.saveProduct(dto);
         return "redirect:/admin/createProduct";
     }
 }

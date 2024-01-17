@@ -37,10 +37,10 @@ public class ProductServiceImpl implements ProductService {
     ImageRepository imageRepository;
 
     @Override
-    public ProductDto save(ProductDto dto, MultipartFile file) {
+    public ProductDto save(ProductDto dto) {
         ProductEntity entity = mapper.toEntity(dto);
         try {
-            entity.addImage(file.getBytes());
+            entity.addImage(dto.getFileImage().getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -50,9 +50,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductEntity> findAll(Integer page, Integer size, ProductSearchDto search) {
+    public Page<ProductDto> findAll(Integer page, Integer size, ProductSearchDto search) {
         Specification<ProductEntity> specification = createSpecification(search);
-        return productRepository.findAll(specification, PageRequest.of(page - 1, size));
+        return productRepository.findAll(specification, PageRequest.of(page - 1, size)).map(mapper::toDto);
     }
 
     @Override
