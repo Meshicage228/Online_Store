@@ -2,39 +2,42 @@ package com.example.adminblservice.controllers;
 
 import com.example.adminblservice.dto.ProductDto;
 import com.example.adminblservice.dto.ProductSearchDto;
-import com.example.adminblservice.entity.ProductEntity;
 import com.example.adminblservice.service.impl.ProductServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 
-@Controller
+@RestController
 @RequestMapping("/products")
 public class ProductController {
     ProductServiceImpl service;
 
     @GetMapping("/{page}/{size}")
-    public Page<ProductEntity> findAll(@PathVariable(value = "page") Integer page,
-                                       @PathVariable(value = "size") Integer size,
-                                       ProductSearchDto search) {
-        return service.findAll(page, size, search);
+    public Page<ProductDto> getPage(@PathVariable(value = "page") Integer page,
+                                    @PathVariable(value = "size") Integer size,
+                                    @RequestParam(value = "title", required = false)  String title,
+                                    @RequestParam(value = "price", required = false) Float price) {
+        ProductSearchDto build = ProductSearchDto.builder()
+                .title(title)
+                .price(price)
+                .build();
+        return service.findAll(page, size, build);
     }
 
     @GetMapping("/{id}")
-    public ProductDto findProductById(@PathVariable("id") Integer id) {
+    public ProductDto findProductById(@PathVariable Integer id) {
         return service.findByIdProduct(id);
     }
 
     @PutMapping("/{id}/change")
     public ProductDto update(@PathVariable("id") Integer id,
-                             ProductDto dto) {
+                             @RequestBody ProductDto dto) {
         return service.update(id, dto);
     }
 
@@ -50,15 +53,12 @@ public class ProductController {
 
     @PatchMapping("/image/{image_id}/update")
     public void updatePicture(@PathVariable("image_id") Integer idImage,
-                              @RequestParam("newImage") MultipartFile file) {
-        if (file.getSize() != 0) {
-            service.update(idImage, file);
-        }
+                              @RequestPart("file") MultipartFile file) {
+        service.update(idImage, file);
     }
 
     @PostMapping("/save")
-    public ProductDto save(ProductDto dto,
-                           @RequestParam(value = "file") MultipartFile file) {
-        return service.save(dto, file);
+    public ProductDto saveProduct(@ModelAttribute ProductDto dto) {
+        return service.save(dto);
     }
 }

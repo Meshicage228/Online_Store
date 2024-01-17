@@ -3,7 +3,6 @@ package com.example.adminblservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Base64;
 
 @AllArgsConstructor
 @NoArgsConstructor

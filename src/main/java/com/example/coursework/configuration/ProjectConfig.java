@@ -1,40 +1,28 @@
 package com.example.coursework.configuration;
 
-import com.example.coursework.exceptions.IdNotFountException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import feign.Logger;
-import feign.Response;
-import feign.codec.ErrorDecoder;
+import feign.okhttp.OkHttpClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.openfeign.support.JsonFormWriter;
+import org.springframework.cloud.openfeign.support.PageJacksonModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-import java.io.IOException;
 
 
 @RequiredArgsConstructor
 @Configuration
 public class ProjectConfig {
-    private final ObjectMapper mapper;
     @Bean
-    Logger.Level feignLoggerLevel() {
-        return Logger.Level.FULL;
+    public OkHttpClient client() {
+        return new OkHttpClient();
     }
     @Bean
-    ErrorDecoder decoder() {
-        return ((methodKey, response) -> {
-            int status = response.status();
-            if (status >= 400 && status < 500) {
-                Response.Body body = response.body();
-                try {
-                    return mapper.readValue(body.asInputStream(), IdNotFountException.class);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return null;
-        });
+    public PageJacksonModule pageJacksonModule() {
+        return new PageJacksonModule();
     }
-
+    @Bean
+    JsonFormWriter jsonFormWriter() {
+        return new JsonFormWriter();
+    }
 }

@@ -3,7 +3,6 @@ package com.example.coursework.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Base64;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,8 +22,4 @@ public class ProductImage {
     @ManyToOne
     @ToString.Exclude
     private ProductEntity product;
-
-    public String getImageFromBytes(){
-        return Base64.getEncoder().encodeToString(image);
-    }
 }

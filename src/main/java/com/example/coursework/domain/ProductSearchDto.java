@@ -1,15 +1,12 @@
 package com.example.coursework.domain;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Data
 public class ProductSearchDto {
-    String title;
-    Float price;
+    private String title;
+    private Float price;
 }

@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     @GetMapping
-    public String adminPage(){
+    public String adminPage() {
         return "redirect:/admin/products/1/5";
     }
+
     @GetMapping("/createProduct")
-    public String createProductPage(){
+    public String createProductPage() {
         return "createProductAdmin";
     }
 }

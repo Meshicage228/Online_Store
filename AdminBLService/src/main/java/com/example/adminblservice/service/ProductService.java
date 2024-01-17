@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface ProductService {
-    ProductDto save(ProductDto dto, MultipartFile file) throws IOException;
-    Page<ProductEntity> findAll(Integer page, Integer size, ProductSearchDto search);
+    ProductDto save(ProductDto dto) throws IOException;
+    Page<ProductDto> findAll(Integer page, Integer size, ProductSearchDto search);
 
     void update(Integer id, MultipartFile file);
 
