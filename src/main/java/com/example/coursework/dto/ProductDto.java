@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @Builder
 public class ProductDto {
-    private MultipartFile fileImage;
+    private List<MultipartFile> fileImage;
     private Integer id;
     private String title;
     private String description;
