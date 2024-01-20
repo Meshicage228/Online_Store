@@ -10,24 +10,27 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/v1/products")
 public class ProductController {
     ProductServiceImpl service;
 
-    @GetMapping("/{page}/{size}")
-    public Page<ProductDto> getPage(@PathVariable(value = "page") Integer page,
-                                    @PathVariable(value = "size") Integer size,
-                                    @RequestParam(value = "title", required = false)  String title,
-                                    @RequestParam(value = "price", required = false) Float price) {
+    @GetMapping("/sorted/{page}/{size}")
+    public Page<ProductDto> getAllSearchPaginatedSortedProducts
+            (@PathVariable(required = false, name = "page") Integer page,
+             @PathVariable(required = false, name = "size") Integer size,
+             @RequestParam(required = false, name = "price") Float price,
+             @RequestParam(required = false, name = "title") String title,
+             @RequestParam(required = false, defaultValue = "defaultOrder", name = "sortedBy") String sortedBy) {
         ProductSearchDto build = ProductSearchDto.builder()
                 .title(title)
                 .price(price)
                 .build();
-        return service.findAll(page, size, build);
+        return service.getAllProducts(page, size, sortedBy, build);
     }
 
     @GetMapping("/{id}")
@@ -58,7 +61,7 @@ public class ProductController {
     }
 
     @PostMapping("/save")
-    public ProductDto saveProduct(@ModelAttribute ProductDto dto) {
+    ProductDto saveProduct(@ModelAttribute ProductDto dto) {
         return service.save(dto);
     }
 }

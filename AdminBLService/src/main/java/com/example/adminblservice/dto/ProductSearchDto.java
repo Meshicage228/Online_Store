@@ -11,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class ProductSearchDto {
     String title;
     Float price;
+    String sorting;
 }

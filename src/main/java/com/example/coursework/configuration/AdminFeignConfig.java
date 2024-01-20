@@ -6,6 +6,7 @@ import feign.Logger;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.openfeign.support.JsonFormWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,5 +34,9 @@ public class AdminFeignConfig {
     @Bean
     public Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
+    }
+    @Bean
+    public JsonFormWriter jsonFormWriter() {
+        return new JsonFormWriter();
     }
 }

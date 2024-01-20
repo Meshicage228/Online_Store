@@ -26,10 +26,11 @@ public class AdminProductsController {
     public ModelAndView getPage(@PathVariable(value = "page") Integer page,
                                 @PathVariable(value = "size") Integer size,
                                 @RequestParam(value = "title", required = false) String title,
-                                @RequestParam(value = "price", required = false)Float price) {
+                                @RequestParam(value = "price", required = false) Float price,
+                                @RequestParam(value = "sortedBy", required = false) String sortedBy) {
 
         ModelAndView modelAndView = new ModelAndView("adminPage");
-        Page<ProductDto> pageContent = adminClient.getPage(page, size, title, price);
+        Page<ProductDto> pageContent = adminClient.getAllSearchPaginatedSortedProducts(page, size, title, price, sortedBy);
 
         modelAndView.addObject("totalPage", pageContent);
         int totalPages = pageContent.getTotalPages();
@@ -39,7 +40,8 @@ public class AdminProductsController {
                     .toList();
             modelAndView.addObject("countPages", countOfButtons);
         }
-
+        modelAndView.addObject("sort", sortedBy);
+        modelAndView.addObject("searchTitle", title);
         return modelAndView;
     }
 
@@ -76,6 +78,8 @@ public class AdminProductsController {
         }
         return new ModelAndView("redirect:/admin/products/" + idProduct);
     }
+
+    // TODO: 20.01.2024  cannot be resolved to absolute file path
     @PostMapping(value = "/save")
     public String save(ProductDto dto){
         adminClient.saveProduct(dto);

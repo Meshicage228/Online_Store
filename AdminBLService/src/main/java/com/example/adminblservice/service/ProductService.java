@@ -2,7 +2,6 @@ package com.example.adminblservice.service;
 
 import com.example.adminblservice.dto.ProductDto;
 import com.example.adminblservice.dto.ProductSearchDto;
-import com.example.adminblservice.entity.ProductEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +13,8 @@ public interface ProductService {
 
     void update(Integer id, MultipartFile file);
 
+    Page<ProductDto> getAllProducts(Integer page, Integer size, String sortedBy, ProductSearchDto searchDto);
+
     ProductDto findByIdProduct(Integer id);
 
     ProductDto update(Integer id, ProductDto dto);
@@ -21,4 +22,5 @@ public interface ProductService {
     void delete(Integer id);
 
     void deleteImage(Integer id);
+
 }

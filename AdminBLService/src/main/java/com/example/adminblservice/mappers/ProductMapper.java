@@ -23,6 +23,7 @@ public interface ProductMapper {
     })
     ProductEntity toEntity(ProductDto dto);
 
+    // TODO: 20.01.2024 изменить игнор когда будет ui
     @Mappings({
         @Mapping(target = "id", source = "id"),
         @Mapping(target = "title", source = "title"),

@@ -14,7 +14,7 @@ spring:
       suffix: .html
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -29,7 +29,11 @@ app:
     admin:
       name: forAdmin-feign
       url: 127.0.0.1:8081
-      product-path: /products
+      product-path: /v1/products
+    users:
+      name : user-feign
+      url: 127.0.0.1:8081
+      user-path : /v1/users
 feign:
   okhttp:
     enabled: true

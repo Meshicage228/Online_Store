@@ -1,4 +1,4 @@
-package com.example.coursework.entity;
+package com.example.coursework.entity.products;
 
 import jakarta.persistence.*;
 import lombok.*;

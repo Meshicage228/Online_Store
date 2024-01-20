@@ -52,7 +52,7 @@
 <div class="navigator">
     <div class="list-group" style="width: 210px; height: 100%; border-radius: 0px">
         <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/admin/products/{page}/{size}(page = 1, size = 10)}">Все товары</a></button>
+                th:href="@{/admin/products/{page}/{size}(page = 0, size = 10)}">Все товары</a></button>
 
         <button type="button" class="list-group-item list-group-item-action"><a
                 th:href="@{/admin/createProduct}">Создать товар</a></button>
@@ -65,40 +65,51 @@
     </div>
 </div>
 
-<form class="form-inline my-2 my-lg-0" th:action="@{/admin/products/{page}/{size}(page = 1, size = 5)}" th:method="get">
-    <input class="form-control mr-sm-2" type="text" aria-label="Search" placeholder="title" name="title">
-    <input type="range" min="0" max="1000" oninput="this.nextElementSibling.value = this.value" name="price">
-    <output th:value="1000">1000</output>
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+<form class="form-inline my-2 my-lg-0"
+      th:action="@{/admin/products/{page}/{size}(page = ${totalPage.number}, size = ${totalPage.size})}"
+      th:method="get">
+    <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
+    <button value="priceUp" name="sortedBy" type="submit">Цена возрастает</button>
+    <button value="priceDown" name="sortedBy" type="submit">Цена убывает</button>
+</form>
+<form th:action="@{/admin/products/{page}/{size}(page = ${totalPage.number}, size = ${totalPage.size})}">
+    <input name="title" placeholder="Введите название">
+    <button type="submit">Найти</button>
+</form>
+<form class="form-inline my-2 my-lg-0"
+      th:action="@{/admin/products/{page}/{size}(page = ${totalPage.number}, size = ${totalPage.size})}"
+      th:method="get">
+    <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
+    <button value="title" name="sortedBy" type="submit">По алфавиту</button>
 </form>
 
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <div class="col" th:each="prod : ${totalPage.getContent()}" style="width: 200px; height: 200px">
         <div class="card">
-            <div id="carouselExample" class="carousel slide">
-                <div class="carousel-inner">
-                    <div th:each="photo, number : ${prod.getImages()}">
-                        <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">
-                            <img th:src="@{'data:image/png;base64,'+${photo.getConvertedImage()}}" alt="product"
-                                 style="height: 125px; width: 59px"
-                                 class="d-block w-100">
-                        </div>
-                    </div>
-                </div>
-                <div th:if="${prod.getImages().size()} > 1">
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                            data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
+            <!--            <div id="carouselExample" class="carousel slide">-->
+            <!--                <div class="carousel-inner">-->
+            <!--                    <div th:each="photo, number : ${prod.getImages()}">-->
+            <!--                        <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">-->
+            <!--                            <img th:src="@{'data:image/png;base64,'+${photo.getConvertedImage()}}" alt="product"-->
+            <!--                                 style="height: 125px; width: 59px"-->
+            <!--                                 class="d-block w-100">-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--                <div th:if="${prod.getImages().size()} > 1">-->
+            <!--                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"-->
+            <!--                            data-bs-slide="prev">-->
+            <!--                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+            <!--                        <span class="visually-hidden">Previous</span>-->
+            <!--                    </button>-->
+            <!--                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"-->
+            <!--                            data-bs-slide="next">-->
+            <!--                        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+            <!--                        <span class="visually-hidden">Next</span>-->
+            <!--                    </button>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <div class="card-body">
                 <h5 class="card-title" th:text="${prod.title}"></h5>
                 <p class="card-text" th:text="${prod.description}"></p>
@@ -116,11 +127,13 @@
             <span class="page-link">Previous</span>
         </li>
         <li class="page-item" aria-current="page" th:each="iterPage : ${countPages}">
-            <a th:href="@{/admin/products/{page}/{size}(page = ${iterPage}, size = ${totalPage.size})}"
-               th:text="${iterPage}"
-               th:class="'page-link ' + ${totalPage.number == iterPage - 1 ? 'active' : ''}"
-               th:method="get">
-            </a>
+            <form th:action="@{/admin/products/{page}/{size}(page = ${iterPage - 1}, size = ${totalPage.size})}"
+                  th:method="get">
+                <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
+                <button th:value="${sort}" th:text="${iterPage}"
+                        th:class="'page-link ' + ${totalPage.number == iterPage - 1 ? 'active' : ''}"
+                        th:name="${sort != null ? 'sortedBy' : ''}"></button>
+            </form>
         </li>
         <li class="page-item">
             <a class="page-link">Next</a>

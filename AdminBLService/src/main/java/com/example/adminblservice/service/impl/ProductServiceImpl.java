@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +41,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto save(ProductDto dto) {
         ProductEntity entity = mapper.toEntity(dto);
         try {
-            entity.addImage(dto.getFileImage().getBytes());
+            for(var file: dto.getFileImage()){
+                entity.addImage(file.getBytes());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,7 +55,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDto> findAll(Integer page, Integer size, ProductSearchDto search) {
         Specification<ProductEntity> specification = createSpecification(search);
-        return productRepository.findAll(specification, PageRequest.of(page - 1, size)).map(mapper::toDto);
+        return productRepository.findAll(specification, PageRequest.of(page - 1, size))
+                .map(mapper::toDto);
     }
 
     @Override
@@ -68,7 +72,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(Integer id, ProductDto dto) {
-        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new IdNotFountException("wrong id"));
+        ProductEntity productEntity = productRepository.findById(id)
+                .orElseThrow(() -> new IdNotFountException("wrong id"));
+
         ProductEntity updated = mapper.update(productEntity, mapper.toEntity(dto));
         return mapper.toDto(updated);
     }
@@ -81,6 +87,32 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteImage(Integer id) {
         imageRepository.deleteByHand(id);
+    }
+
+    @Override
+    public Page<ProductDto> getAllProducts(Integer page, Integer size, String sortedBy, ProductSearchDto searchDto){
+        Specification<ProductEntity> specification = createSpecification(searchDto);
+        switch (sortedBy){
+            case "priceUp" -> {
+                return productRepository.findAll(specification, PageRequest.of(page, size)
+                                        .withSort(Sort.by(Sort.Direction.ASC, "price")))
+                        .map(mapper::toDto);
+            }
+            case "priceDown" -> {
+                return productRepository.findAll(specification, PageRequest.of(page, size)
+                                        .withSort(Sort.by(Sort.Direction.DESC, "price")))
+                        .map(mapper::toDto);
+            }
+            case "defaultOrder" -> {
+                return productRepository.findAll(specification, PageRequest.of(page, size))
+                        .map(mapper::toDto);
+            }
+            default -> {
+                return productRepository.findAll(specification, PageRequest.of(page, size)
+                                        .withSort(Sort.by(Sort.Direction.ASC, sortedBy)))
+                        .map(mapper::toDto);
+            }
+        }
     }
 
     @Override
