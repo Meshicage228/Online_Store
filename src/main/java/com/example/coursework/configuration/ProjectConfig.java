@@ -21,8 +21,4 @@ public class ProjectConfig {
     public PageJacksonModule pageJacksonModule() {
         return new PageJacksonModule();
     }
-    @Bean
-    JsonFormWriter jsonFormWriter() {
-        return new JsonFormWriter();
-    }
 }
