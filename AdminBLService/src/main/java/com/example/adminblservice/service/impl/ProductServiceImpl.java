@@ -3,7 +3,7 @@ package com.example.adminblservice.service.impl;
 
 import com.example.adminblservice.dto.ProductDto;
 import com.example.adminblservice.dto.ProductSearchDto;
-import com.example.adminblservice.entity.ProductEntity;
+import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.exceptions.IdNotFountException;
 import com.example.adminblservice.mappers.ProductMapper;
 import com.example.adminblservice.repository.ImageRepository;
@@ -36,7 +36,6 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     ProductMapper mapper;
     ImageRepository imageRepository;
-
     @Override
     public ProductDto save(ProductDto dto) {
         ProductEntity entity = mapper.toEntity(dto);

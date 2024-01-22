@@ -1,4 +1,4 @@
-package com.example.coursework.dto;
+package com.example.coursework.dto.product;
 
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;

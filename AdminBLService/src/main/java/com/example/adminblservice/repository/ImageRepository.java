@@ -1,6 +1,6 @@
 package com.example.adminblservice.repository;
 
-import com.example.adminblservice.entity.ProductImage;
+import com.example.adminblservice.entity.product.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

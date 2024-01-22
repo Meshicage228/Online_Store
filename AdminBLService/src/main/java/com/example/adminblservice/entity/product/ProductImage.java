@@ -1,4 +1,4 @@
-package com.example.adminblservice.entity;
+package com.example.adminblservice.entity.product;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -2,7 +2,7 @@ package com.example.adminblservice.mappers;
 
 
 import com.example.adminblservice.dto.ProductDto;
-import com.example.adminblservice.entity.ProductEntity;
+import com.example.adminblservice.entity.product.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

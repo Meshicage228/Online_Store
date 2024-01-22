@@ -1,14 +1,12 @@
 package com.example.coursework.clients;
 
 import com.example.coursework.configuration.AdminFeignConfig;
-import com.example.coursework.dto.ProductDto;
+import com.example.coursework.dto.product.ProductDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 
 @FeignClient(name = "${app.clients.admin.name}",

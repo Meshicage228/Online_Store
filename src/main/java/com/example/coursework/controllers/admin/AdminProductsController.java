@@ -1,7 +1,7 @@
 package com.example.coursework.controllers.admin;
 
 import com.example.coursework.clients.AdminClient;
-import com.example.coursework.dto.ProductDto;
+import com.example.coursework.dto.product.ProductDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

@@ -1,4 +1,4 @@
-package com.example.coursework.dto;
+package com.example.coursework.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
