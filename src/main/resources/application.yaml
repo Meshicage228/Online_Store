@@ -32,7 +32,7 @@ app:
       product-path: /v1/products
     users:
       name : user-feign
-      url: 127.0.0.1:8081
+      url: 127.0.0.1:8082
       user-path : /v1/users
 feign:
   okhttp:
