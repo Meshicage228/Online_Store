@@ -1,26 +1,22 @@
 package com.example.userblservice.mapper.user;
 
-import com.example.userblservice.domain.Role;
 import com.example.userblservice.dto.user.UserDto;
+import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.user.UserEntity;
-import com.example.userblservice.repository.user.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import com.example.userblservice.mapper.product.ProductImageMapper;
+import org.mapstruct.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 
-@RequiredArgsConstructor
 
 @Mapper(
-        componentModel = "spring"
+        componentModel = "spring",
+        uses = {ProductEntity.class, ProductImageMapper.class}
 )
-public abstract class UserMapper {
-//    private final UserRepository repository;
+public interface UserMapper {
 
     // TODO: 20.01.2024 Encode and decode password!
     @Mappings({
@@ -28,9 +24,11 @@ public abstract class UserMapper {
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "avatar", expression = "java(decodeStringToBytes(entity.getAvatar()))"),
             @Mapping(target = "password", source = "password"),
-            @Mapping(target = "role", source = "role")
+            @Mapping(target = "role", source = "role"),
+            @Mapping(target = "favoriteProducts", source = "favoriteProducts"),
+            @Mapping(target = "basket", source = "user_carts")
     })
-    public abstract UserDto toDto(UserEntity entity);
+    UserDto toDto(UserEntity entity);
     @Mappings({
             @Mapping(target = "id", source = "id"),
             @Mapping(target = "name", source = "name"),
@@ -38,20 +36,26 @@ public abstract class UserMapper {
             @Mapping(target = "password", source = "password"),
             @Mapping(target = "role", defaultValue = "USER")
     })
-    public abstract UserEntity toEntity(UserDto dto);
+    UserEntity toEntity(UserDto dto);
 
 
-    public abstract List<UserEntity> toEntities(List<UserDto> dtos);
-    public abstract List<UserDto> toDtos(List<UserEntity> dtos);
+//     List<UserEntity> toEntities(List<UserDto> dtos);
+     List<UserDto> toDtos(List<UserEntity> dtos);
 
-    public byte[] encodeBytesToString(MultipartFile file){
+    // TODO: 21.01.2024 Resolve update avatar and password
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "password", source = "password")
+    UserEntity update(@MappingTarget UserEntity target, UserEntity source);
+
+    default byte[] encodeBytesToString(MultipartFile file){
         try {
             return file.getBytes();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public String decodeStringToBytes(byte[] bytes){
+    default String decodeStringToBytes(byte[] bytes){
         return Base64.getEncoder().encodeToString(bytes);
     }
 

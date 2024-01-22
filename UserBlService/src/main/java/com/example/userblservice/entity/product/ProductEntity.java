@@ -11,7 +11,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +21,7 @@ import java.util.Set;
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Integer id;
     private String title;
     private Float price;
@@ -31,7 +31,10 @@ public class ProductEntity {
     private List<ProductImage> images;
 
     @ManyToMany(mappedBy = "favoriteProducts")
-    private Set<UserEntity> users_favorites;
+    private List<UserEntity> users_favorites;
+
+    @ManyToMany(mappedBy = "user_carts")
+    private List<UserEntity> users;
 
     @CreationTimestamp
     @Temporal(value = TemporalType.DATE)

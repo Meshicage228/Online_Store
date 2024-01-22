@@ -21,5 +21,5 @@ public class UserDto {
     private MultipartFile file;
     private String avatar;
     private List<ProductDto> basket;
-    private List<ProductDto> favorite;
+    private List<ProductDto> favoriteProducts;
 }

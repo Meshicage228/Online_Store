@@ -36,14 +36,20 @@ public class UserEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
-    private List<UserBasket> user_baskets;
-
     @ManyToMany
     @JoinTable(
-            name = "user_favorite_products",
+            name = "users_favorite_products",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private Set<ProductEntity> favoriteProducts;
+    private List<ProductEntity> favoriteProducts;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_carts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<ProductEntity> user_carts;
+
 }
