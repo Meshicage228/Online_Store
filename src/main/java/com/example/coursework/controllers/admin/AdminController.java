@@ -16,11 +16,15 @@ public class AdminController {
 
     @GetMapping
     public String adminPage() {
-        return "redirect:/admin/products/1/5";
+        return "redirect:/admin/products/0/10";
     }
 
     @GetMapping("/createProduct")
     public String createProductPage() {
         return "createProductAdmin";
+    }
+    @GetMapping("/users")
+    public String getAllUsers(){
+        return "redirect:/admin/users/0/10";
     }
 }
