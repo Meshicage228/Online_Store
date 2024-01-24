@@ -1,11 +1,11 @@
 package com.example.adminblservice.service.impl;
 
 
-import com.example.adminblservice.dto.ProductDto;
-import com.example.adminblservice.dto.ProductSearchDto;
+import com.example.adminblservice.dto.product.ProductDto;
+import com.example.adminblservice.dto.product.ProductSearchDto;
 import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.exceptions.IdNotFountException;
-import com.example.adminblservice.mappers.ProductMapper;
+import com.example.adminblservice.mappers.product.ProductMapper;
 import com.example.adminblservice.repository.ImageRepository;
 import com.example.adminblservice.repository.ProductRepository;
 import com.example.adminblservice.service.ProductService;

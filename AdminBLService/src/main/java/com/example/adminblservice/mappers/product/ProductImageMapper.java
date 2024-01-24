@@ -1,6 +1,6 @@
-package com.example.adminblservice.mappers;
+package com.example.adminblservice.mappers.product;
 
-import com.example.adminblservice.dto.ProductImageDto;
+import com.example.adminblservice.dto.product.ProductImageDto;
 import com.example.adminblservice.entity.product.ProductImage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

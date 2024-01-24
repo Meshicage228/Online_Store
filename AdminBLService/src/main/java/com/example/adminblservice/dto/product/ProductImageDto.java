@@ -1,4 +1,4 @@
-package com.example.adminblservice.dto;
+package com.example.adminblservice.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

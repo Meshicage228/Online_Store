@@ -1,6 +1,7 @@
-package com.example.adminblservice.dto;
+package com.example.adminblservice.dto.user;
 
 import com.example.adminblservice.domain.Role;
+import com.example.adminblservice.dto.product.ProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

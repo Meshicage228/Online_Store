@@ -1,7 +1,7 @@
 package com.example.adminblservice.controllers;
 
-import com.example.adminblservice.dto.ProductDto;
-import com.example.adminblservice.dto.ProductSearchDto;
+import com.example.adminblservice.dto.product.ProductDto;
+import com.example.adminblservice.dto.product.ProductSearchDto;
 import com.example.adminblservice.service.impl.ProductServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

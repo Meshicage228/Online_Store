@@ -1,4 +1,4 @@
-package com.example.adminblservice.dto;
+package com.example.adminblservice.dto.product;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

@@ -1,7 +1,7 @@
 package com.example.adminblservice.service;
 
-import com.example.adminblservice.dto.ProductDto;
-import com.example.adminblservice.dto.ProductSearchDto;
+import com.example.adminblservice.dto.product.ProductDto;
+import com.example.adminblservice.dto.product.ProductSearchDto;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
