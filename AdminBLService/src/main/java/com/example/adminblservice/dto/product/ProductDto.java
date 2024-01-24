@@ -1,5 +1,6 @@
-package com.example.adminblservice.dto;
+package com.example.adminblservice.dto.product;
 
+import com.example.adminblservice.dto.user.CommentaryDto;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,5 +17,7 @@ public class ProductDto implements Serializable {
     private String title;
     private String description;
     private Float price;
+    private Integer count;
+    private List<CommentaryDto> comments;
     private List<ProductImageDto> images;
 }

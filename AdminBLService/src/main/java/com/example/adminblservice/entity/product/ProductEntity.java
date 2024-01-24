@@ -1,21 +1,23 @@
 package com.example.adminblservice.entity.product;
 
+import com.example.adminblservice.entity.user.Commentary;
 import com.example.adminblservice.entity.user.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+
+// TODO: 23.01.2024 Change this entity from user bl
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(exclude = {"users_favorites", "users", "items", "comments"})
 @Builder
 @Entity
 @Table(name = "products")
@@ -26,16 +28,23 @@ public class ProductEntity {
     private Integer id;
     private String title;
     private Float price;
+    private Integer count;
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
     private List<ProductImage> images;
 
-    @ManyToMany(mappedBy = "favoriteProducts")
-    private List<UserEntity> users_favorites;
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    private List<Purchases> items;
 
-    @ManyToMany(mappedBy = "carts_of_users")
-    private List<UserEntity> users;
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    private List<Commentary> comments;
+
+    @ManyToMany(mappedBy = "favoriteProducts")
+    private Set<UserEntity> users_favorites;
+
+    @ManyToMany(mappedBy = "cart")
+    private Set<UserEntity> users;
 
     @CreationTimestamp
     @Temporal(value = TemporalType.DATE)
@@ -61,11 +70,11 @@ public class ProductEntity {
     }
     @PreRemove
     public void removeProductAssociations(){
-        for (UserEntity user: this.users_favorites) {
+        for (var user: this.users_favorites) {
             user.getFavoriteProducts().remove(this);
         }
-        for (UserEntity user: this.users) {
-            user.getCarts_of_users().remove(this);
+        for (var user: this.users) {
+            user.getCart().remove(this);
         }
     }
 }

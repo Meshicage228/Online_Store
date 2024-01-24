@@ -1,18 +1,21 @@
 package com.example.adminblservice.entity.user;
 
 
-
 import com.example.adminblservice.entity.product.ProductEntity;
+import com.example.adminblservice.entity.product.Purchases;
 import jakarta.persistence.*;
 import lombok.*;
 import com.example.adminblservice.domain.Role;
+
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
+@EqualsAndHashCode(exclude = {"favoriteProducts", "cart", "purchases", "commentaries"})
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -21,6 +24,7 @@ public class UserEntity {
     @Column(name = "user_id")
     private UUID id;
 
+    @Column(unique = true)
     private String name;
 
     @Lob
@@ -31,14 +35,19 @@ public class UserEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Purchases> purchases;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Commentary> commentaries;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_favorite_products",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    @ToString.Exclude
-    private List<ProductEntity> favoriteProducts;
+    private Set<ProductEntity> favoriteProducts;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -46,6 +55,5 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    @ToString.Exclude
-    private List<ProductEntity> carts_of_users;
+    private Set<ProductEntity> cart;
 }
