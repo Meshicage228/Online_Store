@@ -1,9 +1,12 @@
 package com.example.userblservice.service.impl;
 
 import com.example.userblservice.dto.user.UserDto;
+import com.example.userblservice.entity.product.Commentary;
+import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.user.UserEntity;
-import com.example.userblservice.mapper.product.ProductMapper;
 import com.example.userblservice.mapper.user.UserMapper;
+import com.example.userblservice.repository.user.CommentaryRepository;
+import com.example.userblservice.repository.product.ProductRepository;
 import com.example.userblservice.repository.user.UserRepository;
 import com.example.userblservice.service.UserService;
 import com.example.userblservice.dto.user.UserSearchDto;
@@ -30,8 +33,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Transactional
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
-    ProductMapper productMapper;
     UserMapper userMapper;
+    ProductRepository productRepository;
+    CommentaryRepository commentaryRepository;
     @Override
     public UserDto save(UserDto dto) {
         UserEntity entity = userMapper.toEntity(dto);
@@ -67,6 +71,43 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toDto(updated);
     }
+
+    @Override
+    public boolean addToCart(UUID userId, Integer prodId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException());
+        ProductEntity productEntity = productRepository.findById(prodId)
+                .orElseThrow(() -> new RuntimeException());
+
+        return userEntity.AddToCart(productEntity);
+    }
+
+    @Override
+    public boolean addToFavorite(UUID userId, Integer prodId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException());
+        ProductEntity productEntity = productRepository.findById(prodId)
+                .orElseThrow(() -> new RuntimeException());
+
+        return userEntity.AddToFavorite(productEntity);
+    }
+
+    @Override
+    public Commentary addComment(UUID userId, Integer prodId, String comment) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException());
+        ProductEntity productEntity = productRepository.findById(prodId)
+                .orElseThrow(() -> new RuntimeException());
+
+        Commentary build = Commentary.builder()
+                .user(userEntity)
+                .product(productEntity)
+                .comment(comment)
+                .build();
+
+        return commentaryRepository.save(build);
+    }
+
 
     private Specification<UserEntity> createSpecification(UserSearchDto dto) {
         return (root, query, builder) -> {

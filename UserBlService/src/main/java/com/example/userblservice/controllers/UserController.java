@@ -19,30 +19,53 @@ import java.util.UUID;
 @RequestMapping("/v1/users")
 public class UserController {
     UserServiceImpl userService;
+
     @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public UserDto saveUser(@ModelAttribute UserDto dto){
+    public UserDto saveUser(@ModelAttribute UserDto dto) {
         return userService.save(dto);
     }
+
     @GetMapping("/{page}/{size}")
     public Page<UserDto> getAllUsers(@PathVariable("page") Integer page,
                                      @PathVariable("size") Integer size,
-                                     @RequestParam(value = "name", required = false) String name){
+                                     @RequestParam(value = "name", required = false) String name) {
         UserSearchDto dto = UserSearchDto.builder()
                 .name(name)
                 .build();
         return userService.findAll(page, size, dto);
     }
+
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id")UUID id){
+    public void deleteUser(@PathVariable("id") UUID id) {
         userService.delete(id);
     }
+
     @GetMapping("/{user_id}")
-    public UserDto personalUser(@PathVariable("user_id") UUID id){
+    public UserDto personalUser(@PathVariable("user_id") UUID id) {
         return userService.getByid(id);
     }
+
     @PutMapping("/{user_id}")
     public UserDto updateUser(@PathVariable("user_id") UUID id,
-                              @ModelAttribute UserDto dto){
+                              @ModelAttribute UserDto dto) {
         return userService.update(id, dto);
+    }
+
+    @PostMapping("/{user_id}/add_cart/{prod_id}")
+    public void addToCart(@PathVariable("user_id") UUID user_id,
+                          @PathVariable("prod_id") Integer prod_id) {
+        userService.addToCart(user_id, prod_id);
+    }
+
+    @PostMapping("/{user_id}/add_favorite/{prod_id}")
+    public void addToFavorite(@PathVariable("user_id") UUID user_id,
+                              @PathVariable("prod_id") Integer prod_id) {
+        userService.addToFavorite(user_id, prod_id);
+    }
+    @PostMapping("/{user_id}/comment/{product_id}")
+    public void leaveCommentary(@PathVariable("user_id") UUID user_id,
+                                @PathVariable("product_id") Integer prod_id,
+                                @RequestParam("commentary") String comment){
+        userService.addComment(user_id, prod_id, comment);
     }
 }

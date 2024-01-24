@@ -26,7 +26,7 @@ public interface UserMapper {
             @Mapping(target = "password", source = "password"),
             @Mapping(target = "role", source = "role"),
             @Mapping(target = "favoriteProducts", source = "favoriteProducts"),
-            @Mapping(target = "basket", source = "user_carts")
+            @Mapping(target = "basket", source = "cart")
     })
     UserDto toDto(UserEntity entity);
     @Mappings({
@@ -39,7 +39,6 @@ public interface UserMapper {
     UserEntity toEntity(UserDto dto);
 
 
-//     List<UserEntity> toEntities(List<UserDto> dtos);
      List<UserDto> toDtos(List<UserEntity> dtos);
 
     // TODO: 21.01.2024 Resolve update avatar and password
