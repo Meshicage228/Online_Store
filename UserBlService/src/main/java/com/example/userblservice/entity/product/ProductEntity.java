@@ -2,20 +2,19 @@ package com.example.userblservice.entity.product;
 
 import com.example.userblservice.entity.user.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
+@EqualsAndHashCode(exclude = {"users_favorites", "users"})
 @Entity
 @Table(name = "products")
 public class ProductEntity {
@@ -25,16 +24,25 @@ public class ProductEntity {
     private Integer id;
     private String title;
     private Float price;
+    private Integer count;
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
     private List<ProductImage> images;
 
-    @ManyToMany(mappedBy = "favoriteProducts")
-    private List<UserEntity> users_favorites;
+    @OneToMany(mappedBy = "product")
+    private List<Purchases> items;
 
-    @ManyToMany(mappedBy = "user_carts")
-    private List<UserEntity> users;
+    @OneToMany(mappedBy = "product")
+    private List<Commentary> comments;
+
+    @ManyToMany(mappedBy = "favoriteProducts")
+    @ToString.Exclude
+    private Set<UserEntity> users_favorites;
+
+    @ManyToMany(mappedBy = "cart", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<UserEntity> users;
 
     @CreationTimestamp
     @Temporal(value = TemporalType.DATE)

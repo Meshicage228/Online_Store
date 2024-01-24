@@ -20,4 +20,5 @@ public class ProductDto implements Serializable {
     private String description;
     private Float price;
     private List<ProductImageDto> images;
+    private Integer count;
 }

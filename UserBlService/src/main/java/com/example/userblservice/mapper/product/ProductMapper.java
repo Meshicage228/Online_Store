@@ -29,6 +29,7 @@ public interface ProductMapper {
         @Mapping(target = "title", source = "title"),
         @Mapping(target = "description", source = "description"),
         @Mapping(target = "price", source = "price"),
+        @Mapping(target = "count", source = "count"),
         @Mapping(target = "images", ignore = true)
     })
     ProductDto toDto(ProductEntity entity);
@@ -39,5 +40,6 @@ public interface ProductMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "images", ignore = true)
     @Mapping(target = "creationTime", ignore = true)
+    @Mapping(target = "count", ignore = true)
     ProductEntity update(@MappingTarget ProductEntity target, ProductEntity source);
 }
