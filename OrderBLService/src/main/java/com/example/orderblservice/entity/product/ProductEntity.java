@@ -2,10 +2,6 @@ package com.example.orderblservice.entity.product;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.util.Date;
 import java.util.List;
 
 
@@ -29,17 +25,6 @@ public class ProductEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
     private List<ProductImage> images;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product")
     private List<Orders> items;
-
-    @CreationTimestamp
-    @Temporal(value = TemporalType.DATE)
-    private Date creationTime;
-
-    @UpdateTimestamp
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date updateTime;
-
-    @Version
-    private Integer version;
 }
