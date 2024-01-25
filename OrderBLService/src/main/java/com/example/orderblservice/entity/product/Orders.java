@@ -33,6 +33,8 @@ public class Orders {
 
     private Float priceAtMomentBuying;
 
+    private Float bill;
+
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
 

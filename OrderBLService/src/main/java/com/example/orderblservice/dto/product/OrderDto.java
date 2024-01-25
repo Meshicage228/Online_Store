@@ -28,4 +28,6 @@ public class OrderDto {
     private OrderStatus status;
 
     private Date dateOfPurchase;
+
+    private Float bill;
 }

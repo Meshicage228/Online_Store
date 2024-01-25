@@ -32,6 +32,8 @@ public class Purchases {
     @ToString.Exclude
     private UserEntity user;
 
+    private Float bill;
+
     private Integer countOfProduct;
 
     private Float priceAtMomentBuying;
