@@ -7,7 +7,7 @@ import com.example.orderblservice.dto.product.OrderSearchDto;
 import org.springframework.data.domain.Page;
 
 public interface OrderService {
-    OrderDto createPurchase(OrderRequest dto);
+    void acceptPurchase(OrderRequest dto);
 
     Page<OrderDto> findAllWithSort(Integer page, Integer size, OrderSearchDto sortedBy, String sort);
 }

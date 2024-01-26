@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public OrderDto createPurchase(@RequestBody OrderRequest request) {
-        return service.createPurchase(request);
+    public void createPurchase(@RequestBody OrderRequest request) {
+        service.acceptPurchase(request);
     }
 }

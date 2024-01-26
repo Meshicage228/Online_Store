@@ -6,10 +6,15 @@ import com.example.orderblservice.dto.product.OrderRequest;
 import com.example.orderblservice.dto.product.OrderSearchDto;
 import com.example.orderblservice.entity.product.Orders;
 import com.example.orderblservice.entity.product.ProductEntity;
+import com.example.orderblservice.entity.user.UserCard;
 import com.example.orderblservice.entity.user.UserEntity;
+import com.example.orderblservice.entity.user.UsersCart;
+import com.example.orderblservice.exceptions.NoCardFoundException;
+import com.example.orderblservice.exceptions.NotEnoughMoneyException;
+import com.example.orderblservice.exceptions.OutOfStockException;
 import com.example.orderblservice.mapper.OrderMapper;
+import com.example.orderblservice.repository.CartRepository;
 import com.example.orderblservice.repository.OrderRepository;
-import com.example.orderblservice.repository.ProductRepository;
 import com.example.orderblservice.repository.UserRepository;
 import com.example.orderblservice.service.OrderService;
 import jakarta.persistence.criteria.Join;
@@ -25,10 +30,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.nonNull;
@@ -41,9 +43,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Transactional
 public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
-    ProductRepository productRepository;
     UserRepository userRepository;
     OrderMapper orderMapper;
+    CartRepository cartRepository;
 
     @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 5)
     public void updateStatusOrders() {
@@ -58,26 +60,49 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto createPurchase(OrderRequest request) {
-        ProductEntity productEntity = productRepository.findById(request.getProd_id())
-                .orElseThrow(() -> new RuntimeException());
+    public void acceptPurchase(OrderRequest request) {
+        UUID userId = request.getUser_id();
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new RuntimeException());
 
-        UserEntity userEntity = userRepository.findById(request.getUser_id())
-                .orElseThrow(() -> new RuntimeException());
+        UserCard userCard = Optional.of(userEntity.getUserCard())
+                .orElseThrow(() -> new NoCardFoundException());
 
-        Orders order = Orders.builder()
-                .status(OrderStatus.WAITING)
-                .dateOfPurchase(new Date())
-                .countOfProduct(request.getCount())
-                .bill(request.getCount() * productEntity.getPrice())
-                .priceAtMomentBuying(productEntity.getPrice())
-                .product(productEntity)
-                .user(userEntity)
-                .build();
+        List<UsersCart> cart = userEntity.getCart();
+        float totalPurchase = 0;
 
-        Orders saved = orderRepository.save(order);
+        for (var obj : cart){
+            ProductEntity product = obj.getProduct();
+            if(product.getCount() < obj.getCountToBuy()){
+                throw new OutOfStockException();
+            }
+            totalPurchase += product.getPrice() * obj.getCountToBuy();
+        }
 
-        return orderMapper.toDto(saved);
+        if (userCard.getMoney() < totalPurchase) {
+            throw new NotEnoughMoneyException();
+        } else {
+            createPurchase(userEntity, totalPurchase);
+        }
+    }
+
+    private void createPurchase(UserEntity user, float totalPurchase) {
+        for (var cartElement : user.getCart()) {
+            ProductEntity productAtMoment = cartElement.getProduct();
+            Orders order = Orders.builder()
+                    .status(OrderStatus.WAITING)
+                    .dateOfPurchase(new Date())
+                    .countOfProduct(cartElement.getCountToBuy())
+                    .bill(cartElement.getCountToBuy() * productAtMoment.getPrice())
+                    .priceAtMomentBuying(productAtMoment.getPrice())
+                    .product(cartElement.getProduct())
+                    .user(user)
+                    .build();
+            productAtMoment.setCount(productAtMoment.getCount() - cartElement.getCountToBuy());
+            orderRepository.save(order);
+            cartRepository.deleteById(cartElement.getId());
+        }
+        UserCard userCard = user.getUserCard();
+        userCard.setMoney(userCard.getMoney() - totalPurchase);
     }
 
     @Override
