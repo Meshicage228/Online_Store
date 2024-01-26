@@ -1,6 +1,7 @@
 package com.example.adminblservice.entity.user;
 
 
+import com.example.adminblservice.dto.user.UsersCart;
 import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.entity.product.Purchases;
 import jakarta.persistence.*;
@@ -49,11 +50,6 @@ public class UserEntity {
     )
     private Set<ProductEntity> favoriteProducts;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_carts",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private Set<ProductEntity> cart;
+    @OneToMany(mappedBy = "user")
+    private Set<UsersCart> carts;
 }

@@ -36,11 +36,18 @@ public class UserEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @OneToOne(mappedBy = "user")
+    private UserCard card;
+
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Purchases> purchases;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Commentary> commentaries;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @ToString.Exclude
+    private Set<UsersCart> cart;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -50,29 +57,12 @@ public class UserEntity {
     )
     private Set<ProductEntity> favoriteProducts;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_carts",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private Set<ProductEntity> cart;
-
-    public boolean AddToCart(ProductEntity entity) {
-        if (isNull(cart)) {
-            cart = new HashSet<>();
-        }
-        cart.add(entity);
-        entity.getUsers().add(this);
-        return true;
-    }
-
     public boolean AddToFavorite(ProductEntity entity) {
         if (isNull(favoriteProducts)) {
             favoriteProducts = new HashSet<>();
         }
         favoriteProducts.add(entity);
-        entity.getUsers().add(this);
+        entity.getUsers_favorites().add(this);
         return true;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.userblservice.entity.product;
 
 import com.example.userblservice.entity.user.UserEntity;
+import com.example.userblservice.entity.user.UsersCart;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,13 +37,13 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product")
     private List<Commentary> comments;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    @ToString.Exclude
+    private Set<UsersCart> users;
+
     @ManyToMany(mappedBy = "favoriteProducts")
     @ToString.Exclude
     private Set<UserEntity> users_favorites;
-
-    @ManyToMany(mappedBy = "cart", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private Set<UserEntity> users;
 
     @CreationTimestamp
     @Temporal(value = TemporalType.DATE)

@@ -1,5 +1,6 @@
 package com.example.adminblservice.entity.product;
 
+import com.example.adminblservice.dto.user.UsersCart;
 import com.example.adminblservice.entity.user.Commentary;
 import com.example.adminblservice.entity.user.UserEntity;
 import jakarta.persistence.*;
@@ -43,8 +44,8 @@ public class ProductEntity {
     @ManyToMany(mappedBy = "favoriteProducts")
     private Set<UserEntity> users_favorites;
 
-    @ManyToMany(mappedBy = "cart")
-    private Set<UserEntity> users;
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    private Set<UsersCart> users;
 
     @CreationTimestamp
     @Temporal(value = TemporalType.DATE)
@@ -72,9 +73,6 @@ public class ProductEntity {
     public void removeProductAssociations(){
         for (var user: this.users_favorites) {
             user.getFavoriteProducts().remove(this);
-        }
-        for (var user: this.users) {
-            user.getCart().remove(this);
         }
     }
 }
