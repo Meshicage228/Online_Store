@@ -18,9 +18,11 @@ public interface UserService {
 
     UserDto update(UUID id, UserDto dto);
 
-    boolean addToCart(UUID userId, Integer prodId);
+    boolean addToCart(UUID userId, Integer prodId, Integer count);
 
     boolean addToFavorite(UUID userId, Integer prodId);
 
     Commentary addComment(UUID userId, Integer prodId, String comment);
+
+    void addCard(UUID userId);
 }

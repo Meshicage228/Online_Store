@@ -3,8 +3,12 @@ package com.example.userblservice.service.impl;
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.product.ProductEntity;
+import com.example.userblservice.entity.user.UserCard;
 import com.example.userblservice.entity.user.UserEntity;
+import com.example.userblservice.entity.user.UsersCart;
 import com.example.userblservice.mapper.user.UserMapper;
+import com.example.userblservice.repository.user.CardRepository;
+import com.example.userblservice.repository.user.CartRepository;
 import com.example.userblservice.repository.user.CommentaryRepository;
 import com.example.userblservice.repository.product.ProductRepository;
 import com.example.userblservice.repository.user.UserRepository;
@@ -36,6 +40,8 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     ProductRepository productRepository;
     CommentaryRepository commentaryRepository;
+    CardRepository cardRepository;
+    CartRepository cartRepository;
     @Override
     public UserDto save(UserDto dto) {
         UserEntity entity = userMapper.toEntity(dto);
@@ -73,13 +79,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addToCart(UUID userId, Integer prodId) {
+    public boolean addToCart(UUID userId, Integer prodId, Integer count) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException());
         ProductEntity productEntity = productRepository.findById(prodId)
                 .orElseThrow(() -> new RuntimeException());
 
-        return userEntity.AddToCart(productEntity);
+        cartRepository.save(UsersCart.builder()
+                        .countToBuy(count)
+                        .product(productEntity)
+                        .user(userEntity)
+                .build());
+
+        return true;
     }
 
     @Override
@@ -106,6 +118,16 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         return commentaryRepository.save(build);
+    }
+
+    @Override
+    public void addCard(UUID userId) {
+        userRepository.findById(userId).ifPresentOrElse(user -> {
+                   cardRepository.save(UserCard.builder()
+                            .money(99999f)
+                            .user(user)
+                            .build());
+                }, () -> new RuntimeException());
     }
 
 
