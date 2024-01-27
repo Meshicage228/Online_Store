@@ -2,7 +2,6 @@ package com.example.orderblservice.controller;
 
 import com.example.orderblservice.domain.OrderStatus;
 import com.example.orderblservice.dto.product.OrderDto;
-import com.example.orderblservice.dto.product.OrderRequest;
 import com.example.orderblservice.dto.product.OrderSearchDto;
 import com.example.orderblservice.service.impl.OrderServiceImpl;
 import lombok.AccessLevel;
@@ -39,8 +38,8 @@ public class OrderController {
         return service.findAllWithSort(page, size, searchDto, sortedBy);
     }
 
-    @PostMapping("/create")
-    public void createPurchase(@RequestBody OrderRequest request) {
-        service.acceptPurchase(request);
+    @PostMapping("/create/{user_id}")
+    public void createPurchase(@PathVariable("user_id") UUID id) {
+        service.acceptPurchase(id);
     }
 }

@@ -6,8 +6,10 @@ import com.example.orderblservice.dto.product.OrderRequest;
 import com.example.orderblservice.dto.product.OrderSearchDto;
 import org.springframework.data.domain.Page;
 
+import java.util.UUID;
+
 public interface OrderService {
-    void acceptPurchase(OrderRequest dto);
+    void acceptPurchase(UUID id);
 
     Page<OrderDto> findAllWithSort(Integer page, Integer size, OrderSearchDto sortedBy, String sort);
 }
