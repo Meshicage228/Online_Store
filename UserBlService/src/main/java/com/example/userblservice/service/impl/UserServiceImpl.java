@@ -6,6 +6,9 @@ import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.user.UserCard;
 import com.example.userblservice.entity.user.UserEntity;
 import com.example.userblservice.entity.user.UsersCart;
+import com.example.userblservice.exceptions.NegativeProductCountException;
+import com.example.userblservice.exceptions.ProductNotFoundException;
+import com.example.userblservice.exceptions.UserNotFoundException;
 import com.example.userblservice.mapper.user.UserMapper;
 import com.example.userblservice.repository.user.CardRepository;
 import com.example.userblservice.repository.user.CartRepository;
@@ -34,15 +37,14 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @RequiredArgsConstructor
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     ProductRepository productRepository;
     CommentaryRepository commentaryRepository;
     CardRepository cardRepository;
-    CartRepository cartRepository;
     @Override
+    @Transactional
     public UserDto save(UserDto dto) {
         UserEntity entity = userMapper.toEntity(dto);
         UserEntity save = userRepository.save(entity);
@@ -50,6 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Page<UserDto> findAll(Integer page, Integer size, UserSearchDto dto) {
         Specification<UserEntity> specification = createSpecification(dto);
 
@@ -58,58 +61,48 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         userRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public UserDto getByid(UUID id) {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
         return userMapper.toDto(userEntity);
     }
 
     @Override
+    @Transactional
     public UserDto update(UUID id, UserDto dto) {
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
         UserEntity updated = userMapper.update(userEntity, userMapper.toEntity(dto));
 
         return userMapper.toDto(updated);
     }
 
     @Override
-    public boolean addToCart(UUID userId, Integer prodId, Integer count) {
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException());
-        ProductEntity productEntity = productRepository.findById(prodId)
-                .orElseThrow(() -> new RuntimeException());
-
-        cartRepository.save(UsersCart.builder()
-                        .countToBuy(count)
-                        .product(productEntity)
-                        .user(userEntity)
-                .build());
-
-        return true;
-    }
-
-    @Override
+    @Transactional
     public boolean addToFavorite(UUID userId, Integer prodId) {
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
         ProductEntity productEntity = productRepository.findById(prodId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ProductNotFoundException("Продукт не найдет"));
 
         return userEntity.AddToFavorite(productEntity);
     }
 
     @Override
+    @Transactional
     public Commentary addComment(UUID userId, Integer prodId, String comment) {
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
         ProductEntity productEntity = productRepository.findById(prodId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ProductNotFoundException("Продукт не найдет"));
 
         Commentary build = Commentary.builder()
                 .user(userEntity)
@@ -121,13 +114,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void addCard(UUID userId) {
         userRepository.findById(userId).ifPresentOrElse(user -> {
                    cardRepository.save(UserCard.builder()
                             .money(99999f)
                             .user(user)
                             .build());
-                }, () -> new RuntimeException());
+                }, () -> new UserNotFoundException("Пользователь не найден"));
     }
 
 

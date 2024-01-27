@@ -51,13 +51,6 @@ public class UserController {
         return userService.update(id, dto);
     }
 
-    @PostMapping("/{user_id}/add_cart/{prod_id}")
-    public void addToCart(@PathVariable("user_id") UUID user_id,
-                          @PathVariable("prod_id") Integer prod_id,
-                          @RequestParam Integer count) {
-        userService.addToCart(user_id, prod_id, count);
-    }
-
     @PostMapping("/{user_id}/add_favorite/{prod_id}")
     public void addToFavorite(@PathVariable("user_id") UUID user_id,
                               @PathVariable("prod_id") Integer prod_id) {
