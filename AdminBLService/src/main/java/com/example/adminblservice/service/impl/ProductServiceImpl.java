@@ -4,7 +4,7 @@ package com.example.adminblservice.service.impl;
 import com.example.adminblservice.dto.product.ProductDto;
 import com.example.adminblservice.dto.product.ProductSearchDto;
 import com.example.adminblservice.entity.product.ProductEntity;
-import com.example.adminblservice.exceptions.IdNotFountException;
+import com.example.adminblservice.exceptions.ProductNotFoundException;
 import com.example.adminblservice.mappers.product.ProductMapper;
 import com.example.adminblservice.repository.ImageRepository;
 import com.example.adminblservice.repository.ProductRepository;
@@ -66,13 +66,13 @@ public class ProductServiceImpl implements ProductService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }, () -> new IdNotFountException("wrong id"));
+        }, () -> new RuntimeException("wrong id"));
     }
 
     @Override
     public ProductDto update(Integer id, ProductDto dto) {
         ProductEntity productEntity = productRepository.findById(id)
-                .orElseThrow(() -> new IdNotFountException("wrong id"));
+                .orElseThrow(() -> new ProductNotFoundException("wrong id"));
 
         ProductEntity updated = mapper.update(productEntity, mapper.toEntity(dto));
         return mapper.toDto(updated);
@@ -85,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteImage(Integer id) {
-        imageRepository.deleteByHand(id);
+        imageRepository.deleteById(id);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto findByIdProduct(Integer id) {
         ProductEntity productEntity = productRepository.findById(id)
-                .orElseThrow(() -> new IdNotFountException("wrong id"));
+                .orElseThrow(() -> new ProductNotFoundException("wrong id"));
 
         return mapper.toDto(productEntity);
     }

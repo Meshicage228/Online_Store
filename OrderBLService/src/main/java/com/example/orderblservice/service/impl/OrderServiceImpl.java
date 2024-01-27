@@ -8,10 +8,7 @@ import com.example.orderblservice.entity.product.Orders;
 import com.example.orderblservice.entity.product.ProductEntity;
 import com.example.orderblservice.entity.user.UserCard;
 import com.example.orderblservice.entity.user.UserEntity;
-import com.example.orderblservice.entity.user.UsersCart;
-import com.example.orderblservice.exceptions.NoCardFoundException;
-import com.example.orderblservice.exceptions.NotEnoughMoneyException;
-import com.example.orderblservice.exceptions.OutOfStockException;
+import com.example.orderblservice.exceptions.*;
 import com.example.orderblservice.mapper.OrderMapper;
 import com.example.orderblservice.repository.CartRepository;
 import com.example.orderblservice.repository.OrderRepository;
@@ -23,6 +20,7 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,7 +38,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @RequiredArgsConstructor
 
 @Service
-@Transactional
 public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     UserRepository userRepository;
@@ -48,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
     CartRepository cartRepository;
 
     @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 5)
+    @Transactional
     public void updateStatusOrders() {
         Optional.of(orderRepository.findAll())
                 .ifPresent(list -> list
@@ -60,32 +58,33 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void acceptPurchase(OrderRequest request) {
-        UUID userId = request.getUser_id();
-        UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new RuntimeException());
+    @Transactional
+    public void acceptPurchase(UUID userId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
         UserCard userCard = Optional.of(userEntity.getUserCard())
-                .orElseThrow(() -> new NoCardFoundException());
+                .orElseThrow(() -> new NoCardFoundException("Не найдена привязанная карта"));
 
-        List<UsersCart> cart = userEntity.getCart();
         float totalPurchase = 0;
 
-        for (var obj : cart){
+        for (var obj : userEntity.getCart()){
             ProductEntity product = obj.getProduct();
             if(product.getCount() < obj.getCountToBuy()){
-                throw new OutOfStockException();
+                throw new OutOfStockException("Выбрано товара больше, чем присутствует на складе");
             }
             totalPurchase += product.getPrice() * obj.getCountToBuy();
         }
 
         if (userCard.getMoney() < totalPurchase) {
-            throw new NotEnoughMoneyException();
+            throw new NotEnoughMoneyException("На карте недостаточно средств");
         } else {
             createPurchase(userEntity, totalPurchase);
         }
     }
 
-    private void createPurchase(UserEntity user, float totalPurchase) {
+    @Transactional
+    public void createPurchase(UserEntity user, float totalPurchase) {
         for (var cartElement : user.getCart()) {
             ProductEntity productAtMoment = cartElement.getProduct();
             Orders order = Orders.builder()
@@ -106,6 +105,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Page<OrderDto> findAllWithSort(Integer page, Integer size, OrderSearchDto searchDto, String sortedBy) {
         Specification<Orders> specification = createSpecification(searchDto);
         switch (sortedBy) {
