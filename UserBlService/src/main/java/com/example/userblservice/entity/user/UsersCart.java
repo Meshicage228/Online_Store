@@ -24,6 +24,7 @@ public class UsersCart {
        name = "product_id",
        foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT)
     )
+    @ToString.Exclude
     private ProductEntity product;
 
     @ManyToOne
@@ -31,6 +32,7 @@ public class UsersCart {
        name = "user_id",
        foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT)
     )
+    @ToString.Exclude
     private UserEntity user;
 
     private Integer countToBuy;

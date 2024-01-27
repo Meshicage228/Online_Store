@@ -29,12 +29,15 @@ public class ProductEntity {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
+    @ToString.Exclude
     private List<ProductImage> images;
 
     @OneToMany(mappedBy = "product")
+    @ToString.Exclude
     private List<Purchases> items;
 
     @OneToMany(mappedBy = "product")
+    @ToString.Exclude
     private List<Commentary> comments;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")

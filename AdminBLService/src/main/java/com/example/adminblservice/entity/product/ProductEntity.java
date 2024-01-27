@@ -32,7 +32,7 @@ public class ProductEntity {
     private Integer count;
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product", orphanRemoval = true)
     private List<ProductImage> images;
 
     @OneToMany(mappedBy = "product", orphanRemoval = true)
