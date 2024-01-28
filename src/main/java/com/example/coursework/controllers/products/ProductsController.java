@@ -1,4 +1,4 @@
-package com.example.coursework.controllers.admin;
+package com.example.coursework.controllers.products;
 
 import com.example.coursework.clients.AdminClient;
 import com.example.coursework.dto.product.ProductDto;
@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("*/products")
-public class AdminProductsController {
+public class ProductsController {
     AdminClient adminClient;
 
     @GetMapping("/{page}/{size}")
@@ -80,7 +80,7 @@ public class AdminProductsController {
     }
 
     // TODO: 20.01.2024  cannot be resolved to absolute file path
-    @PostMapping(value = "/save")
+    @PostMapping( "/save")
     public String save(ProductDto dto){
         adminClient.saveProduct(dto);
         return "redirect:/admin/createProduct";

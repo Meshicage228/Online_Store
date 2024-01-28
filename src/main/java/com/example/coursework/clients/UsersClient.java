@@ -1,5 +1,6 @@
 package com.example.coursework.clients;
 
+import com.example.coursework.configuration.ProjectConfig;
 import com.example.coursework.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -11,7 +12,8 @@ import java.util.UUID;
 @FeignClient(
         name = "${app.clients.users.name}",
         url = "${app.clients.users.url}",
-        path = "${app.clients.users.user-path}"
+        path = "${app.clients.users.user-path}",
+        configuration = ProjectConfig.class
 )
 public interface UsersClient {
     @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})

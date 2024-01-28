@@ -1,6 +1,6 @@
 package com.example.coursework.clients;
 
-import com.example.coursework.configuration.AdminFeignConfig;
+import com.example.coursework.configuration.ProjectConfig;
 import com.example.coursework.dto.product.ProductDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @FeignClient(name = "${app.clients.admin.name}",
         url = "${app.clients.admin.url}",
         path = "${app.clients.admin.product-path}",
-        configuration = AdminFeignConfig.class)
+        configuration = {ProjectConfig.class})
 public interface AdminClient {
     @GetMapping("/sorted/{page}/{size}")
     Page<ProductDto> getAllSearchPaginatedSortedProducts(@PathVariable("page") Integer page,
