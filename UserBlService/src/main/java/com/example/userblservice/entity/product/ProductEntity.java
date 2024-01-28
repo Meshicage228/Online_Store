@@ -44,7 +44,7 @@ public class ProductEntity {
     @ToString.Exclude
     private Set<UsersCart> users;
 
-    @ManyToMany(mappedBy = "favoriteProducts")
+    @ManyToMany(mappedBy = "favoriteProducts", fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<UserEntity> users_favorites;
 
