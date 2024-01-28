@@ -24,6 +24,10 @@ spring:
     password: 28072004
     username: postgres
     url: jdbc:postgresql://localhost:5432/course_work
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
 app:
   clients:
     admin:
@@ -32,12 +36,14 @@ app:
       product-path: /v1/products
     users:
       name : user-feign
+      cart-name : cart-feign
       url: 127.0.0.1:8082
       user-path : /v1/users
-feign:
-  okhttp:
-    enabled: true
-  client:
-    config:
-      user-client:
-        loggerLevel : full
+      cart-path : /v1/users/cart
+    orders:
+      name: order-feign
+      url: 127.0.0.1:8083
+      path: /v1/orders
+logging:
+  level:
+    root: info
