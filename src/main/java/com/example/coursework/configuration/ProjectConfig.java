@@ -7,8 +7,11 @@ import feign.okhttp.OkHttpClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.openfeign.support.JsonFormWriter;
 import org.springframework.cloud.openfeign.support.PageJacksonModule;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 
 @RequiredArgsConstructor
@@ -33,5 +36,20 @@ public class ProjectConfig {
     @Bean
     public JsonFormWriter jsonFormWriter() {
         return new JsonFormWriter();
+    }
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource
+                = new ReloadableResourceBundleMessageSource();
+
+        messageSource.setBasename("classpath:messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+    @Bean
+    public LocalValidatorFactoryBean getValidator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
     }
 }

@@ -2,11 +2,15 @@ package com.example.coursework.controllers.products;
 
 import com.example.coursework.clients.AdminClient;
 import com.example.coursework.dto.product.ProductDto;
+import com.example.coursework.utils.annotations.CheckFileSize;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -53,18 +57,21 @@ public class ProductsController {
 
     @PutMapping("/{id}/change")
     public ModelAndView update(@PathVariable("id") Integer id,
-                               ProductDto dto) {
+                               @Valid ProductDto dto,
+                               BindingResult check) {
         ProductDto updated = adminClient.update(id, dto);
         return new ModelAndView("redirect:/admin/products/" + id).addObject("toChange", updated);
     }
+
     @DeleteMapping("/{id}/delete")
-    public String deleteProduct(@PathVariable("id")Integer id){
+    public String deleteProduct(@PathVariable("id") Integer id) {
         adminClient.deleteProduct(id);
         return "redirect:/admin";
     }
+
     @DeleteMapping("/{product_id}/image/{image_id}/delete")
-    public String deleteImage(@PathVariable("product_id")Integer productId,
-                              @PathVariable("image_id")Integer imageId){
+    public String deleteImage(@PathVariable("product_id") Integer productId,
+                              @PathVariable("image_id") Integer imageId) {
         adminClient.deleteImage(imageId);
         return "redirect:/admin/products/" + productId;
     }
@@ -72,16 +79,19 @@ public class ProductsController {
     @PatchMapping("/{product_id}/image/{image_id}/update")
     public ModelAndView updatePicture(@PathVariable("product_id") Integer idProduct,
                                       @PathVariable("image_id") Integer idImage,
-                                      @RequestParam("newImage") MultipartFile file){
-        if(file.getSize() != 0) {
+                                      @CheckFileSize(maxSizeInMB = 5, message = "Превышен размер файла в 5 МБ")
+                                      @NotNull(message = "Выберите файл")
+                                      @RequestParam("newImage") MultipartFile file, BindingResult result) {
+        if (!result.hasFieldErrors()) {
             adminClient.updatePicture(idImage, file);
         }
         return new ModelAndView("redirect:/admin/products/" + idProduct);
     }
 
     // TODO: 20.01.2024  cannot be resolved to absolute file path
-    @PostMapping( "/save")
-    public String save(ProductDto dto){
+    @PostMapping("/save")
+    public String save(@Valid ProductDto dto,
+                       BindingResult check) {
         adminClient.saveProduct(dto);
         return "redirect:/admin/createProduct";
     }

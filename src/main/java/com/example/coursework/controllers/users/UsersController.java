@@ -3,11 +3,16 @@ package com.example.coursework.controllers.users;
 import com.example.coursework.clients.UsersClient;
 import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.UserDto;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -55,7 +60,8 @@ public class UsersController {
 
     @PutMapping("/{user_id}")
     public UserDto updateUser(@PathVariable("user_id") UUID id,
-                              @ModelAttribute UserDto dto) {
+                              @Valid @ModelAttribute UserDto dto,
+                              BindingResult result) {
         return client.updateUser(id, dto);
     }
 
@@ -67,7 +73,8 @@ public class UsersController {
     @PostMapping("/{user_id}/comment/{product_id}")
     public void leaveCommentary(@PathVariable("user_id") UUID user_id,
                                 @PathVariable("product_id") Integer prod_id,
-                                @RequestParam("commentary") String comment){
+                                @Size(min = 5, max = 150, message = "Размер комментария в пределах от 5 до 150 символов")
+                                @RequestParam("commentary") String comment, BindingResult result){
         client.leaveCommentary(user_id, prod_id, comment);
     }
     @PostMapping("/card/{user_id}")
