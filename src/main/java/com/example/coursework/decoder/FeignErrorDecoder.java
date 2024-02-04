@@ -19,6 +19,7 @@ public class FeignErrorDecoder implements ErrorDecoder {
         ErrorMessage message = null;
         try (InputStream bodyIs = response.body().asInputStream()) {
             var mapper = new ObjectMapper();
+            String string = response.body().asInputStream().readAllBytes().toString();
             message = mapper.readValue(bodyIs, ErrorMessage.class);
         } catch (IOException e) {
             return new Exception(e.getMessage());

@@ -6,8 +6,12 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
+import static java.util.Objects.isNull;
+
 @Component
-public class CheckFileSizeValidator implements ConstraintValidator<CheckFileSize, MultipartFile> {
+public class CheckFileSizeValidator implements ConstraintValidator<CheckFileSize, List<MultipartFile>> {
     private final long MB = (long) Math.pow(1024, 2);
 
     private long maxSize;
@@ -18,7 +22,14 @@ public class CheckFileSizeValidator implements ConstraintValidator<CheckFileSize
     }
 
     @Override
-    public boolean isValid(MultipartFile value, ConstraintValidatorContext context) {
-        return value.getSize() < maxSize * MB;
+    public boolean isValid(List<MultipartFile> value, ConstraintValidatorContext context) {
+        if(isNull(value)) return true;
+        for(var file : value){
+            if(file.getSize() == 0) return  true;
+            if(file.getSize() > MB * maxSize){
+                return false;
+            }
+        }
+        return true;
     }
 }

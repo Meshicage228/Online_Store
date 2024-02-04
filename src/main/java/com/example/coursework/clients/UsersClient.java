@@ -23,7 +23,8 @@ public interface UsersClient {
     Page<UserDto> getAllUsers(@PathVariable("page") Integer page,
                               @PathVariable("size") Integer size,
                               @RequestParam(value = "name", required = false) String name);
-
+    @PostMapping("/find")
+    boolean findExists(@RequestParam("username") String name);
     @DeleteMapping("/{id}")
     void deleteUser(@PathVariable("id") UUID id);
 

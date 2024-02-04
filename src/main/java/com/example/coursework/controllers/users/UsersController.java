@@ -1,16 +1,15 @@
 package com.example.coursework.controllers.users;
 
 import com.example.coursework.clients.UsersClient;
-import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.UserDto;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
+//import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ import java.util.stream.IntStream;
 @RequestMapping("*/users")
 public class UsersController {
     UsersClient client;
-
+//    @Secured("hasRole('ROLE_ADMIN')")
     @GetMapping("/{page}/{size}")
     public ModelAndView getPage(@PathVariable(value = "page") Integer page,
                                 @PathVariable(value = "size") Integer size,
@@ -47,22 +46,27 @@ public class UsersController {
         modelAndView.addObject("searchedName", name);
         return modelAndView;
     }
-
+//    @Secured("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") UUID id) {
+    public ModelAndView deleteUser(@PathVariable("id") UUID id) {
         client.deleteUser(id);
+        return new ModelAndView("redirect:/admin/users/0/5");
     }
 
     @GetMapping("/{user_id}")
     public UserDto getPersonal(@PathVariable("user_id") UUID id) {
         return client.personalUser(id);
     }
-
+//    @Secured("hasRole('ROLE_ADMIN')")
     @PutMapping("/{user_id}")
     public UserDto updateUser(@PathVariable("user_id") UUID id,
                               @Valid @ModelAttribute UserDto dto,
                               BindingResult result) {
         return client.updateUser(id, dto);
+    }
+    @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    UserDto saveUser(@ModelAttribute UserDto dto){
+        return client.saveUser(dto);
     }
 
     @PostMapping("/{user_id}/add_favorite/{prod_id}")
@@ -71,10 +75,9 @@ public class UsersController {
         client.addToFavorite(user_id, prod_id);
     }
     @PostMapping("/{user_id}/comment/{product_id}")
-    public void leaveCommentary(@PathVariable("user_id") UUID user_id,
-                                @PathVariable("product_id") Integer prod_id,
-                                @Size(min = 5, max = 150, message = "Размер комментария в пределах от 5 до 150 символов")
-                                @RequestParam("commentary") String comment, BindingResult result){
+    public void leaveCommentary(@RequestParam("commentary") String comment,
+                                @PathVariable("user_id") UUID user_id,
+                                @PathVariable("product_id") Integer prod_id){
         client.leaveCommentary(user_id, prod_id, comment);
     }
     @PostMapping("/card/{user_id}")

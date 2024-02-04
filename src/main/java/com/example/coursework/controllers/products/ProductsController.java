@@ -2,21 +2,25 @@ package com.example.coursework.controllers.products;
 
 import com.example.coursework.clients.AdminClient;
 import com.example.coursework.dto.product.ProductDto;
-import com.example.coursework.utils.annotations.CheckFileSize;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
+/*import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;*/
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -50,25 +54,31 @@ public class ProductsController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getById(@PathVariable("id") Integer id) {
+    public ModelAndView getById(@PathVariable("id") Integer id, @ModelAttribute("modelToUpdate") ProductDto showDto) {
         ProductDto dto = adminClient.findProductById(id);
-        return new ModelAndView("productChangeAdmin").addObject("toChange", dto);
+        return new ModelAndView("adminUpdateProduct").addObject("modelToUpdate", dto);
     }
 
+    //    @Secured("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}/change")
     public ModelAndView update(@PathVariable("id") Integer id,
-                               @Valid ProductDto dto,
+                               @Valid @ModelAttribute("modelToUpdate") ProductDto dto,
                                BindingResult check) {
-        ProductDto updated = adminClient.update(id, dto);
-        return new ModelAndView("redirect:/admin/products/" + id).addObject("toChange", updated);
+        if(!check.hasFieldErrors()) {
+            ProductDto updated = adminClient.update(id, dto);
+            return new ModelAndView("redirect:/admin/products/" + id).addObject("modelToUpdate", updated);
+        }
+        return new ModelAndView("adminUpdateProduct");
     }
 
+    //    @Secured("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}/delete")
     public String deleteProduct(@PathVariable("id") Integer id) {
         adminClient.deleteProduct(id);
         return "redirect:/admin";
     }
 
+    //    @Secured("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{product_id}/image/{image_id}/delete")
     public String deleteImage(@PathVariable("product_id") Integer productId,
                               @PathVariable("image_id") Integer imageId) {
@@ -76,23 +86,46 @@ public class ProductsController {
         return "redirect:/admin/products/" + productId;
     }
 
+    //    @Secured("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{product_id}/image/{image_id}/update")
     public ModelAndView updatePicture(@PathVariable("product_id") Integer idProduct,
-                                      @PathVariable("image_id") Integer idImage,
-                                      @CheckFileSize(maxSizeInMB = 5, message = "Превышен размер файла в 5 МБ")
-                                      @NotNull(message = "Выберите файл")
-                                      @RequestParam("newImage") MultipartFile file, BindingResult result) {
-        if (!result.hasFieldErrors()) {
+                                      @PathVariable(value = "image_id") Integer idImage,
+                                      @RequestParam("newImage") MultipartFile file) {
+        if (file.getSize() != 0) {
             adminClient.updatePicture(idImage, file);
         }
         return new ModelAndView("redirect:/admin/products/" + idProduct);
     }
 
-    // TODO: 20.01.2024  cannot be resolved to absolute file path
+    @PostMapping("/{prod_id}/addImage")
+    public ModelAndView saveNewImage(@PathVariable("prod_id") Integer prodId,
+                                     @RequestParam("addImage") MultipartFile file) {
+        adminClient.addNewImage(prodId, file);
+
+        return new ModelAndView("redirect:/admin/products/" + prodId);
+    }
+
+    //    @Secured("hasRole('ROLE_ADMIN')")
     @PostMapping("/save")
-    public String save(@Valid ProductDto dto,
-                       BindingResult check) {
-        adminClient.saveProduct(dto);
-        return "redirect:/admin/createProduct";
+    public ModelAndView save(@Valid @ModelAttribute(name = "modelToSave") ProductDto dto,
+                             BindingResult check) {
+        ModelAndView modelAndView = new ModelAndView("createProductAdmin");
+        if (!check.hasFieldErrors()) {
+            List<byte[]> imagesToThrow = new ArrayList<>();
+
+            dto.getFileImage().forEach(image -> {
+                try {
+                    imagesToThrow.add(image.getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            dto.setFileImage(null);
+            dto.setImagesToThrow(imagesToThrow);
+            adminClient.saveProduct(dto);
+            return modelAndView.addObject("modelToSave", new ProductDto());
+        }
+        modelAndView.addObject("modelToSave", dto);
+        return modelAndView;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.coursework.controllers.admin;
 
+import com.example.coursework.dto.product.ProductDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,11 +21,7 @@ public class AdminController {
     }
 
     @GetMapping("/createProduct")
-    public String createProductPage() {
+    public String createProductPage(@ModelAttribute("modelToSave") ProductDto dto) {
         return "createProductAdmin";
-    }
-    @GetMapping("/users")
-    public String getAllUsers(){
-        return "redirect:/admin/users/0/10";
     }
 }
