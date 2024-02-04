@@ -1,6 +1,5 @@
 package com.example.orderblservice.entity.product;
 
-import com.example.orderblservice.entity.user.UserEntity;
 import com.example.orderblservice.entity.user.UsersCart;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 
-// TODO: 23.01.2024 Change this entity from user bl
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
