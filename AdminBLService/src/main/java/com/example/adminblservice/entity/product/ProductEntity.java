@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 
-// TODO: 23.01.2024 Change this entity from user bl
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 public class ProductDto implements Serializable {
     private List<MultipartFile> fileImage;
+    private List<byte[]> imagesToThrow;
     private Integer id;
     private String title;
     private String description;

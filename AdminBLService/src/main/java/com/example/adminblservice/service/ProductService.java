@@ -23,4 +23,5 @@ public interface ProductService {
 
     void deleteImage(Integer id);
 
+    void addImage(Integer id, MultipartFile file);
 }

@@ -26,7 +26,7 @@ public interface UserMapper {
             @Mapping(target = "password", source = "password"),
             @Mapping(target = "role", source = "role"),
             @Mapping(target = "favoriteProducts", source = "favoriteProducts"),
-            @Mapping(target = "basket", source = "cart")
+//            @Mapping(target = "basket", source = "cart") // TODO: 26.01.2024 commited cart
     })
     UserDto toDto(UserEntity entity);
     @Mappings({

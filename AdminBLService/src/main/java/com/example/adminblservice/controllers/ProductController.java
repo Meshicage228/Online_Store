@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -61,7 +63,13 @@ public class ProductController {
     }
 
     @PostMapping("/save")
-    ProductDto saveProduct(@ModelAttribute ProductDto dto) {
+    ProductDto saveProduct(@RequestBody ProductDto dto) {
         return service.save(dto);
+    }
+
+    @PostMapping(value = "/{id}" , consumes = MULTIPART_FORM_DATA_VALUE)
+    void addNewImage(@PathVariable("id") Integer id,
+                     @RequestPart("file") MultipartFile file){
+        service.addImage(id, file);
     }
 }

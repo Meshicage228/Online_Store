@@ -21,7 +21,6 @@ public interface ProductMapper {
     })
     ProductEntity toEntity(ProductDto dto);
 
-    // TODO: 20.01.2024 изменить игнор когда будет ui
     @Mappings({
         @Mapping(target = "id", source = "id"),
         @Mapping(target = "title", source = "title"),
@@ -36,10 +35,10 @@ public interface ProductMapper {
     List<ProductDto> toDtos (List<ProductEntity> entities);
     List<ProductEntity> toEntities (List<ProductDto> dtos);
 
-    // TODO: 24.01.2024 Добавить потом count
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "title", source = "title")
     @Mapping(target = "description", source = "description")
     @Mapping(target = "price", source = "price")
+    @Mapping(target = "count", source = "count")
     ProductEntity update(@MappingTarget ProductEntity target, ProductEntity source);
 }

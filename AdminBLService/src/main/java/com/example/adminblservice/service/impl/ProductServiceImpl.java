@@ -31,27 +31,22 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @RequiredArgsConstructor
 
 @Service
-@Transactional
 public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     ProductMapper mapper;
     ImageRepository imageRepository;
     @Override
+    @Transactional
     public ProductDto save(ProductDto dto) {
         ProductEntity entity = mapper.toEntity(dto);
-        try {
-            for(var file: dto.getFileImage()){
-                entity.addImage(file.getBytes());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        dto.getImagesToThrow().forEach(entity::addImage);
         ProductEntity save = productRepository.save(entity);
 
         return mapper.toDto(save);
     }
 
     @Override
+    @Transactional
     public Page<ProductDto> findAll(Integer page, Integer size, ProductSearchDto search) {
         Specification<ProductEntity> specification = createSpecification(search);
         return productRepository.findAll(specification, PageRequest.of(page - 1, size))
@@ -59,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void update(Integer idImage, MultipartFile file) {
         imageRepository.findById(idImage).ifPresentOrElse(image -> {
             try {
@@ -70,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDto update(Integer id, ProductDto dto) {
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("wrong id"));
@@ -79,16 +76,31 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         productRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void deleteImage(Integer id) {
-        imageRepository.deleteById(id);
+        imageRepository.deleteByHand(id);
     }
 
     @Override
+    @Transactional
+    public void addImage(Integer id, MultipartFile file) {
+        ProductEntity entity = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
+        try {
+            entity.addImage(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional
     public Page<ProductDto> getAllProducts(Integer page, Integer size, String sortedBy, ProductSearchDto searchDto){
         Specification<ProductEntity> specification = createSpecification(searchDto);
         switch (sortedBy){
@@ -115,9 +127,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDto findByIdProduct(Integer id) {
         ProductEntity productEntity = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("wrong id"));
+                .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
 
         return mapper.toDto(productEntity);
     }
