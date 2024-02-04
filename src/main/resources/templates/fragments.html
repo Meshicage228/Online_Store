@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="navigator" th:fragment="admin-navigation">
+    <div class="list-group" style="width: 210px; height: 100%; border-radius: 0px">
+        <button type="button" class="list-group-item list-group-item-action"><a
+                th:href="@{/admin/products/{page}/{size}(page = 0, size = 10)}">Все товары</a></button>
+
+        <button type="button" class="list-group-item list-group-item-action"><a
+                th:href="@{/admin/createProduct}">Создать товар</a></button>
+
+        <button type="button" class="list-group-item list-group-item-action"><a
+                th:href="@{/admin/orders/{page}/{size}(page = 0, size = 10)}">Заказы</a></button>
+
+        <button type="button" class="list-group-item list-group-item-action"><a
+                th:href="@{/admin/users/{page}/{size}(page = 0, size = 10)}">Пользователи</a></button>
+    </div>
+</div>
+<div th:fragment="input-details (variable)">
+    <input name="title" placeholder="title" th:value="${variable.title}" type="text" th:field="*{title}">
+    <div th:if="${#fields.hasErrors('title')}" th:class="${#fields.hasErrors('title')}? error"
+         th:errors="*{title}"></div>
+    <input name="price" placeholder="price" th:value="${variable.price}" th:field="*{price}" type="number">
+    <div th:if="${#fields.hasErrors('price')}" th:class="${#fields.hasErrors('price')}? error"
+         th:errors="*{price}"></div>
+    <input name="count" placeholder="count" th:value="${variable.count}" th:field="*{count}" type="number">
+    <div th:if="${#fields.hasErrors('count')}" th:class="${#fields.hasErrors('count')}? error"
+         th:errors="*{count}"></div>
+    <input name="description" placeholder="description" th:value="${variable.description}" type="text" th:field="*{description}">
+    <div th:if="${#fields.hasErrors('description')}" th:class="${#fields.hasErrors('description')}? error"
+         th:errors="*{description}"></div>
+</div>
+</body>
+</html>
