@@ -4,6 +4,9 @@ body, html{
 .navigator{
     height: 100%;
 }
+.error {
+    text-decoration-color: red;
+}
 .list-group{
     display: flex;
     flex-direction: column;
