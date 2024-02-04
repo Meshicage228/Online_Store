@@ -23,4 +23,6 @@ public interface UserService {
     Commentary addComment(UUID userId, Integer prodId, String comment);
 
     void addCard(UUID userId);
+
+    boolean findByName(String name);
 }

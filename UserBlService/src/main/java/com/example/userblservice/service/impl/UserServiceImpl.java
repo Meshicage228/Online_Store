@@ -1,17 +1,15 @@
 package com.example.userblservice.service.impl;
 
+import com.example.userblservice.domain.Role;
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.user.UserCard;
 import com.example.userblservice.entity.user.UserEntity;
-import com.example.userblservice.entity.user.UsersCart;
-import com.example.userblservice.exceptions.NegativeProductCountException;
 import com.example.userblservice.exceptions.ProductNotFoundException;
 import com.example.userblservice.exceptions.UserNotFoundException;
 import com.example.userblservice.mapper.user.UserMapper;
 import com.example.userblservice.repository.user.CardRepository;
-import com.example.userblservice.repository.user.CartRepository;
 import com.example.userblservice.repository.user.CommentaryRepository;
 import com.example.userblservice.repository.product.ProductRepository;
 import com.example.userblservice.repository.user.UserRepository;
@@ -25,6 +23,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+/*import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;*/
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,12 +33,13 @@ import java.util.UUID;
 
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.remove;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService/*, UserDetailsService*/ {
     UserRepository userRepository;
     UserMapper userMapper;
     ProductRepository productRepository;
@@ -50,6 +52,13 @@ public class UserServiceImpl implements UserService {
         UserEntity save = userRepository.save(entity);
         return userMapper.toDto(save);
     }
+
+    /*@Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByName(username)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+    }*/
 
     @Override
     @Transactional
@@ -122,6 +131,11 @@ public class UserServiceImpl implements UserService {
                             .user(user)
                             .build());
                 }, () -> new UserNotFoundException("Пользователь не найден"));
+    }
+
+    @Override
+    public boolean findByName(String name) {
+        return userRepository.existsByName(name);
     }
 
 
