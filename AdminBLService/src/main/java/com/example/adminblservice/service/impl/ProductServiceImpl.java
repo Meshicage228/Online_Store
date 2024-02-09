@@ -4,6 +4,7 @@ package com.example.adminblservice.service.impl;
 import com.example.adminblservice.dto.product.ProductDto;
 import com.example.adminblservice.dto.product.ProductSearchDto;
 import com.example.adminblservice.entity.product.ProductEntity;
+import com.example.adminblservice.entity.user.Commentary;
 import com.example.adminblservice.exceptions.ProductNotFoundException;
 import com.example.adminblservice.mappers.product.ProductMapper;
 import com.example.adminblservice.repository.ImageRepository;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -131,6 +132,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto findByIdProduct(Integer id) {
         ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
+
+        if(!productEntity.getComments().isEmpty()){
+            productEntity.getComments().sort(Comparator.comparing(Commentary::getDate).reversed());
+        }
 
         return mapper.toDto(productEntity);
     }

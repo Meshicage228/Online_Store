@@ -4,6 +4,9 @@ package com.example.userblservice.entity.product;
 import com.example.userblservice.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,4 +28,8 @@ public class Commentary {
     private UserEntity user;
 
     private String comment;
+
+    @CreationTimestamp
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Date date;
 }

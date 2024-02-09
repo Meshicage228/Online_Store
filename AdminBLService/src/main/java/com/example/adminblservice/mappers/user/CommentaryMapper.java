@@ -18,7 +18,8 @@ public interface CommentaryMapper {
             @Mapping(target = "id", source = "id"),
             @Mapping(target = "name", expression = "java(entity.getUser().getName())"),
             @Mapping(target = "userAvatar", expression = "java(getStringAvatar(entity.getUser().getAvatar()))"),
-            @Mapping(target = "comment", source = "comment")
+            @Mapping(target = "comment", source = "comment"),
+            @Mapping(target = "date", source = "date")
     })
     CommentaryDto toDto(Commentary entity);
 

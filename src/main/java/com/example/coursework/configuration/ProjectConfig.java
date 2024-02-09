@@ -19,11 +19,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @RequiredArgsConstructor
 @Configuration
-public class ProjectConfig {
+public class ProjectConfig implements WebMvcConfigurer {
     @Bean
     public OkHttpClient client() {
         return new OkHttpClient();
@@ -69,5 +71,10 @@ public class ProjectConfig {
     @Bean
     public Encoder multipartFormEncoder() {
         return new SpringFormEncoder(new SpringEncoder(() -> new HttpMessageConverters(new RestTemplate().getMessageConverters())));
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/images/**").addResourceLocations("/WEB-INF/images/");
     }
 }

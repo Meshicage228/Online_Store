@@ -2,7 +2,11 @@ package com.example.adminblservice.entity.user;
 
 import com.example.adminblservice.entity.product.ProductEntity;
 import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,4 +28,8 @@ public class Commentary {
     private UserEntity user;
 
     private String comment;
+
+    @CreationTimestamp
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Date date;
 }

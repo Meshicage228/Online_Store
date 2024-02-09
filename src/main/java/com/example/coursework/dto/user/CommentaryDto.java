@@ -1,9 +1,11 @@
-package com.example.coursework.controllers.users;
+package com.example.coursework.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,4 +19,6 @@ public class CommentaryDto {
     private String name;
 
     private String comment;
+
+    private Date date;
 }
