@@ -1,5 +1,6 @@
 package com.example.coursework.dto.product;
 
+import com.example.coursework.controllers.users.CommentaryDto;
 import com.example.coursework.utils.annotations.CheckFileIsEmpty;
 import com.example.coursework.utils.annotations.CheckFileSize;
 import com.example.coursework.utils.annotations.CheckIsZero;
@@ -43,4 +44,6 @@ public class ProductDto {
     private Integer count;
 
     private List<ProductImageDto> images;
+
+    private List<CommentaryDto> comments;
 }

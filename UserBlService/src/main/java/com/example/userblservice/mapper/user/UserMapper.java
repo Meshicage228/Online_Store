@@ -5,11 +5,15 @@ import com.example.userblservice.entity.user.UserEntity;
 import com.example.userblservice.mapper.product.ProductImageMapper;
 import com.example.userblservice.mapper.product.ProductMapper;
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 
 @Mapper(
@@ -18,13 +22,13 @@ import java.util.List;
 )
 public abstract class UserMapper {
 
-/*    @Autowired
+   /* @Autowired
     private BCryptPasswordEncoder encoder;*/
 
     @Mappings({
             @Mapping(target = "id", source = "id"),
             @Mapping(target = "name", source = "name"),
-            @Mapping(target = "avatar", /*expression = "java(decodeStringToBytes(entity.getAvatar()))"*/ ignore = true),
+            @Mapping(target = "avatar", expression = "java(decodeStringToBytes(entity.getAvatar()))"),
             @Mapping(target = "password", source = "password"),
             @Mapping(target = "role", source = "role"),
             @Mapping(target = "favoriteProducts", source = "favoriteProducts"),
@@ -35,7 +39,7 @@ public abstract class UserMapper {
             @Mapping(target = "id", source = "id"),
             @Mapping(target = "name", source = "name"),
             // TODO: 03.02.2024 commited avater while saving in /store/authorize
-            @Mapping(target = "avatar", /*expression = "java(encodeBytesToString(dto.getFile()))"*/ ignore = true),
+            @Mapping(target = "avatar",/* expression = "java(encodeBytesToString(dto.getFile()))"*/ ignore = true),
             @Mapping(target = "password", /*expression = "java(encodePassword(dto))"*/ source = "password"),
             @Mapping(target = "role", defaultValue = "USER")
     })
@@ -53,15 +57,17 @@ public abstract class UserMapper {
     public byte[] encodeBytesToString(MultipartFile file){
         try {
             return file.getBytes();
+        } catch (NullPointerException e) {
+            return new byte[0];
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-/*    public String decodeStringToBytes(byte[] bytes){
+    public String decodeStringToBytes(byte[] bytes){
         return Base64.getEncoder().encodeToString(bytes);
-    }*/
+    }
 
-/*    public String encodePassword(UserDto dto){
+ /*   public String encodePassword(UserDto dto){
         return encoder.encode(dto.getPassword());
     }*/
 

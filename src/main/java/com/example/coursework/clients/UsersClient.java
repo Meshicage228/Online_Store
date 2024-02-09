@@ -1,6 +1,7 @@
 package com.example.coursework.clients;
 
 import com.example.coursework.configuration.ProjectConfig;
+import com.example.coursework.dto.user.AuthorizeDao;
 import com.example.coursework.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ public interface UsersClient {
                               @PathVariable("size") Integer size,
                               @RequestParam(value = "name", required = false) String name);
     @PostMapping("/find")
-    boolean findExists(@RequestParam("username") String name);
+    boolean findExists(@RequestParam("find") String name);
     @DeleteMapping("/{id}")
     void deleteUser(@PathVariable("id") UUID id);
 
@@ -46,4 +47,7 @@ public interface UsersClient {
 
     @PostMapping("/card/{user_id}")
     void addNewCard(@PathVariable("user_id") UUID user_id);
+
+    @PostMapping("/login")
+    void login(@RequestParam("nameAuth") String authName, @RequestParam("password") String password);
 }

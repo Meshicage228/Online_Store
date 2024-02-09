@@ -8,6 +8,8 @@ import org.mapstruct.Mappings;
 
 import java.util.Base64;
 
+import static java.util.Objects.isNull;
+
 @Mapper(
         componentModel = "spring"
 )
@@ -21,6 +23,10 @@ public interface CommentaryMapper {
     CommentaryDto toDto(Commentary entity);
 
     default String getStringAvatar(byte[] avatar){
+        if(isNull(avatar)){
+            // TODO: 07.02.2024 set default avatar
+            return "";
+        }
         return Base64.getEncoder().encodeToString(avatar);
     }
 }

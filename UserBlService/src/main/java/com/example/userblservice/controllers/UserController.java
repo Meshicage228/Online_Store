@@ -1,17 +1,13 @@
 package com.example.userblservice.controllers;
 
+import com.example.userblservice.dto.user.AuthorizeDao;
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.dto.user.UserSearchDto;
-import com.example.userblservice.entity.user.UserEntity;
 import com.example.userblservice.service.impl.UserServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
-/*import org.springframework.security.core.AuthenticatedPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;*/
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -40,9 +36,12 @@ public class UserController {
     }
 
     @PostMapping("/find")
-    public boolean findExists(@RequestParam("username") String name) {
-        boolean enabled = userService.findByName(name);
-        return enabled;
+    public boolean findExists(@RequestParam("find") String name) {
+        return userService.findByName(name);
+    }
+    @PostMapping("/login")
+    public void login(@RequestParam("nameAuth") String authName, @RequestParam("password") String password){
+        System.out.println("Sccuess");
     }
 
     @DeleteMapping("/{id}")

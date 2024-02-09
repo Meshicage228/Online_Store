@@ -23,8 +23,11 @@ public class UserDto {
     @NotEmpty(message = "Введите пароль")
     @Size(min = 5, max = 30, message = "Пароль в размере от 5 до 30 символов")
     private String password;
+
     @NotEmpty(message = "Введите ваш логин")
+    @Size(min = 5, max = 15, message = "Логин в размере от 5 до 15 символов")
     private String name;
+
     private Role role;
     @CheckFileSize(maxSizeInMB = 5, message = "{app.file-size-message}")
     private MultipartFile file;

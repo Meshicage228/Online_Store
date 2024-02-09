@@ -28,7 +28,7 @@ public class TokenGenerationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String password = request.getParameter("password");
 
-        String username = request.getParameter("username");
+        String username = request.getParameter("nameAuth");
 
         if (username != null && !username.isBlank()) {
             UserDetails userDetails = service.loadUserByUsername(username);

@@ -17,25 +17,25 @@
                         <h3 class="mb-5">Authorize</h3>
                         <form th:action="@{/store/authorize}" method="post">
                             <div class="form-outline mb-4">
-                                <input type="text" id="typeEmailX-2" class="form-control form-control-lg" name="name">
-                                <label class="form-label" for="typeEmailX-2" th:field="*{name}" th:value="*{name}">логин</label>
-                                <div th:if="${#fields.hasErrors('name')}" th:class="${#fields.hasErrors('name')}? error"
-                                     th:errors="*{name}"></div>
+                                <input th:field="*{nameAuth}" th:value="*{nameAuth}" type="text" id="typeEmailX-2" class="form-control form-control-lg" name="nameAuth">
+                                <label class="form-label" for="typeEmailX-2">логин</label>
+                                <div th:if="${#fields.hasErrors('nameAuth')}" th:class="${#fields.hasErrors('nameAuth')}? error"
+                                     th:errors="*{nameAuth}"></div>
                             </div>
                             <div th:text="${usersExits}"></div>
 
                             <div class="form-outline mb-4">
                                 <input type="password" id="typePasswordX-2" class="form-control form-control-lg"
-                                       name="password">
-                                <label class="form-label" for="typePasswordX-2" th:field="*{password}" th:value="*{password}">пароль</label>
+                                       name="password" th:field="*{password}" th:value="*{password}">
+                                <label class="form-label" for="typePasswordX-2">пароль</label>
                                 <div th:if="${#fields.hasErrors('password')}" th:class="${#fields.hasErrors('password')}? error"
                                      th:errors="*{password}"></div>
                             </div>
 
                             <div class="form-outline mb-4">
                                 <input type="password" id="typePasswordX-1" class="form-control form-control-lg"
-                                       name="doublePass">
-                                <label class="form-label" for="typePasswordX-2" th:field="*{doublePass}" th:value="*{doublePass}">Повторите пароль</label>
+                                       name="doublePass" th:field="*{doublePass}" th:value="*{doublePass}">
+                                <label class="form-label" for="typePasswordX-2">Повторите пароль</label>
                                 <div th:if="${#fields.hasErrors('doublePass')}" th:class="${#fields.hasErrors('doublePass')}? error"
                                      th:errors="*{doublePass}"></div>
                             </div>

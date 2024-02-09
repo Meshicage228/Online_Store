@@ -47,6 +47,8 @@ app:
       name: order-feign
       url: 127.0.0.1:8083
       path: /v1/orders
+project:
+  secretKey : assgaasglnsaggasnklgsankasgnksasnkasgknsdhnasgjahsgvbasghbnvxbzcnb
 logging:
   level:
     root: info

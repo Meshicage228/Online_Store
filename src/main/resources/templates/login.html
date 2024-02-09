@@ -15,15 +15,19 @@
                     <div class="card-body p-5 text-center">
 
                         <h3 class="mb-5">Sign in</h3>
-                        <form th:action="@{/store/login}" method="post">
+                        <form th:action="@{/store/login}" th:method="post" th:object="${enterUser}">
                             <div class="form-outline mb-4">
-                                <input type="email" id="typeEmailX-2" class="form-control form-control-lg" name="name">
+                                <input type="text" id="typeEmailX-2" class="form-control form-control-lg" name="nameAuth" th:field="*{nameAuth}" th:value="*{nameAuth}">
                                 <label class="form-label" for="typeEmailX-2">Ваш логин</label>
+                                <div th:if="${#fields.hasErrors('nameAuth')}" th:class="${#fields.hasErrors('nameAuth')}? error"
+                                     th:errors="*{nameAuth}"></div>
                             </div>
 
                             <div class="form-outline mb-4">
                                 <input type="password" id="typePasswordX-2" class="form-control form-control-lg"
-                                       name="password">
+                                       name="password" th:value="*{password}" th:field="*{password}">
+                                <div th:if="${#fields.hasErrors('password')}" th:class="${#fields.hasErrors('password')}? error"
+                                     th:errors="*{password}"></div>
                                 <label class="form-label" for="typePasswordX-2">Ваш пароль</label>
                             </div>
 

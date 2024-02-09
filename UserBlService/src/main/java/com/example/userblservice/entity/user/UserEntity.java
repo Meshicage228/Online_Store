@@ -28,7 +28,6 @@ public class UserEntity/* implements UserDetails*/ {
     @Column(name = "user_id")
     private UUID id;
 
-    @Column(unique = true)
     private String name;
 
     @Lob
@@ -69,7 +68,7 @@ public class UserEntity/* implements UserDetails*/ {
         return true;
     }
 
-    /*@Override
+  /*  @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(String.valueOf(role)));
     }

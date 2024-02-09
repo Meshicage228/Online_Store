@@ -21,6 +21,9 @@ public class UsersConfig {
         http.authorizeHttpRequests(registry -> {
             registry.requestMatchers("/v1/users/save").permitAll();
             registry.requestMatchers("/v1/users/login").permitAll();
+            registry.requestMatchers("/v1/users/personal").permitAll();
+            registry.requestMatchers("/v1/users/{user_id}/").permitAll();
+            registry.requestMatchers("/v1/users/personal").permitAll();
             registry.requestMatchers("/v1/users/{user_id}").hasAuthority("USER");
             registry.requestMatchers("/v1/users/{page}/{size}").hasAuthority("USER");
         });

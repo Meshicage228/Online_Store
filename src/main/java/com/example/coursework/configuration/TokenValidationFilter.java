@@ -1,7 +1,7 @@
 /*
-package com.example.userblservice.config;
+package com.example.coursework.configuration;
 
-import com.example.userblservice.service.impl.TokenService;
+import com.example.coursework.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,10 +14,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.Validate.notBlank;
-
 @RequiredArgsConstructor
 @Service
 public class TokenValidationFilter extends OncePerRequestFilter {
@@ -25,7 +21,7 @@ public class TokenValidationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
-        if(nonNull(header) && isNotBlank(header)){
+        if(header != null && !header.isBlank()){
             String token = header.substring(7);
             Authentication authentication = service.fromToken(token);
 
@@ -34,5 +30,4 @@ public class TokenValidationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request,response);
     }
-}
-*/
+}*/
