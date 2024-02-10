@@ -7,9 +7,9 @@ import com.example.userblservice.entity.product.Purchases;
 import jakarta.persistence.*;
 import lombok.*;
 import com.example.userblservice.domain.Role;
-/*import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;*/
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
@@ -22,12 +22,13 @@ import static java.util.Objects.isNull;
 @EqualsAndHashCode(exclude = {"favoriteProducts", "cart", "purchases", "commentaries", "card"})
 @Entity
 @Table(name = "users")
-public class UserEntity/* implements UserDetails*/ {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
     private UUID id;
 
+    @Column(unique = true)
     private String name;
 
     @Lob
@@ -68,7 +69,7 @@ public class UserEntity/* implements UserDetails*/ {
         return true;
     }
 
-  /*  @Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(String.valueOf(role)));
     }
@@ -100,5 +101,5 @@ public class UserEntity/* implements UserDetails*/ {
     @Override
     public boolean isEnabled() {
         return true;
-    }*/
+    }
 }

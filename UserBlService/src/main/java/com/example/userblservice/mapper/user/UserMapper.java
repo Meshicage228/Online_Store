@@ -4,32 +4,32 @@ import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.entity.user.UserEntity;
 import com.example.userblservice.mapper.product.ProductImageMapper;
 import com.example.userblservice.mapper.product.ProductMapper;
+import lombok.Getter;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.processing.Generated;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.Objects.isNull;
 
 
 @Mapper(
         componentModel = "spring",
         uses = {ProductMapper.class, ProductImageMapper.class}
 )
+@Getter
 public abstract class UserMapper {
 
-   /* @Autowired
-    private BCryptPasswordEncoder encoder;*/
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Mappings({
             @Mapping(target = "id", source = "id"),
@@ -44,9 +44,8 @@ public abstract class UserMapper {
     @Mappings({
             @Mapping(target = "id", source = "id"),
             @Mapping(target = "name", source = "name"),
-            // TODO: 03.02.2024 commited avater while saving in /store/authorize
             @Mapping(target = "avatar", expression = "java(setDefaultAvatar())"),
-            @Mapping(target = "password", /*expression = "java(encodePassword(dto))"*/ source = "password"),
+            @Mapping(target = "password", expression = "java(encodePassword(dto))"),
             @Mapping(target = "role", defaultValue = "USER")
     })
     public abstract UserEntity toEntity(UserDto dto);
@@ -82,8 +81,8 @@ public abstract class UserMapper {
         return Base64.getEncoder().encodeToString(bytes);
     }
 
- /*   public String encodePassword(UserDto dto){
+    public String encodePassword(UserDto dto){
         return encoder.encode(dto.getPassword());
-    }*/
+    }
 
 }

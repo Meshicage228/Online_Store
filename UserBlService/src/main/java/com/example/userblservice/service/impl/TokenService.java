@@ -1,4 +1,3 @@
-/*
 package com.example.userblservice.service.impl;
 
 import com.example.userblservice.entity.user.UserEntity;
@@ -10,12 +9,11 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
-*/
-/*import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;*//*
+import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.stereotype.Service;
 
@@ -72,4 +70,3 @@ public class TokenService {
         return new UsernamePasswordAuthenticationToken(UUID.fromString(id), null, list);
     }
 }
-*/

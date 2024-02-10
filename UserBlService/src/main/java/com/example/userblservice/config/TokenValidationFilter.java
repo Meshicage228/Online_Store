@@ -1,4 +1,3 @@
-/*
 package com.example.userblservice.config;
 
 import com.example.userblservice.service.impl.TokenService;
@@ -35,4 +34,3 @@ public class TokenValidationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 }
-*/

@@ -1,4 +1,3 @@
-/*
 package com.example.userblservice.config;
 
 
@@ -35,4 +34,3 @@ public class UsersConfig {
         return http.build();
     }
 }
-*/

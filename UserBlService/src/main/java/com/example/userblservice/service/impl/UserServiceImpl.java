@@ -1,6 +1,5 @@
 package com.example.userblservice.service.impl;
 
-import com.example.userblservice.domain.Role;
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.product.ProductEntity;
@@ -23,9 +22,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-/*import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;*/
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -41,7 +40,7 @@ import static org.apache.commons.lang3.StringUtils.remove;
 @RequiredArgsConstructor
 
 @Service
-public class UserServiceImpl implements UserService/*, UserDetailsService*/ {
+public class UserServiceImpl implements UserService, UserDetailsService {
     UserRepository userRepository;
     UserMapper userMapper;
     ProductRepository productRepository;
@@ -55,12 +54,12 @@ public class UserServiceImpl implements UserService/*, UserDetailsService*/ {
         return userMapper.toDto(save);
     }
 
-/*    @Override
+    @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByName(username)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
-    }*/
+    }
 
     @Override
     @Transactional
@@ -140,6 +139,13 @@ public class UserServiceImpl implements UserService/*, UserDetailsService*/ {
     @Transactional
     public boolean findByName(String name) {
         return userRepository.existsByName(name);
+    }
+
+    @Override
+    @Transactional
+    public boolean checkExists(String authName, String password) {
+        String encoded = userMapper.getEncoder().encode(password);
+        return userRepository.existsByNameAndPassword(authName, encoded);
     }
 
 

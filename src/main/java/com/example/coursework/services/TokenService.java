@@ -1,4 +1,3 @@
-/*
 package com.example.coursework.services;
 
 import io.jsonwebtoken.Claims;
@@ -51,4 +50,3 @@ public class TokenService {
         return new UsernamePasswordAuthenticationToken(UUID.fromString(id), null, list);
     }
 }
-*/

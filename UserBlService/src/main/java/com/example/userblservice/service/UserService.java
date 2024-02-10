@@ -25,4 +25,6 @@ public interface UserService {
     void addCard(UUID userId);
 
     boolean findByName(String name);
+
+    boolean checkExists(String authName, String password);
 }

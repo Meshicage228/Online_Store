@@ -1,4 +1,3 @@
-/*
 package com.example.userblservice.config;
 
 import com.example.userblservice.service.impl.TokenService;
@@ -16,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @RequiredArgsConstructor
 
@@ -30,7 +30,7 @@ public class TokenGenerationFilter extends OncePerRequestFilter {
 
         String username = request.getParameter("nameAuth");
 
-        if (username != null && !username.isBlank()) {
+        if (nonNull(username) && isNotBlank(username)) {
             UserDetails userDetails = service.loadUserByUsername(username);
             if(nonNull(userDetails)) {
                 if (encoder.matches(password, userDetails.getPassword())) {
@@ -42,4 +42,3 @@ public class TokenGenerationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-*/

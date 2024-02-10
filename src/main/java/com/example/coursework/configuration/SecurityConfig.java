@@ -1,4 +1,3 @@
-/*
 package com.example.coursework.configuration;
 
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,19 @@ public class SecurityConfig {
         http.cors(AbstractHttpConfigurer::disable);
         http.csrf(AbstractHttpConfigurer::disable);
 
+     /*   http.formLogin(cust -> {
+            cust.loginPage("/auth");
+            cust.loginProcessingUrl("/auth");
+            cust.usernameParameter("login");
+            cust.passwordParameter("cred");
+            cust.successHandler((request, response, authentication) -> {
+                response.sendRedirect("/home");
+            });
+            cust.failureHandler((request, response, exception) -> {
+                response.sendRedirect("/auth");
+            });
+        });*/
         http.addFilterBefore(validationFilter, SecurityContextHolderAwareRequestFilter.class);
         return http.build();
     }
 }
-*/

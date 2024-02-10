@@ -1,6 +1,5 @@
 package com.example.userblservice.controllers;
 
-import com.example.userblservice.dto.user.AuthorizeDao;
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.dto.user.UserSearchDto;
 import com.example.userblservice.service.impl.UserServiceImpl;
@@ -40,8 +39,8 @@ public class UserController {
         return userService.findByName(name);
     }
     @PostMapping("/login")
-    public void login(@RequestParam("nameAuth") String authName, @RequestParam("password") String password){
-        System.out.println("Sccuess");
+    public boolean login(@RequestParam("nameAuth") String authName, @RequestParam("password") String password){
+        return userService.checkExists(authName,password);
     }
 
     @DeleteMapping("/{id}")

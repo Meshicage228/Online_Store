@@ -1,4 +1,3 @@
-/*
 package com.example.coursework.configuration;
 
 import com.example.coursework.services.TokenService;
@@ -30,4 +29,4 @@ public class TokenValidationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request,response);
     }
-}*/
+}

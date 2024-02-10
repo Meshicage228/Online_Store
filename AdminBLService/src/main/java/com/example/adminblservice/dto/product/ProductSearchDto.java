@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @Data
 public class ProductSearchDto {
-    String title;
-    Float price;
-    String sorting;
+    private String title;
+    private Float price;
+    private String sorting;
 }
