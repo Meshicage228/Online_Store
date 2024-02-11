@@ -1,6 +1,6 @@
 package com.example.coursework.controllers.products;
 
-import com.example.coursework.clients.AdminClient;
+import com.example.coursework.clients.ProductClient;
 import com.example.coursework.dto.product.ProductDto;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 /*import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;*/
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 
 @Controller
 @RequestMapping("*/products")
 public class ProductsController {
-    AdminClient adminClient;
+    ProductClient adminClient;
 
     @GetMapping("/{page}/{size}")
     public ModelAndView getPage(@PathVariable(value = "page") Integer page,
@@ -54,12 +53,13 @@ public class ProductsController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getById(@PathVariable("id") Integer id, @ModelAttribute("modelToUpdate") ProductDto showDto) {
+    public ModelAndView getById(@PathVariable("id") Integer id,
+                                @ModelAttribute("modelToUpdate") ProductDto showDto) {
         ProductDto dto = adminClient.findProductById(id);
         return new ModelAndView("adminUpdateProduct").addObject("modelToUpdate", dto);
     }
 
-    //    @Secured("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}/change")
     public ModelAndView update(@PathVariable("id") Integer id,
                                @Valid @ModelAttribute("modelToUpdate") ProductDto dto,
@@ -71,14 +71,14 @@ public class ProductsController {
         return new ModelAndView("adminUpdateProduct");
     }
 
-    //    @Secured("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}/delete")
     public String deleteProduct(@PathVariable("id") Integer id) {
         adminClient.deleteProduct(id);
         return "redirect:/admin";
     }
 
-    //    @Secured("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{product_id}/image/{image_id}/delete")
     public String deleteImage(@PathVariable("product_id") Integer productId,
                               @PathVariable("image_id") Integer imageId) {
@@ -86,7 +86,7 @@ public class ProductsController {
         return "redirect:/admin/products/" + productId;
     }
 
-    //    @Secured("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("/{product_id}/image/{image_id}/update")
     public ModelAndView updatePicture(@PathVariable("product_id") Integer idProduct,
                                       @PathVariable(value = "image_id") Integer idImage,
@@ -97,6 +97,7 @@ public class ProductsController {
         return new ModelAndView("redirect:/admin/products/" + idProduct);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{prod_id}/addImage")
     public ModelAndView saveNewImage(@PathVariable("prod_id") Integer prodId,
                                      @RequestParam("addImage") MultipartFile file) {
@@ -105,7 +106,7 @@ public class ProductsController {
         return new ModelAndView("redirect:/admin/products/" + prodId);
     }
 
-    //    @Secured("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/save")
     public ModelAndView save(@Valid @ModelAttribute(name = "modelToSave") ProductDto dto,
                              BindingResult check) {

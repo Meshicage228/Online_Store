@@ -27,8 +27,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 
@@ -57,8 +57,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByName(username)
+        UserEntity userEntity = userRepository.findByName(username)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+        return userEntity;
     }
 
     @Override
@@ -146,6 +147,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public boolean checkExists(String authName, String password) {
         String encoded = userMapper.getEncoder().encode(password);
         return userRepository.existsByNameAndPassword(authName, encoded);
+    }
+
+    @Override
+    public void deleteCommentary(Integer id) {
+        commentaryRepository.deleteById(id);
     }
 
 

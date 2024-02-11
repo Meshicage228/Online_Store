@@ -13,24 +13,13 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 @Configuration
 @RequiredArgsConstructor
 public class UsersConfig {
-    private final TokenValidationFilter validationFilter;
-    private final TokenGenerationFilter generationFilter;
     @Bean
     public SecurityFilterChain chain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(registry -> {
-            registry.requestMatchers("/v1/users/save").permitAll();
-            registry.requestMatchers("/v1/users/login").permitAll();
-            registry.requestMatchers("/v1/users/personal").permitAll();
-            registry.requestMatchers("/v1/users/{user_id}/").permitAll();
-            registry.requestMatchers("/v1/users/personal").permitAll();
-            registry.requestMatchers("/v1/users/{user_id}").hasAuthority("USER");
-            registry.requestMatchers("/v1/users/{page}/{size}").hasAuthority("USER");
+            registry.anyRequest().permitAll();
         });
         http.cors(AbstractHttpConfigurer::disable);
         http.csrf(AbstractHttpConfigurer::disable);
-
-        http.addFilterAfter(generationFilter, LogoutFilter.class);
-        http.addFilterBefore(validationFilter, SecurityContextHolderAwareRequestFilter.class);
         return http.build();
     }
 }

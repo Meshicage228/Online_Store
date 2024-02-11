@@ -1,8 +1,9 @@
-package com.example.coursework.configuration;
+package com.example.coursework.configuration.token;
 
 import com.example.coursework.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
+
+import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @RequiredArgsConstructor
 @Service
@@ -19,10 +26,17 @@ public class TokenValidationFilter extends OncePerRequestFilter {
     private final TokenService service;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader("Authorization");
-        if(header != null && !header.isBlank()){
-            String token = header.substring(7);
-            Authentication authentication = service.fromToken(token);
+        Optional<String> tokenFromCookie = Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals("Authorization"))
+                .findFirst()
+                .map(Cookie::getValue);
+        if(tokenFromCookie.isPresent()){
+            System.out.println("Cookie now : " + tokenFromCookie.get());
+        } else {
+            System.out.println("Cookie NULL");
+        }
+        if(tokenFromCookie.isPresent()){
+            Authentication authentication = service.fromToken(tokenFromCookie.get());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

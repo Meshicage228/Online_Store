@@ -1,11 +1,11 @@
 package com.example.coursework.clients;
 
 import com.example.coursework.configuration.ProjectConfig;
-import com.example.coursework.dto.user.AuthorizeDao;
 import com.example.coursework.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,8 +24,10 @@ public interface UsersClient {
     Page<UserDto> getAllUsers(@PathVariable("page") Integer page,
                               @PathVariable("size") Integer size,
                               @RequestParam(value = "name", required = false) String name);
+
     @PostMapping("/find")
     boolean findExists(@RequestParam("find") String name);
+
     @DeleteMapping("/{id}")
     void deleteUser(@PathVariable("id") UUID id);
 
@@ -50,4 +52,10 @@ public interface UsersClient {
 
     @PostMapping("/login")
     void login(@RequestParam("nameAuth") String authName, @RequestParam("password") String password);
+
+    @PostMapping("/load")
+    UserDetails load(@RequestParam("find") String username);
+
+    @PostMapping("/deleteComment/{comment_id}")
+    void deleteComm(@PathVariable("comment_id") Integer id);
 }

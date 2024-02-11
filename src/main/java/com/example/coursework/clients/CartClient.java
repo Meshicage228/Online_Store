@@ -9,7 +9,7 @@ import java.util.UUID;
 @FeignClient(name = "${app.clients.users.cart-name}",
         url = "${app.clients.users.url}",
         path = "${app.clients.users.cart-path}")
-public interface UsersCartClient {
+public interface CartClient {
     @PatchMapping("/{cart_id}/changeCount")
     void changeCount(@PathVariable("cart_id") Integer cart_id,
                      @RequestParam(value = "option", required = false) String option);

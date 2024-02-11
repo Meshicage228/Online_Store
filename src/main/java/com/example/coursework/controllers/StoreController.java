@@ -1,14 +1,12 @@
 package com.example.coursework.controllers;
 
-import com.example.coursework.clients.AdminClient;
+import com.example.coursework.clients.ProductClient;
 import com.example.coursework.clients.UsersClient;
 import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.AuthorizeDao;
 import com.example.coursework.dto.user.UserDto;
-import com.example.coursework.exceptions.UserNotFoundException;
 import com.example.coursework.utils.markers.AuthorizeValidationMarker;
 import com.example.coursework.utils.markers.LoginValidationMarker;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +27,7 @@ import java.util.stream.IntStream;
 @RequestMapping("/store")
 public class StoreController {
     UsersClient usersClient;
-    AdminClient productClient;
+    ProductClient productClient;
 
     @GetMapping
     public ModelAndView getMainPage() {
@@ -52,13 +50,7 @@ public class StoreController {
   /*      if(!usersClient.findExists(dao.getNameAuth())){
             return model.addObject("userNotFound", "Пользователь не найден");
         }*/
-        try {
-            // TODO: 07.02.2024 тут вводить существующего
-            usersClient.login(dao.getNameAuth(), dao.getPassword());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return new ModelAndView("redirect:/store/0/10");
+        return model;
     }
 
     @GetMapping("/authorize")
@@ -88,6 +80,14 @@ public class StoreController {
         return new ModelAndView("redirect:/store/login");
     }
 
+    @GetMapping("/catalog/{id}")
+    ModelAndView getPersonalPage(@PathVariable("id") Integer id) {
+        ModelAndView modelAndView = new ModelAndView("personalProductPage");
+        ProductDto productById = productClient.findProductById(id);
+        modelAndView.addObject("product", productById);
+        return modelAndView;
+    }
+
     @GetMapping("/{page}/{size}")
     public ModelAndView getPage(@PathVariable(value = "page") Integer page,
                                 @PathVariable(value = "size") Integer size,
@@ -108,14 +108,6 @@ public class StoreController {
         }
         modelAndView.addObject("sort", sortedBy);
         modelAndView.addObject("searchTitle", title);
-        return modelAndView;
-    }
-
-    @GetMapping("/catalog/{id}")
-    ModelAndView getPersonalPage(@PathVariable("id") Integer id) {
-        ModelAndView modelAndView = new ModelAndView("personalProductPage");
-        ProductDto productById = productClient.findProductById(id);
-        modelAndView.addObject("product", productById);
         return modelAndView;
     }
 }

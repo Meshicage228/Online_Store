@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -20,6 +21,19 @@
                 th:href="@{/admin/users/{page}/{size}(page = 0, size = 10)}">Пользователи</a></button>
     </div>
 </div>
+
+<div th:fragment="addToCart (product_id)">
+    <form th:method="post" th:action="@{/store/users/cart/{prod_id}(prod_id = ${product_id})}">
+        <button type="submit">Добавить в корзину</button>
+    </form>
+</div>
+
+<div th:fragment="toFavorite (product_id)">
+    <form th:method="post" th:action="@{/store/users/add_favorite/{prod_id}(prod_id = ${product_id})}">
+        <button type="submit">В избранное</button>
+    </form>
+</div>
+
 <div th:fragment="input-details (variable)">
     <input name="title" placeholder="title" th:value="${variable.title}" type="text" th:field="*{title}">
     <div th:if="${#fields.hasErrors('title')}" th:class="${#fields.hasErrors('title')}? error"
@@ -30,7 +44,8 @@
     <input name="count" placeholder="count" th:value="${variable.count}" th:field="*{count}" type="number">
     <div th:if="${#fields.hasErrors('count')}" th:class="${#fields.hasErrors('count')}? error"
          th:errors="*{count}"></div>
-    <input name="description" placeholder="description" th:value="${variable.description}" type="text" th:field="*{description}">
+    <input name="description" placeholder="description" th:value="${variable.description}" type="text"
+           th:field="*{description}">
     <div th:if="${#fields.hasErrors('description')}" th:class="${#fields.hasErrors('description')}? error"
          th:errors="*{description}"></div>
 </div>
@@ -38,7 +53,8 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -68,10 +84,22 @@
                         <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                     </li>
                 </ul>
+                <div sec:authorize="isAuthenticated()">
+<!--                    TODO : user avatar-->
+<!--                    <img th:src="@{'data:image/png;base64,'+${#authentication.principal.avatar}}" alt="avatar"-->
+<!--                         style="height: 125px; width: 59px"-->
+<!--                         class="d-block w-100">-->
+                    <p th:text="${#authentication.principal.name}"></p>
+                </div>
                 <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <a th:href="@{/admin}">Панель Админа</a>
+                </div>
+
             </div>
         </div>
     </nav>

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 //import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,7 +28,6 @@ import java.util.stream.IntStream;
 public class OrderController {
     OrderClient client;
 
-    //    @Secured("hasRole('ROLE_ADMIN')")
     @GetMapping("/{page}/{size}")
     public ModelAndView getOrders(@PathVariable("page") Integer page,
                                   @PathVariable("size") Integer size,

@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -75,5 +76,14 @@ public class UserController {
     @PostMapping("/card/{user_id}")
     public void addNewCard(@PathVariable("user_id") UUID user_id) {
         userService.addCard(user_id);
+    }
+    @PostMapping("/load")
+    UserDetails load(@RequestParam("find") String username){
+        return (UserDetails) userService.loadUserByUsername(username);
+    }
+
+    @PostMapping("/deleteComment/{comment_id}")
+    void deleteComm(@PathVariable("comment_id") Integer id){
+        userService.deleteCommentary(id);
     }
 }

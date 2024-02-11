@@ -15,7 +15,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
         url = "${app.clients.admin.url}",
         path = "${app.clients.admin.product-path}",
         configuration = {ProjectConfig.class})
-public interface AdminClient {
+public interface ProductClient {
     @GetMapping("/sorted/{page}/{size}")
     Page<ProductDto> getAllSearchPaginatedSortedProducts(@PathVariable("page") Integer page,
                                                          @PathVariable("size") Integer size,

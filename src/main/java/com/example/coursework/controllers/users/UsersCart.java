@@ -1,32 +1,41 @@
 package com.example.coursework.controllers.users;
 
-import com.example.coursework.clients.UsersCartClient;
+import com.example.coursework.clients.CartClient;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 
 @Controller
-@RequestMapping("*/users/cart")
+@RequestMapping("/store/users/cart")
 public class UsersCart {
-    UsersCartClient client;
+    CartClient client;
+
     @PatchMapping("/{cart_id}/changeCount")
     public void changeCount(@PathVariable("cart_id") Integer cart_id,
-                            @RequestParam(value = "option", required = false) String option){
+                            @RequestParam(value = "option", required = false) String option) {
         client.changeCount(cart_id, option);
     }
+
     @DeleteMapping("/{cart_id}")
-    public void deleteFromCart(@PathVariable Integer cart_id){
+    public void deleteFromCart(@PathVariable Integer cart_id) {
         client.deleteFromCart(cart_id);
     }
-    @PostMapping("/{user_id}/{prod_id}")
-    public void addToCart(@PathVariable("user_id") UUID user_id,
-                          @PathVariable("prod_id") Integer prod_id) {
-        client.addToCart(user_id, prod_id);
+
+    @PostMapping("/{prod_id}")
+    public String addToCart(@AuthenticationPrincipal UUID id,
+                            @PathVariable("prod_id") Integer prod_id,
+                            HttpServletRequest request) {
+        client.addToCart(id, prod_id);
+        return "redirect:/" + request.getHeader("referer").substring(22);
     }
 }

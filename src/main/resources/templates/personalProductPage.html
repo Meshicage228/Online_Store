@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -39,24 +40,31 @@
                     <p class="card-text" th:text="${product.description}"></p>
                     <p class="card-text" th:text="${product.price}"></p>
                 </div>
-                <form th:method="post" th:action="@{/store/users/cart/{user_id}/{prod_id}(prod_id = ${product.id}, user_id = 1)}">
-                    <button type="submit">Добавить в корзину</button>
-                </form>
-                <button><a th:href="@{/store/users/{user_id}/add_favorite/{prod_id}(user_id = 1, prod_id = ${product.id})}">В избранное</a></button>
-                <ul th:each="user : ${product.getComments()}">
-                    <div>
-                        <img th:src="@{'data:image/png;base64,'+${user.getUserAvatar()}}" alt="avatar"
+
+                <div th:replace="~{fragments :: addToCart (${product.id})}"></div>
+
+                <div th:replace="~{fragments :: toFavorite (${product.id})}"></div>
+
+                <ul th:each="comment : ${product.getComments()}">
+                    <div class="commentary">
+                        <img th:src="@{'data:image/png;base64,'+${comment.getUserAvatar()}}" alt="avatar"
                              style="height: 125px; width: 59px"
                              class="d-block w-100">
-                        <div th:text="${user.getName()}"></div>
-                        <div th:text="${user.getComment()}"></div>
-                        <div th:text="${user.getDate()}"></div>
+                        <div th:text="${comment.getName()}"></div>
+                        <div th:text="${comment.getComment()}"></div>
+                        <div th:text="${comment.getDate()}"></div>
+
+                        <div sec:authorize="hasAuthority('ADMIN')">
+                            <form th:action="@{/admin/users/deleteComment/{comment_id}/{prod_id}(comment_id = ${comment.id}, prod_id = ${product.id})}" th:method="post">
+                                <button type="submit">Удалить</button>
+                            </form>
+                        </div>
                     </div>
                 </ul>
 
-                <form th:method="post" th:action="@{/store/users/{user_id}/comment/{prod_id}(user_id = 1, prod_id = ${product.id})}">
-<!--                    TODO : check empty commentary-->
-                    <input type="text" name ="commentary">
+                <form th:method="post" th:action="@{/store/users/comment/{prod_id}(prod_id = ${product.id})}">
+                    <!--                    TODO : check empty commentary-->
+                    <input type="text" name="commentary">
                     <button type="submit">Оставить комментарий</button>
                 </form>
             </div>

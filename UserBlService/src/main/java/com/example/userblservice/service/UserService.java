@@ -27,4 +27,6 @@ public interface UserService {
     boolean findByName(String name);
 
     boolean checkExists(String authName, String password);
+
+    void deleteCommentary(Integer id);
 }

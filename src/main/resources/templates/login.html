@@ -17,10 +17,10 @@
                         <h3 class="mb-5">Sign in</h3>
                         <form th:action="@{/store/login}" th:method="post" th:object="${enterUser}">
                             <div class="form-outline mb-4">
-                                <input type="text" id="typeEmailX-2" class="form-control form-control-lg" name="nameAuth" th:field="*{nameAuth}" th:value="*{nameAuth}">
+                                <input type="text" id="typeEmailX-2" class="form-control form-control-lg" name="loginAuth" th:field="*{loginAuth}" th:value="*{loginAuth}">
                                 <label class="form-label" for="typeEmailX-2">Ваш логин</label>
-                                <div th:if="${#fields.hasErrors('nameAuth')}" th:class="${#fields.hasErrors('nameAuth')}? error"
-                                     th:errors="*{nameAuth}"></div>
+                                <div th:if="${#fields.hasErrors('loginAuth')}" th:class="${#fields.hasErrors('loginAuth')}? error"
+                                     th:errors="*{loginAuth}"></div>
                             </div>
 
                             <div class="form-outline mb-4">

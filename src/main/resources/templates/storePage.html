@@ -13,38 +13,38 @@
         <div class="card">
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner" th:each="photo, number : ${prod.getImages()}">
-                        <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">
-                            <img th:src="@{'data:image/png;base64,'+${photo.getConvertedImage()}}" alt="product"
-                                 style="height: 125px; width: 59px"
-                                 class="d-block w-100">
-                        </div>
-                        <div th:if="${prod.getImages().size()} > 1">
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                                    data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                                    data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
+                    <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">
+                        <img th:src="@{'data:image/png;base64,'+${photo.getConvertedImage()}}" alt="product"
+                             style="height: 125px; width: 59px"
+                             class="d-block w-100">
+                    </div>
+                    <div th:if="${prod.getImages().size()} > 1">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${prod.title}"></h5>
-                    <p class="card-text" th:text="${prod.description}"></p>
-                    <p class="card-text" th:text="${prod.price}"></p>
-                </div>
-                <div><a th:href="@{/store/catalog/{id}(id = ${prod.id})}">На персональную страницу</a></div>
-                <button><a th:href="@{/store/users/{user_id}/add_favorite/{prod_id}(user_id = 1, prod_id = ${prod.id})}">В избранное</a></button>
-            <form th:method="post" th:action="@{/store/users/cart/{user_id}/{prod_id}(prod_id = ${prod.id}, user_id = 1)}">
-                <button type="submit">Добавить в корзину</button>
-            </form>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${prod.title}"></h5>
+                <p class="card-text" th:text="${prod.description}"></p>
+                <p class="card-text" th:text="${prod.price}"></p>
             </div>
+            <div><a th:href="@{/store/catalog/{id}(id = ${prod.id})}">На персональную страницу</a></div>
+
+            <div th:replace="~{fragments :: addToCart (${prod.id})}"></div>
+
+            <div th:replace="~{fragments :: toFavorite (${prod.id})}"></div>
         </div>
     </div>
+</div>
 <br>
 <br>
 <nav aria-label="..." th:if="${totalPage.getTotalPages() > 1}">

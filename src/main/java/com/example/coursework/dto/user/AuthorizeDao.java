@@ -14,9 +14,14 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class AuthorizeDao {
-    @NotEmpty(message = "Введите ваш логин", groups = {AuthorizeValidationMarker.class, LoginValidationMarker.class})
-    @Size(min = 5, max = 15, message = "Логин в размере от 5 до 15 символов", groups = {AuthorizeValidationMarker.class, LoginValidationMarker.class})
+    @NotEmpty(message = "Введите ваш логин", groups = {AuthorizeValidationMarker.class})
+    @Size(min = 5, max = 15, message = "Логин в размере от 5 до 15 символов", groups = {AuthorizeValidationMarker.class})
     private String nameAuth;
+
+    @NotEmpty(message = "Введите ваш логин", groups = {LoginValidationMarker.class})
+    @Size(min = 5, max = 15, message = "Логин в размере от 5 до 15 символов", groups = {LoginValidationMarker.class})
+    private String loginAuth;
+
     @Size(min = 5, max = 30, message = "Пароль в размере от 5 до 30 символов", groups = {AuthorizeValidationMarker.class, LoginValidationMarker.class})
     @NotEmpty(message = "Введите пароль", groups = {AuthorizeValidationMarker.class, LoginValidationMarker.class})
     private String password;
