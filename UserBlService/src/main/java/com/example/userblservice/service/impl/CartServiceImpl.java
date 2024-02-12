@@ -48,7 +48,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
         ProductEntity productEntity = productRepository.findById(prodId)
                 .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
-
+        // TODO: 12.02.2024 check that exists
         cartRepository.save(
                 UsersCart.builder()
                         .countToBuy(1)

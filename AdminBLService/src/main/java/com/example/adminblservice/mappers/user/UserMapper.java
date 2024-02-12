@@ -18,7 +18,6 @@ import java.util.List;
 )
 public interface UserMapper {
 
-    // TODO: 20.01.2024 Encode and decode password!
     @Mappings({
             @Mapping(target = "id", source = "id"),
             @Mapping(target = "name", source = "name"),

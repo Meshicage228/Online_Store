@@ -32,10 +32,10 @@ public class UsersCart {
     }
 
     @PostMapping("/{prod_id}")
-    public String addToCart(@AuthenticationPrincipal UUID id,
+    public String addToCart(@AuthenticationPrincipal CurrentUser user,
                             @PathVariable("prod_id") Integer prod_id,
                             HttpServletRequest request) {
-        client.addToCart(id, prod_id);
+        client.addToCart(user.getId(), prod_id);
         return "redirect:/" + request.getHeader("referer").substring(22);
     }
 }

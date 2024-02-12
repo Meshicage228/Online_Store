@@ -53,7 +53,6 @@ public abstract class UserMapper {
 
     public abstract List<UserDto> toDtos(List<UserEntity> dtos);
 
-    // TODO: 21.01.2024 Resolve update avatar and password
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "name", source = "name")
     @Mapping(target = "password", source = "password")
