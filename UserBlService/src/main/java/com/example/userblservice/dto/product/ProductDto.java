@@ -16,6 +16,8 @@ import java.util.List;
 public class ProductDto implements Serializable {
     private List<MultipartFile> fileImage;
     private Integer id;
+    private Float bill;
+    private Integer cart_id;
     private String title;
     private String description;
     private Float price;

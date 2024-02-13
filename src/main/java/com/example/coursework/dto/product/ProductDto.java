@@ -17,6 +17,9 @@ import java.util.List;
 @Builder
 public class ProductDto {
     private Integer id;
+    private Integer cart_id;
+
+    private Float bill;
 
     @CheckFileIsEmpty
     @CheckFileSize(maxSizeInMB = 5, message = "{app.file-size-message}")

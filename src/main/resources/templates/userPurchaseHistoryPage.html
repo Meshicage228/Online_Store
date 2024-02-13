@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+
+<div th:replace="~{fragments :: user-navigation}"></div>
+
+<form class="form-inline my-2 my-lg-0"
+      th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}"
+      th:method="get">
+    <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
+    <input type="hidden" th:value="${status}" th:name="${status != null ? 'status' : ''}">
+    <button value="billUp" name="sortedBy" type="submit">Счет возрастает</button>
+    <button value="billDown" name="sortedBy" type="submit">Счет убывает</button>
+</form>
+<form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}">
+    <input name="title" placeholder="Название продукта">
+    <button type="submit">Найти</button>
+</form>
+<form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}">
+    <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
+    <input type="hidden" th:value="${sort}" th:name="${sort != null ? 'sortedBy' : ''}">
+
+    <button type="submit" value = "WAITING" name="status">В ожидании</button>
+    <button type="submit" value = "IN_PROGRESS" name="status">Обрабатывается</button>
+    <button type="submit" value = "DONE" name="status">Готов</button>
+</form>
+
+<tbody>
+<tr th:each="history, number : ${userHistory.getContent()}">
+    <th scope="row" th:text="'№' + ${number.count}"></th>
+    <td th:text="'product title ' + ${history.product.getTitle()}"></td>
+    <td>
+        <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+                <div th:each="photo, number : ${history.product.getImages()}">
+                    <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">
+                        <img th:src="@{'data:image/png;base64,'+${photo.convertedImage}}" alt="product"
+                             style="height: 125px; width: 125px"
+                             class="d-block">
+                    </div>
+                </div>
+                <div th:if="${history.product.getImages().size()} > 1">
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td th:text="'count of product : ' + ${history.countOfProduct}"></td>
+    <td th:text="'bill of purchase : ' + ${history.bill}"></td>
+    <td th:text="'date of purchase : '+ ${history.dateOfPurchase}"></td>
+    <td th:text="'status of purchase : ' + ${history.status}"></td>
+</tr>
+</tbody>
+
+<nav aria-label="..." th:if="${userHistory.getTotalPages() > 1}">
+    <ul class="pagination">
+        <li class="page-item">
+            <span class="page-link">Previous</span>
+        </li>
+        <li class="page-item" aria-current="page" th:each="iterPage : ${countPages}">
+            <form th:action="@{/admin/orders/{page}/{size}(page = ${iterPage - 1}, size = ${userHistory.size})}"
+                  th:method="get">
+                <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
+                <input type="hidden" th:value="${status}" th:name="${status != null ? 'status' : ''}">
+                <button th:value="${sort}" th:text="${iterPage}"
+                        th:class="'page-link ' + ${userHistory.number == iterPage - 1 ? 'active' : ''}"
+                        th:name="${sort != null ? 'sortedBy' : ''}"></button>
+            </form>
+        </li>
+        <li class="page-item">
+            <a class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>
+<div th:replace="~{fragments :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>

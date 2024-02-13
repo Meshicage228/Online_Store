@@ -34,9 +34,7 @@ public class CartServiceImpl implements CartService {
         switch (option){
             case "increment" -> usersCart.setCountToBuy(++currentCount);
             case "decrement" -> {
-                if(currentCount - 1 <= 0){
-                    throw new NegativeProductCountException("Кол-во <= 0");
-                } else {
+                if(currentCount - 1 > 0){
                     usersCart.setCountToBuy(--currentCount);
                 }
             }

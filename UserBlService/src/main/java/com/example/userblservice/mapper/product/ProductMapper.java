@@ -34,6 +34,8 @@ public interface ProductMapper {
     ProductDto toDto(ProductEntity entity);
 
     @Mapping(target = "id", expression = "java(cart.getProduct().getId())")
+    @Mapping(target = "cart_id", source = "id")
+    @Mapping(target = "bill", expression = "java(countBill(cart))")
     @Mapping(target = "title", expression = "java(cart.getProduct().getTitle())")
     @Mapping(target = "description", expression = "java(cart.getProduct().getDescription())")
     @Mapping(target = "price", expression = "java(cart.getProduct().getPrice())")
@@ -51,5 +53,9 @@ public interface ProductMapper {
 
     default List<ProductImage> mapProductImage(ProductEntity product) {
         return product.getImages();
+    }
+
+    default Float countBill(UsersCart cart){
+        return cart.getProduct().getPrice() * cart.getCountToBuy();
     }
 }

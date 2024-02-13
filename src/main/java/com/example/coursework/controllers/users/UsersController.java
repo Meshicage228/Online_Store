@@ -1,20 +1,24 @@
 package com.example.coursework.controllers.users;
 
+import com.example.coursework.clients.OrderClient;
 import com.example.coursework.clients.UsersClient;
+import com.example.coursework.domain.OrderStatus;
+import com.example.coursework.dto.product.OrderDto;
 import com.example.coursework.dto.user.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-//import org.springframework.security.access.annotation.Secured;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.UUID;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -26,11 +30,35 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RequestMapping("/store/users")
 public class UsersController {
     UsersClient client;
+    OrderClient orderClient;
 
-    @GetMapping("/{user_id}")
-    public UserDto getPersonal(@PathVariable("user_id") UUID id) {
-        return client.personalUser(id);
+    @GetMapping("/profile")
+    public ModelAndView getProfile(@AuthenticationPrincipal CurrentUser user) {
+        UserDto userDto = client.personalUser(user.getId());
+        return new ModelAndView("userProfilePage").addObject("userInfo", userDto);
     }
+    @GetMapping("/favorite")
+    public ModelAndView getFavorite(@AuthenticationPrincipal CurrentUser user) {
+        UserDto userDto = client.personalUser(user.getId());
+        return new ModelAndView("userFavoriteProductsPage").addObject("userInfo", userDto);
+    }
+    @GetMapping("/cart")
+    public ModelAndView getCart(@AuthenticationPrincipal CurrentUser user) {
+        UserDto userDto = client.personalUser(user.getId());
+        return new ModelAndView("userCartPage").addObject("userInfo", userDto);
+    }
+
+    @GetMapping("/card")
+    public String getCardPage(){
+        return "userRegisterCardPage";
+    }
+
+/*    @PostMapping("/addCard")
+    public ModelAndView addCard(@AuthenticationPrincipal CurrentUser user) {
+        client.addNewCard(user.getId());
+
+        return getUserModelAndView(user, "userRegisterCardPage");
+    }*/
 
     @PutMapping
     public UserDto updateUser(@AuthenticationPrincipal CurrentUser user,
@@ -59,8 +87,30 @@ public class UsersController {
         return modelAndView;
     }
 
-    @PostMapping("/card")
-    public void addNewCard(@AuthenticationPrincipal CurrentUser user) {
-        client.addNewCard(user.getId());
+    @GetMapping("/history/{page}/{size}")
+    public ModelAndView getOrders(@PathVariable("page") Integer page,
+                                  @PathVariable("size") Integer size,
+                                  @RequestParam(name = "status", required = false) OrderStatus status,
+                                  @RequestParam(name = "name", required = false) String name,
+                                  @RequestParam(name = "title", required = false) String title,
+                                  @AuthenticationPrincipal CurrentUser user,
+                                  @RequestParam(name = "sortedBy", required = false, defaultValue = "default") String sortedBy) {
+
+        ModelAndView modelAndView = new ModelAndView("userPurchaseHistoryPage");
+        Page<OrderDto> pageContent = orderClient.getOrders(page, size, status, name, title, user.getId(), sortedBy);
+
+        modelAndView.addObject("userHistory", pageContent);
+        int totalPages = pageContent.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> countOfButtons = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .toList();
+            modelAndView.addObject("countPages", countOfButtons);
+        }
+        modelAndView.addObject("sort", sortedBy);
+        modelAndView.addObject("status", status);
+        modelAndView.addObject("searchTitle", title);
+        modelAndView.addObject("searchName", name);
+        return modelAndView;
     }
 }

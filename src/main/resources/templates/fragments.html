@@ -21,7 +21,21 @@
                 th:href="@{/admin/users/{page}/{size}(page = 0, size = 10)}">Пользователи</a></button>
     </div>
 </div>
+<div class="navigator" th:fragment="user-navigation">
+    <div class="list-group" style="width: 210px; height: 100%; border-radius: 0px">
+        <button type="button" class="list-group-item list-group-item-action"><a
+                th:href="@{/store/users/history/{page}/{size}(page = 0, size = 10)}">История покупок</a></button>
 
+        <button type="button" class="list-group-item list-group-item-action"><a
+                th:href="@{/store/users/favorite}">Избранные товары</a></button>
+
+        <button type="button" class="list-group-item list-group-item-action"><a
+                th:href="@{/store/users/cart}">Корзина</a></button>
+
+<!--        <button type="button" class="list-group-item list-group-item-action"><a-->
+<!--                th:href="@{/admin/users/{page}/{size}(page = 0, size = 10)}">Профиль</a></button>-->
+    </div>
+</div>
 <div th:fragment="addToCart (product_id)">
     <form th:method="post" th:action="@{/store/users/cart/{prod_id}(prod_id = ${product_id})}">
         <button type="submit">Добавить в корзину</button>
@@ -89,7 +103,7 @@
 <!--                    <img th:src="@{'data:image/png;base64,'+${#authentication.principal.avatar}}" alt="avatar"-->
 <!--                         style="height: 125px; width: 59px"-->
 <!--                         class="d-block w-100">-->
-                    <p th:text="${#authentication.principal.name}"></p>
+                    <p th:text="${#authentication.principal.name}"><a th:href="@{/store/users/profile}"></a></p>
                 </div>
                 <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

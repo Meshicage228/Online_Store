@@ -21,14 +21,16 @@ public class UsersCart {
     CartClient client;
 
     @PatchMapping("/{cart_id}/changeCount")
-    public void changeCount(@PathVariable("cart_id") Integer cart_id,
-                            @RequestParam(value = "option", required = false) String option) {
+    public String changeCount(@PathVariable("cart_id") Integer cart_id,
+                              @RequestParam(value = "option", required = false) String option) {
         client.changeCount(cart_id, option);
+        return "redirect:/store/users/cart";
     }
 
     @DeleteMapping("/{cart_id}")
-    public void deleteFromCart(@PathVariable Integer cart_id) {
+    public String deleteFromCart(@PathVariable("cart_id") Integer cart_id) {
         client.deleteFromCart(cart_id);
+        return "redirect:/store/users/cart";
     }
 
     @PostMapping("/{prod_id}")

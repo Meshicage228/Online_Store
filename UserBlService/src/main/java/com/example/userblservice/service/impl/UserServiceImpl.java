@@ -1,5 +1,6 @@
 package com.example.userblservice.service.impl;
 
+import com.example.userblservice.dto.product.ProductDto;
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.product.ProductEntity;
@@ -27,14 +28,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.remove;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -83,7 +80,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
-        return userMapper.toDto(userEntity);
+        UserDto dto = userMapper.toDto(userEntity);
+        dto.getBasket().sort(Comparator.comparing(ProductDto::getTitle));
+        return dto;
     }
 
     @Override
