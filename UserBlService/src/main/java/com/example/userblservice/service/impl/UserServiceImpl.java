@@ -127,12 +127,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void addCard(UUID userId) {
-        userRepository.findById(userId).ifPresentOrElse(user -> {
-                   cardRepository.save(UserCard.builder()
-                            .money(99999f)
-                            .user(user)
-                            .build());
-                }, () -> new UserNotFoundException("Пользователь не найден"));
+        Optional<UserEntity> byId = userRepository.findById(userId);
+        byId.ifPresent(userEntity -> {
+            cardRepository.save(UserCard.builder()
+                    .money(99999f)
+                    .user(userEntity)
+                    .build());
+        });
+        if(byId.isEmpty()){
+            throw new UserNotFoundException("Не найдено пользователя");
+        }
     }
 
     @Override

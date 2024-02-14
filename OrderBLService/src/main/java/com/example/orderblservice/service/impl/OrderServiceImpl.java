@@ -59,12 +59,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void acceptPurchase(UUID userId) {
+    public boolean acceptPurchase(UUID userId) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
-
-        UserCard userCard = Optional.of(userEntity.getUserCard())
-                .orElseThrow(() -> new NoCardFoundException("Не найдена привязанная карта"));
 
         float totalPurchase = 0;
 
@@ -76,11 +73,12 @@ public class OrderServiceImpl implements OrderService {
             totalPurchase += product.getPrice() * obj.getCountToBuy();
         }
 
-        if (userCard.getMoney() < totalPurchase) {
-            throw new NotEnoughMoneyException("На карте недостаточно средств");
+        if (userEntity.getUserCard().getMoney() < totalPurchase) {
+            return false;
         } else {
             createPurchase(userEntity, totalPurchase);
         }
+        return true;
     }
 
     @Transactional

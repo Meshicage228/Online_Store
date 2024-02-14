@@ -1,8 +1,8 @@
 package com.example.coursework.services;
 
-import com.example.coursework.controllers.users.CurrentUser;
+import com.example.coursework.dto.user.CurrentUser;
 import com.example.coursework.domain.Role;
-import com.example.coursework.dto.user.UserDto;
+import com.example.coursework.dto.user.UserCard;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -58,6 +58,7 @@ public class TokenService implements UserDetailsService {
                 .claim("username", user.getUsername())
                 .claim("id", user.getId())
                 .claim("roles", roles)
+                .claim("card", user.getCard())
                 .claim("avatar", user.getAvatar())
                 .signWith(secretKey)
                 .compact();
@@ -74,10 +75,12 @@ public class TokenService implements UserDetailsService {
         var user_id = (String) payload.get("id");
         var roles = (String) payload.get("roles");
         var avatar = (byte[]) payload.get("avatar");
+        var card = (UserCard) payload.get("card");
 
         CurrentUser user = CurrentUser.builder()
                 .id(UUID.fromString(user_id))
                 .role(Role.valueOf(roles))
+                .card(card)
                 .avatar(avatar)
                 .build();
 

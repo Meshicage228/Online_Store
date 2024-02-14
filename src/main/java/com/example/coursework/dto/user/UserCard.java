@@ -1,16 +1,15 @@
-package com.example.orderblservice.entity.user;
+package com.example.coursework.dto.user;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "users_cards")
 public class UserCard {
     @Id
@@ -18,8 +17,9 @@ public class UserCard {
     private Integer id;
 
     @OneToOne
+    @JsonIgnore
     @ToString.Exclude
-    private UserEntity user;
+    private CurrentUser user;
 
     private Float money;
 }

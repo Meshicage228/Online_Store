@@ -4,6 +4,7 @@ import com.example.coursework.clients.OrderClient;
 import com.example.coursework.clients.UsersClient;
 import com.example.coursework.domain.OrderStatus;
 import com.example.coursework.dto.product.OrderDto;
+import com.example.coursework.dto.user.CurrentUser;
 import com.example.coursework.dto.user.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,7 @@ import java.util.stream.IntStream;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.remove;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -42,23 +45,18 @@ public class UsersController {
         UserDto userDto = client.personalUser(user.getId());
         return new ModelAndView("userFavoriteProductsPage").addObject("userInfo", userDto);
     }
-    @GetMapping("/cart")
-    public ModelAndView getCart(@AuthenticationPrincipal CurrentUser user) {
-        UserDto userDto = client.personalUser(user.getId());
-        return new ModelAndView("userCartPage").addObject("userInfo", userDto);
-    }
 
     @GetMapping("/card")
     public String getCardPage(){
         return "userRegisterCardPage";
     }
 
-/*    @PostMapping("/addCard")
-    public ModelAndView addCard(@AuthenticationPrincipal CurrentUser user) {
+    @PostMapping("/addCard")
+    public String addCard(@AuthenticationPrincipal CurrentUser user) {
         client.addNewCard(user.getId());
 
-        return getUserModelAndView(user, "userRegisterCardPage");
-    }*/
+        return "redirect:/store/users/cart";
+    }
 
     @PutMapping
     public UserDto updateUser(@AuthenticationPrincipal CurrentUser user,

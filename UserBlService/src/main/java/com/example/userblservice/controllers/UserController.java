@@ -79,7 +79,7 @@ public class UserController {
     }
     @PostMapping("/load")
     UserDetails load(@RequestParam("find") String username){
-        return (UserDetails) userService.loadUserByUsername(username);
+        return userService.loadUserByUsername(username);
     }
 
     @PostMapping("/deleteComment/{comment_id}")

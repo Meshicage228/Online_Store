@@ -3,10 +3,7 @@ package com.example.orderblservice.entity.user;
 
 import com.example.orderblservice.entity.product.ProductEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +22,7 @@ public class UsersCart {
        name = "product_id",
        foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT)
     )
+    @ToString.Exclude
     private ProductEntity product;
 
     @ManyToOne
@@ -32,6 +30,7 @@ public class UsersCart {
        name = "user_id",
        foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT)
     )
+    @ToString.Exclude
     private UserEntity user;
 
     private Integer countToBuy;

@@ -1,6 +1,11 @@
 package com.example.coursework.controllers.users;
 
 import com.example.coursework.clients.CartClient;
+import com.example.coursework.clients.OrderClient;
+import com.example.coursework.clients.UsersClient;
+import com.example.coursework.dto.product.ProductDto;
+import com.example.coursework.dto.user.CurrentUser;
+import com.example.coursework.dto.user.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.UUID;
+import static java.util.Objects.isNull;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -19,6 +25,34 @@ import java.util.UUID;
 @RequestMapping("/store/users/cart")
 public class UsersCart {
     CartClient client;
+    UsersClient usersClient;
+    OrderClient orderClient;
+
+    @GetMapping
+    public ModelAndView getCart(@AuthenticationPrincipal CurrentUser user) {
+        ModelAndView modelAndView = new ModelAndView("userCartPage");
+        UserDto userDto = usersClient.personalUser(user.getId());
+
+        double sum = userDto.getBasket().stream()
+                .mapToDouble(ProductDto::getBill)
+                .sum();
+
+        modelAndView.addObject("totalBill", sum);
+        return modelAndView.addObject("userInfo", userDto);
+    }
+
+    @PostMapping("/order/create")
+    public ModelAndView createPurchase(@AuthenticationPrincipal CurrentUser user) {
+        ModelAndView cart = getCart(user);
+        if(isNull(user.getCard())){
+            return cart.addObject("noCardFound", "Не найдена привзянная карта!");
+        }
+        if(!orderClient.createPurchase(user.getId())){
+            return cart.addObject("notEnoughMoney", "На карте недостаточно средств!");
+        };
+        cart = getCart(user);
+        return cart;
+    }
 
     @PatchMapping("/{cart_id}/changeCount")
     public String changeCount(@PathVariable("cart_id") Integer cart_id,

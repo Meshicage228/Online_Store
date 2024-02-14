@@ -37,7 +37,7 @@ public class UserEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Orders> purchases;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserCard userCard;
 
     @OneToMany(mappedBy = "user")

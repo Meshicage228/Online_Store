@@ -7,8 +7,6 @@ import feign.codec.ErrorDecoder;
 import feign.form.spring.SpringFormEncoder;
 import feign.okhttp.OkHttpClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.JsonFormWriter;
 import org.springframework.cloud.openfeign.support.PageJacksonModule;
@@ -22,8 +20,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Base64;
 
 
 @RequiredArgsConstructor

@@ -1,7 +1,10 @@
 package com.example.coursework.clients;
 
+import com.example.coursework.configuration.ProjectConfig;
 import com.example.coursework.domain.OrderStatus;
 import com.example.coursework.dto.product.OrderDto;
+import com.example.coursework.exceptions.handler.ProjectExceptionHandler;
+import feign.codec.ErrorDecoder;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,8 @@ import java.util.UUID;
 
 @FeignClient(name = "${app.clients.orders.name}",
         url = "${app.clients.orders.url}",
-        path = "${app.clients.orders.path}")
+        path = "${app.clients.orders.path}",
+        configuration = ProjectExceptionHandler.class)
 public interface OrderClient {
     @GetMapping("/{page}/{size}")
     Page<OrderDto> getOrders(@PathVariable("page") Integer page,
@@ -25,5 +29,5 @@ public interface OrderClient {
                              @RequestParam(name = "sortedBy", required = false, defaultValue = "default") String sortedBy);
 
     @PostMapping("/create/{user_id}")
-    void createPurchase(@PathVariable("user_id") UUID id);
+    boolean createPurchase(@PathVariable("user_id") UUID id);
 }

@@ -1,7 +1,9 @@
 package com.example.coursework.exceptions.handler;
 
 
+import com.example.coursework.dto.user.CurrentUser;
 import com.example.coursework.exceptions.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,14 +20,6 @@ public class ProjectExceptionHandler {
     }
     @ExceptionHandler(NegativeProductCountException.class)
     public ModelAndView negativeCount(NegativeProductCountException ex){
-        return new ModelAndView("errorPage").addObject("errorMessage", ex.getMessage());
-    }
-    @ExceptionHandler(NoCardFoundException.class)
-    public ModelAndView noSuitableCard(NoCardFoundException ex){
-        return new ModelAndView("errorPage").addObject("errorMessage", ex.getMessage());
-    }
-    @ExceptionHandler(NotEnoughMoneyException.class)
-    public ModelAndView notEnoughMoney(NotEnoughMoneyException ex){
         return new ModelAndView("errorPage").addObject("errorMessage", ex.getMessage());
     }
     @ExceptionHandler(OutOfStockException.class)

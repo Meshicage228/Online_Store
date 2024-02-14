@@ -1,6 +1,6 @@
 package com.example.coursework.services;
 
-import com.example.coursework.controllers.users.CurrentUser;
+import com.example.coursework.dto.user.CurrentUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

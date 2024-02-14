@@ -6,38 +6,30 @@ import com.example.coursework.utils.ErrorMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.coyote.BadRequestException;
 
 import java.io.IOException;
-import java.io.InputStream;
+
+import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public class FeignErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
         ErrorMessage message = null;
-        try (InputStream bodyIs = response.body().asInputStream()) {
+        try {
+            byte[] arr = response.body().asInputStream().readAllBytes();
             var mapper = new ObjectMapper();
-            String string = response.body().asInputStream().readAllBytes().toString();
-            message = mapper.readValue(bodyIs, ErrorMessage.class);
+            message = mapper.readValue(arr, ErrorMessage.class);
         } catch (IOException e) {
             return new Exception(e.getMessage());
         }
-        switch (response.status()) {
-            case 400 -> {
-                return new BadRequestException(message.getMessage() != null ? message.getMessage() : "Bad Request");
-            }
-            case 404 -> {
-                if(StringUtils.startsWith(message.getServiceName(), "product")) {
-                    return new ProductNotFoundException(message.getMessage() != null ? message.getMessage() : "Not found");
-                } else {
-                    return new UserNotFoundException(message.getMessage() != null ? message.getMessage() : "Not found");
-                }
-            }
-            default -> {
-                return new RuntimeException();
+        if (response.status() > 400 && response.status() < 500) {
+            if (startsWith(message.getServiceName(), "product")) {
+                return new ProductNotFoundException(message.getMessage() != null ? message.getMessage() : "Not found");
+            } else if (startsWith(message.getServiceName(), "user")) {
+                return new UserNotFoundException(message.getMessage() != null ? message.getMessage() : "Not found");
             }
         }
+        return new RuntimeException();
     }
 }

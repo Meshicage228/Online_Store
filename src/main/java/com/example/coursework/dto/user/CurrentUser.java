@@ -1,4 +1,4 @@
-package com.example.coursework.controllers.users;
+package com.example.coursework.dto.user;
 
 
 import com.example.coursework.domain.Role;
@@ -33,6 +33,9 @@ public class CurrentUser implements UserDetails {
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private UserCard card;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

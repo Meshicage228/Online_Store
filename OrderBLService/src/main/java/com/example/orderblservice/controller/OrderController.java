@@ -39,7 +39,7 @@ public class OrderController {
     }
 
     @PostMapping("/create/{user_id}")
-    public void createPurchase(@PathVariable("user_id") UUID id) {
-        service.acceptPurchase(id);
+    public boolean createPurchase(@PathVariable("user_id") UUID id) {
+        return service.acceptPurchase(id);
     }
 }

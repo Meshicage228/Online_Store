@@ -2,16 +2,12 @@ package com.example.coursework.controllers.admin;
 
 import com.example.coursework.clients.UsersClient;
 import com.example.coursework.dto.user.UserDto;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,7 +21,7 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("/admin/users")
 @PreAuthorize("hasAuthority('ADMIN')")
-public class AdminUsers {
+public class AdminUsersController {
     UsersClient client;
     @DeleteMapping("/{id}")
     public ModelAndView deleteUser(@PathVariable("id") UUID id) {

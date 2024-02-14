@@ -3,7 +3,6 @@ package com.example.userblservice.service.impl;
 import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.user.UserEntity;
 import com.example.userblservice.entity.user.UsersCart;
-import com.example.userblservice.exceptions.NegativeProductCountException;
 import com.example.userblservice.exceptions.ProductNotFoundException;
 import com.example.userblservice.exceptions.UserNotFoundException;
 import com.example.userblservice.repository.product.ProductRepository;
