@@ -4,13 +4,12 @@ import com.example.coursework.clients.CartClient;
 import com.example.coursework.clients.OrderClient;
 import com.example.coursework.clients.UsersClient;
 import com.example.coursework.dto.product.ProductDto;
-import com.example.coursework.dto.user.CurrentUser;
+import com.example.coursework.dto.user.CurrentUserDto;
 import com.example.coursework.dto.user.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,27 +28,33 @@ public class UsersCart {
     OrderClient orderClient;
 
     @GetMapping
-    public ModelAndView getCart(@AuthenticationPrincipal CurrentUser user) {
+    public ModelAndView getCart(@AuthenticationPrincipal CurrentUserDto user) {
         ModelAndView modelAndView = new ModelAndView("userCartPage");
         UserDto userDto = usersClient.personalUser(user.getId());
 
         double sum = userDto.getBasket().stream()
                 .mapToDouble(ProductDto::getBill)
                 .sum();
+        double countProducts = userDto.getBasket().stream()
+                .mapToInt(ProductDto::getCount)
+                .sum();
 
+        modelAndView.addObject("countProducts", countProducts);
         modelAndView.addObject("totalBill", sum);
+        modelAndView.addObject("noCardFound", "");
         return modelAndView.addObject("userInfo", userDto);
     }
 
     @PostMapping("/order/create")
-    public ModelAndView createPurchase(@AuthenticationPrincipal CurrentUser user) {
+    public ModelAndView createPurchase(@AuthenticationPrincipal CurrentUserDto user) {
         ModelAndView cart = getCart(user);
-        if(isNull(user.getCard())){
+        if (isNull(user.getCard())) {
             return cart.addObject("noCardFound", "Не найдена привзянная карта!");
         }
-        if(!orderClient.createPurchase(user.getId())){
+        if (!orderClient.createPurchase(user.getId())) {
             return cart.addObject("notEnoughMoney", "На карте недостаточно средств!");
-        };
+        }
+        ;
         cart = getCart(user);
         return cart;
     }
@@ -68,7 +73,7 @@ public class UsersCart {
     }
 
     @PostMapping("/{prod_id}")
-    public String addToCart(@AuthenticationPrincipal CurrentUser user,
+    public String addToCart(@AuthenticationPrincipal CurrentUserDto user,
                             @PathVariable("prod_id") Integer prod_id,
                             HttpServletRequest request) {
         client.addToCart(user.getId(), prod_id);

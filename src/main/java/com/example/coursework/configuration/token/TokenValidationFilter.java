@@ -15,10 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.UUID;
 
-import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @RequiredArgsConstructor
 @Service
@@ -27,14 +24,9 @@ public class TokenValidationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> tokenFromCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals("Authorization"))
+                .filter(cookie -> cookie.getName().equals("token"))
                 .findFirst()
                 .map(Cookie::getValue);
-        if(tokenFromCookie.isPresent()){
-            System.out.println("Cookie now : " + tokenFromCookie.get());
-        } else {
-            System.out.println("Cookie NULL");
-        }
         if(tokenFromCookie.isPresent()){
             Authentication authentication = service.fromToken(tokenFromCookie.get());
 

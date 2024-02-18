@@ -6,7 +6,6 @@ import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.AuthorizeDao;
 import com.example.coursework.dto.user.UserDto;
 import com.example.coursework.utils.markers.AuthorizeValidationMarker;
-import com.example.coursework.utils.markers.LoginValidationMarker;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -39,20 +38,6 @@ public class StoreController {
         return new ModelAndView("login");
     }
 
-    @PostMapping("/login")
-    public ModelAndView checkLogin(@Validated(value = LoginValidationMarker.class) @ModelAttribute("enterUser") AuthorizeDao dao,
-                                   BindingResult result){
-        ModelAndView model = new ModelAndView("login");
-        if(result.hasFieldErrors()){
-            return model.addObject("enterUser", dao);
-        }
-        // TODO: 07.02.2024 check correctly written name and pass
-  /*      if(!usersClient.findExists(dao.getNameAuth())){
-            return model.addObject("userNotFound", "Пользователь не найден");
-        }*/
-        return model;
-    }
-
     @GetMapping("/authorize")
     public ModelAndView getAuthorize(@ModelAttribute("enterUser") AuthorizeDao dao) {
         return new ModelAndView("authorizePage");
@@ -80,8 +65,8 @@ public class StoreController {
         return new ModelAndView("redirect:/store/login");
     }
 
-    @GetMapping("/catalog/{id}")
-    ModelAndView getPersonalPage(@PathVariable("id") Integer id) {
+    @GetMapping("/catalog/{prod_id}")
+    ModelAndView getPersonalPage(@PathVariable("prod_id") Integer id) {
         ModelAndView modelAndView = new ModelAndView("personalProductPage");
         ProductDto productById = productClient.findProductById(id);
         modelAndView.addObject("product", productById);

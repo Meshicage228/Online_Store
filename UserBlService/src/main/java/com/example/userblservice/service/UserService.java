@@ -3,6 +3,7 @@ package com.example.userblservice.service;
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.dto.user.UserSearchDto;
 import com.example.userblservice.entity.product.Commentary;
+import com.example.userblservice.entity.user.UserCard;
 import org.springframework.data.domain.Page;
 
 import java.util.UUID;
@@ -22,7 +23,7 @@ public interface UserService {
 
     Commentary addComment(UUID userId, Integer prodId, String comment);
 
-    void addCard(UUID userId);
+    UserCard addCard(UUID userId);
 
     boolean findByName(String name);
 

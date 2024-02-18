@@ -1,10 +1,8 @@
 package com.example.coursework.clients;
 
-import com.example.coursework.configuration.ProjectConfig;
 import com.example.coursework.domain.OrderStatus;
 import com.example.coursework.dto.product.OrderDto;
 import com.example.coursework.exceptions.handler.ProjectExceptionHandler;
-import feign.codec.ErrorDecoder;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;

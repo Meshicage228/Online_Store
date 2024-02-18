@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="/css/App.css" rel="stylesheet">
 </head>
 <body>
 <div class="navigator" th:fragment="admin-navigation">
@@ -32,13 +33,18 @@
         <button type="button" class="list-group-item list-group-item-action"><a
                 th:href="@{/store/users/cart}">Корзина</a></button>
 
-<!--        <button type="button" class="list-group-item list-group-item-action"><a-->
-<!--                th:href="@{/admin/users/{page}/{size}(page = 0, size = 10)}">Профиль</a></button>-->
+        <!--        <button type="button" class="list-group-item list-group-item-action"><a-->
+        <!--                th:href="@{/admin/users/{page}/{size}(page = 0, size = 10)}">Профиль</a></button>-->
     </div>
 </div>
-<div th:fragment="addToCart (product_id)">
+<div th:fragment="addToCart (product_id)" >
     <form th:method="post" th:action="@{/store/users/cart/{prod_id}(prod_id = ${product_id})}">
-        <button type="submit">Добавить в корзину</button>
+        <button type="submit" class="addToCartButton">В корзину
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart"
+                 viewBox="0 0 16 16">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+            </svg>
+        </button>
     </form>
 </div>
 
@@ -64,65 +70,47 @@
          th:errors="*{description}"></div>
 </div>
 <div th:fragment="header">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary row">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <a class="nav-link active" aria-current="page" th:href="@{/store/0/10}">MY SITE</a>
                     </li>
                 </ul>
-                <div sec:authorize="isAuthenticated()">
-<!--                    TODO : user avatar-->
-<!--                    <img th:src="@{'data:image/png;base64,'+${#authentication.principal.avatar}}" alt="avatar"-->
-<!--                         style="height: 125px; width: 59px"-->
-<!--                         class="d-block w-100">-->
-                    <p th:text="${#authentication.principal.name}"><a th:href="@{/store/users/profile}"></a></p>
+                <div>
+                    <form th:action="@{/store/0/10}">
+                        <input class="inputTitleProduct" name="title" placeholder="Введите название">
+                    </form>
                 </div>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+            </div>
+            <a th:href="@{/store/users/cart}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart"
+                 viewBox="0 0 16 16">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+            </svg>
+            </a>
+            <div sec:authorize="isAuthenticated()">
+                <div class="avatar-Name">
+                    <a th:href="@{/store/users/profile}">
+                    <img th:src="@{'data:image/png;base64,'+${#authentication.principal.avatarToShow}}" alt="avatar"
+                         class="avatar">
+                    </a>
+                    <p th:text="${#authentication.name}" class="userName"><a th:href="@{/store/users/profile}"></a>
 
-                <div sec:authorize="hasAuthority('ADMIN')">
-                    <a th:href="@{/admin}">Панель Админа</a>
+                    </p>
                 </div>
-
+            </div>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/admin}">Панель Админа</a>
             </div>
         </div>
     </nav>
 </div>
-<footer class="bg-body-tertiary text-center text-lg-start" th:fragment="footer">
+<footer th:fragment="footer">
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
         © 2020 Copyright:
-        <a class="text-body" href="https://mdbootstrap.com/">MDBootstrap.com</a>
     </div>
     <!-- Copyright -->
 </footer>

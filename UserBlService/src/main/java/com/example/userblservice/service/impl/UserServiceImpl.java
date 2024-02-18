@@ -23,9 +23,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -37,7 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @RequiredArgsConstructor
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService{
     UserRepository userRepository;
     UserMapper userMapper;
     ProductRepository productRepository;
@@ -49,14 +46,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserEntity entity = userMapper.toEntity(dto);
         UserEntity save = userRepository.save(entity);
         return userMapper.toDto(save);
-    }
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByName(username)
-                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
-        return userEntity;
     }
 
     @Override
@@ -126,17 +115,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void addCard(UUID userId) {
+    public UserCard addCard(UUID userId) {
         Optional<UserEntity> byId = userRepository.findById(userId);
-        byId.ifPresent(userEntity -> {
-            cardRepository.save(UserCard.builder()
+        if (byId.isPresent()) {
+            UserCard save = cardRepository.save(UserCard.builder()
                     .money(99999f)
-                    .user(userEntity)
+                    .user(byId.get())
                     .build());
-        });
+            return save;
+        }
         if(byId.isEmpty()){
             throw new UserNotFoundException("Не найдено пользователя");
         }
+        return null;
     }
 
     @Override

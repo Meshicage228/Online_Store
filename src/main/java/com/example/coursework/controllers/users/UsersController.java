@@ -4,7 +4,8 @@ import com.example.coursework.clients.OrderClient;
 import com.example.coursework.clients.UsersClient;
 import com.example.coursework.domain.OrderStatus;
 import com.example.coursework.dto.product.OrderDto;
-import com.example.coursework.dto.user.CurrentUser;
+import com.example.coursework.dto.user.CurrentUserDto;
+import com.example.coursework.dto.user.UserCard;
 import com.example.coursework.dto.user.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -12,7 +13,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,7 +24,6 @@ import java.util.stream.IntStream;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.remove;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -36,37 +35,32 @@ public class UsersController {
     OrderClient orderClient;
 
     @GetMapping("/profile")
-    public ModelAndView getProfile(@AuthenticationPrincipal CurrentUser user) {
+    public ModelAndView getProfile(@AuthenticationPrincipal CurrentUserDto user) {
         UserDto userDto = client.personalUser(user.getId());
         return new ModelAndView("userProfilePage").addObject("userInfo", userDto);
     }
     @GetMapping("/favorite")
-    public ModelAndView getFavorite(@AuthenticationPrincipal CurrentUser user) {
+    public ModelAndView getFavorite(@AuthenticationPrincipal CurrentUserDto user) {
         UserDto userDto = client.personalUser(user.getId());
         return new ModelAndView("userFavoriteProductsPage").addObject("userInfo", userDto);
     }
 
-    @GetMapping("/card")
-    public String getCardPage(){
-        return "userRegisterCardPage";
-    }
-
     @PostMapping("/addCard")
-    public String addCard(@AuthenticationPrincipal CurrentUser user) {
-        client.addNewCard(user.getId());
-
+    public String addCard(@AuthenticationPrincipal CurrentUserDto user) {
+        UserCard card = client.addNewCard(user.getId());
+        user.setCard(card);
         return "redirect:/store/users/cart";
     }
 
     @PutMapping
-    public UserDto updateUser(@AuthenticationPrincipal CurrentUser user,
+    public UserDto updateUser(@AuthenticationPrincipal CurrentUserDto user,
                               @Valid @ModelAttribute UserDto dto,
                               BindingResult result) {
         return client.updateUser(user.getId(), dto);
     }
 
-    @PostMapping("/add_favorite/{prod_id}")
-    public String addToFavorite(@AuthenticationPrincipal CurrentUser user,
+    @GetMapping("/add_favorite/{prod_id}")
+    public String addToFavorite(@AuthenticationPrincipal CurrentUserDto user,
                                 @PathVariable("prod_id") Integer prod_id,
                                 HttpServletRequest request) {
         client.addToFavorite(user.getId(), prod_id);
@@ -75,7 +69,7 @@ public class UsersController {
 
     @PostMapping("/comment/{product_id}")
     public ModelAndView leaveCommentary(@RequestParam("commentary") String comment,
-                                        @AuthenticationPrincipal CurrentUser user,
+                                        @AuthenticationPrincipal CurrentUserDto user,
                                         @PathVariable("product_id") Integer prod_id) {
         ModelAndView modelAndView = new ModelAndView("redirect:/store/catalog/" + prod_id);
         if (isNull(comment) || isBlank(comment)) {
@@ -91,7 +85,7 @@ public class UsersController {
                                   @RequestParam(name = "status", required = false) OrderStatus status,
                                   @RequestParam(name = "name", required = false) String name,
                                   @RequestParam(name = "title", required = false) String title,
-                                  @AuthenticationPrincipal CurrentUser user,
+                                  @AuthenticationPrincipal CurrentUserDto user,
                                   @RequestParam(name = "sortedBy", required = false, defaultValue = "default") String sortedBy) {
 
         ModelAndView modelAndView = new ModelAndView("userPurchaseHistoryPage");

@@ -1,11 +1,9 @@
 package com.example.userblservice.entity.user;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +17,8 @@ public class UserCard {
     private Integer id;
 
     @OneToOne
+    @JsonIgnore
+    @ToString.Exclude
     private UserEntity user;
 
     private Float money;

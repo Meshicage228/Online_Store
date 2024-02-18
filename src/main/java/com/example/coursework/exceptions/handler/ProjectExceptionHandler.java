@@ -1,9 +1,7 @@
 package com.example.coursework.exceptions.handler;
 
 
-import com.example.coursework.dto.user.CurrentUser;
 import com.example.coursework.exceptions.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;

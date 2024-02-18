@@ -1,11 +1,11 @@
 package com.example.coursework.clients;
 
 import com.example.coursework.configuration.ProjectConfig;
+import com.example.coursework.dto.user.UserCard;
 import com.example.coursework.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -48,13 +48,11 @@ public interface UsersClient {
                          @RequestParam("commentary") String comment);
 
     @PostMapping("/card/{user_id}")
-    void addNewCard(@PathVariable("user_id") UUID user_id);
+    UserCard addNewCard(@PathVariable("user_id") UUID user_id);
 
     @PostMapping("/login")
     void login(@RequestParam("nameAuth") String authName, @RequestParam("password") String password);
 
-    @PostMapping("/load")
-    UserDetails load(@RequestParam("find") String username);
 
     @PostMapping("/deleteComment/{comment_id}")
     void deleteComm(@PathVariable("comment_id") Integer id);

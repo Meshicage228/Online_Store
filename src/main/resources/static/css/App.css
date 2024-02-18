@@ -1,0 +1,184 @@
+body, html{
+    height: 100%;
+    width: 100%;
+}
+.findProductInput{
+    background-color: red;
+    padding-top: 500px;
+    margin-top: 500px;
+}
+.avatar-Name{
+    width: 100px;
+    height: 100px;
+    display: block;
+}
+.userName{
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+.avatar{
+    display: block;
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto
+}
+.inputTitleProduct{
+    width: 500px;
+    height: 50px;
+    margin: 20px 0 20px 0;
+    border-radius: 10px;
+    display: block;
+}
+.collapse {
+    justify-content: space-around;
+}
+.buttons-search{
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+}
+
+.chooseFilter {
+    margin: 0 0 0 20px;
+    display: inline-block;
+    padding: 10px 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #04AA6D;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 1px #999;
+}
+
+.chooseFilter:hover {background-color: #3e8e41}
+
+.chooseFilter:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+.pagination{
+    margin-top: 40px;
+    margin-bottom: 0;
+    justify-content: center;
+}
+.cards-content{
+    display: inline-flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 100px;
+}
+.cards{
+    display: contents;
+}
+.card-product{
+    width: 275px;
+    height: 516px;
+    margin: 0 8px 36px 8px;
+    border: none;
+}
+.prodImage{
+    height: 366px;
+    width: 275px;
+    border-radius: 10px;
+}
+.addToCartButton{
+    width: 100%;
+    border-radius: 10px;
+}
+.card-body{
+    padding-top: 4px;
+}
+.card-title{
+    width: 100%;
+    text-align: center;
+}
+.bi-heart{
+    width: 37px;
+    height: 40px;
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 85%;
+}
+.carousel-photo{
+    width: 502px;
+    height: 670px;
+}
+.MainContent{
+    width: 100%;
+    height: 768px;
+    margin: 30px 32px;
+    padding: 0 32px;
+    display: inline-flex;
+}
+.personalCarousel{
+    width: 502px;
+    height: 670px;
+    margin-left: 250px;
+    margin-top: 40px;
+}
+.block-info{
+    margin: auto 30px;
+    width: 300px;
+    height: 150px;
+    border: solid;
+    display: inline-grid;
+    align-items: end;
+    border-radius: 10px;
+    padding: 30px;
+}
+.block-buy{
+    margin: auto 30px;
+    width: 300px;
+    height: 150px;
+    border: solid;
+    display: inline-grid;
+    align-items: end;
+    border-radius: 10px;
+    padding: 30px;
+}
+.change{
+    margin: 10px 0 10px 200px;
+}
+.user-info{
+    display: flex;
+    justify-content: center;
+    justify-items: baseline;
+    width: 300px;
+    height: 120px;
+}
+.comments{
+    display: contents;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    margin: 0 100px;
+}
+.commentary{
+    width: 400px;
+    height: 180px;
+    margin: 20px;
+    border: solid;
+    border-radius: 10px;
+}
+.textComment{
+    padding-left: 25px;
+}
+.myRow{
+    margin-left: 60px;
+}
+.leaveComment{
+    width: 100%;
+    margin-left: 600px;
+    margin-bottom: 50px;
+}
+.cartContent{
+    align-content: flex-start;
+}

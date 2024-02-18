@@ -5,70 +5,81 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <meta charset="UTF-8">
+    <link href="/css/App.css" rel="stylesheet">
     <title>Title</title>
 </head>
 <body>
 <div th:replace="~{fragments :: header}"></div>
-<div class="row row-cols-1 row-cols-md-3 g-4" th:object="${product}">
-    <div class="col" style="width: 200px; height: 200px">
-        <div class="card">
-            <div id="carouselExample" class="carousel slide">
-                <div class="carousel-inner">
-                    <div th:each="photo, number : ${product.getImages()}">
-                        <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">
-                            <img th:src="@{'data:image/png;base64,'+${photo.getConvertedImage()}}" alt="product"
-                                 style="height: 125px; width: 59px"
-                                 class="d-block w-100">
-                        </div>
-                    </div>
-                    <div th:if="${product.getImages().size()} > 1">
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                                data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                                data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+<div class="myRow row row-cols-1 row-cols-md-3 g-4" th:object="${product}">
+    <div class="MainContent">
+        <div id="carouselExample" class="carousel slide personalCarousel">
+            <div class="carousel-inner">
+                <div th:each="photo, number : ${product.getImages()}">
+                    <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">
+                        <img th:src="@{'data:image/png;base64,'+${photo.getConvertedImage()}}" alt="product"
+                             class="d-block carousel-photo">
                     </div>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${product.title}"></h5>
-                    <p class="card-text" th:text="${product.description}"></p>
-                    <p class="card-text" th:text="${product.price}"></p>
+                <a th:href="@{/store/users/add_favorite/{prod_id}(prod_id = ${product.id})}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-heart" viewBox="0 0 16 16">
+                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+                    </svg>
+                </a>
+                <div th:if="${product.getImages().size()} > 1">
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-
-                <div th:replace="~{fragments :: addToCart (${product.id})}"></div>
-
-                <div th:replace="~{fragments :: toFavorite (${product.id})}"></div>
-
-                <ul th:each="comment : ${product.getComments()}">
-                    <div class="commentary">
-                        <img th:src="@{'data:image/png;base64,'+${comment.getUserAvatar()}}" alt="avatar"
-                             style="height: 125px; width: 59px"
-                             class="d-block w-100">
-                        <div th:text="${comment.getName()}"></div>
-                        <div th:text="${comment.getComment()}"></div>
-                        <div th:text="${comment.getDate()}"></div>
-
-                        <div sec:authorize="hasAuthority('ADMIN')">
-                            <form th:action="@{/admin/users/deleteComment/{comment_id}/{prod_id}(comment_id = ${comment.id}, prod_id = ${product.id})}" th:method="post">
-                                <button type="submit">Удалить</button>
-                            </form>
-                        </div>
-                    </div>
-                </ul>
-
-                <form th:method="post" th:action="@{/store/users/comment/{prod_id}(prod_id = ${product.id})}">
-                    <!--                    TODO : check empty commentary-->
-                    <input type="text" name="commentary">
-                    <button type="submit">Оставить комментарий</button>
+            </div>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <form th:action="@{/admin/products/{product_id}(product_id = ${product.id})}" th:method="get">
+                    <button type="submit" class="change btn btn-danger">Изменить</button>
                 </form>
             </div>
         </div>
+        <div class="block-info">
+            <h5 class="card-title" th:text="${product.title}"></h5>
+            <p class="card-text" th:text="${product.description}"></p>
+        </div>
+        <div class="block-buy">
+            <p class="card-text" th:text="${product.price}"></p>
+            <div th:replace="~{fragments :: addToCart (${product.id})}"></div>
+        </div>
     </div>
+    <div class="comments">
+        <div th:each="comment : ${product.getComments()}" class="commentary">
+            <div class="user-info">
+                <img th:src="@{'data:image/png;base64,'+${comment.getUserAvatar()}}" alt="avatar"
+                     style="height: 125px;"
+                     class="d-block">
+                <div class="NameAndDate">
+                    <div th:text="${comment.getName()}"></div>
+                    <div th:text="${comment.getDate()}"></div>
+                </div>
+            </div>
+            <div class="commentaryItself">
+                <div th:text="${comment.getComment()}" class="textComment"></div>
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <form th:action="@{/admin/users/deleteComment/{comment_id}/{prod_id}(comment_id = ${comment.id}, prod_id = ${product.id})}"
+                          th:method="post">
+                        <button type="submit" style="margin-left: 310px">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form th:method="post" th:action="@{/store/users/comment/{prod_id}(prod_id = ${product.id})}" class="leaveComment">
+        <input type="text" name="commentary">
+        <button type="submit">Оставить комментарий</button>
+    </form>
 </div>
 <div th:replace="~{fragments :: footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
