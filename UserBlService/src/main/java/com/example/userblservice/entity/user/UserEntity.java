@@ -68,6 +68,10 @@ public class UserEntity implements UserDetails {
         entity.getUsers_favorites().add(this);
         return true;
     }
+    public void removeFavorite(ProductEntity entity){
+        this.favoriteProducts.remove(entity);
+        entity.getUsers().remove(this);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

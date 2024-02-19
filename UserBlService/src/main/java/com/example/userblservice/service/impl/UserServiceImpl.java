@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService{
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
         ProductEntity productEntity = productRepository.findById(prodId)
-                .orElseThrow(() -> new ProductNotFoundException("Продукт не найдет"));
+                .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
 
         Commentary build = Commentary.builder()
                 .user(userEntity)
@@ -146,6 +146,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteCommentary(Integer id) {
         commentaryRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void removeFavorite(UUID userId, Integer prodId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+        ProductEntity productEntity = productRepository.findById(prodId)
+                .orElseThrow(() -> new ProductNotFoundException("Продукт не найдет"));
+
+        userEntity.removeFavorite(productEntity);
     }
 
 

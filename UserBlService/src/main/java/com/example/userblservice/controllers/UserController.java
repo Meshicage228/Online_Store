@@ -65,6 +65,11 @@ public class UserController {
                               @PathVariable("prod_id") Integer prod_id) {
         userService.addToFavorite(user_id, prod_id);
     }
+    @GetMapping("/{user_id}/remove_favorite/{prod_id}")
+    public void removeFavorite(@PathVariable("user_id") UUID user_id,
+                               @PathVariable("prod_id") Integer prod_id){
+        userService.removeFavorite(user_id, prod_id);
+    }
 
     @PostMapping("/{user_id}/comment/{product_id}")
     public void leaveCommentary(@PathVariable("user_id") UUID user_id,

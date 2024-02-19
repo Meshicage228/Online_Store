@@ -39,6 +39,7 @@ public class UsersController {
         UserDto userDto = client.personalUser(user.getId());
         return new ModelAndView("userProfilePage").addObject("userInfo", userDto);
     }
+
     @GetMapping("/favorite")
     public ModelAndView getFavorite(@AuthenticationPrincipal CurrentUserDto user) {
         UserDto userDto = client.personalUser(user.getId());
@@ -65,6 +66,14 @@ public class UsersController {
                                 HttpServletRequest request) {
         client.addToFavorite(user.getId(), prod_id);
         return "redirect:/" + request.getHeader("referer").substring(22);
+    }
+
+    @GetMapping("/remove_favorite/{prod_id}")
+    public String removeFavorite(@AuthenticationPrincipal CurrentUserDto userDto,
+                                 @PathVariable("prod_id") Integer prod_id) {
+        client.removeFavorite(userDto.getId(), prod_id);
+
+        return "redirect:/store/users/favorite";
     }
 
     @PostMapping("/comment/{product_id}")

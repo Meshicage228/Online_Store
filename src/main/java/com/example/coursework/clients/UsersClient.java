@@ -56,4 +56,8 @@ public interface UsersClient {
 
     @PostMapping("/deleteComment/{comment_id}")
     void deleteComm(@PathVariable("comment_id") Integer id);
+
+    @GetMapping("{user_id}/remove_favorite/{prod_id}")
+    void removeFavorite(@PathVariable("user_id") UUID id,
+                        @PathVariable("prod_id") Integer prodId);
 }

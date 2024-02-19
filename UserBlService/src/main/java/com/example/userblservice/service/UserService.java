@@ -30,4 +30,6 @@ public interface UserService {
     boolean checkExists(String authName, String password);
 
     void deleteCommentary(Integer id);
+
+    void removeFavorite(UUID userId, Integer prodId);
 }
