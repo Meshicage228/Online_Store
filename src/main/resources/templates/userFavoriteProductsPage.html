@@ -9,44 +9,37 @@
 </head>
 <body>
 <div th:replace="~{fragments :: header}"></div>
-
-<div th:replace="~{fragments :: user-navigation}"></div>
-
-<tbody>
-<tr th:each="favorite, number : ${userInfo.getFavoriteProducts()}">
-    <th scope="row" th:text="'№' + ${number.count}"></th>
-    <td th:text="'product title ' + ${favorite.title}"></td>
-    <td>
-        <div id="carouselExample" class="carousel slide">
-            <div class="carousel-inner">
-                <div th:each="photo, number : ${favorite.getImages()}">
-                    <div th:class="'carousel-item ' + ${number.count == 1 ? 'active' : ''}">
-                        <img th:src="@{'data:image/png;base64,'+${photo.convertedImage}}" alt="product"
-                             style="height: 125px; width: 125px"
-                             class="d-block">
+<div class="favoriteMainContent">
+    <div class="favorite-content">
+        <div th:replace="~{fragments :: user-navigation}"></div>
+        <div class="cards-content-favorite">
+            <div class="cards">
+                <div th:each="prod : ${userInfo.getFavoriteProducts()}" class="card-product">
+                    <div id="carouselExample1" class="carousel slide">
+                        <div><a th:href="@{/store/catalog/{prod_id}(prod_id = ${prod.id})}">
+                            <img th:src="@{'data:image/png;base64,'+${prod.getImages().get(0).convertedImage}}"
+                                 alt="product" class="d-block prodImage">
+                        </a>
+                            <a th:href="@{/store/users/remove_favorite/{prod_id}(prod_id = ${prod.id})}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-heart" viewBox="0 0 16 16">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div th:if="${userInfo.getFavoriteProducts().size()} > 1">
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                            data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${prod.title}"></h5>
+                        <p class="card-text" th:text="${prod.description}"></p>
+                        <p class="card-text" th:text="${prod.price}"></p>
+                    </div>
+
+                    <div th:replace="~{fragments :: addToCart (${prod.id})}"></div>
                 </div>
             </div>
         </div>
-    </td>
-    <td th:text="'price of product : ' + ${favorite.price}"></td>
-    <td th:text="'descriptiobn of purchase : '+ ${favorite.description}"></td>
-    <td th:text="'title of product : ' + ${favorite.title}"></td>
-</tr>
-</tbody>
-
+    </div>
+</div>
 <div th:replace="~{fragments :: footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

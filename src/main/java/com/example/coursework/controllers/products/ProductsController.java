@@ -122,6 +122,7 @@ public class ProductsController {
             dto.setFileImage(null);
             dto.setImagesToThrow(imagesToThrow);
             adminClient.saveProduct(dto);
+            modelAndView.addObject("successSave", "Товар успешно сохранен!");
             return modelAndView.addObject("modelToSave", new ProductDto());
         }
         modelAndView.addObject("modelToSave", dto);

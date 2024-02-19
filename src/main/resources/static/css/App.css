@@ -12,6 +12,10 @@ body, html{
     height: 100px;
     display: block;
 }
+.NameAndDate{
+    display: grid;
+    padding-top: 16px;
+}
 .userName{
     display: block;
     text-align: center;
@@ -92,9 +96,6 @@ body, html{
     width: 100%;
     border-radius: 10px;
 }
-.card-body{
-    padding-top: 4px;
-}
 .card-title{
     width: 100%;
     text-align: center;
@@ -165,20 +166,148 @@ body, html{
     width: 400px;
     height: 180px;
     margin: 20px;
-    border: solid;
+    box-shadow: 0 2px 16px rgba(0,0,0,.08);
     border-radius: 10px;
 }
 .textComment{
     padding-left: 25px;
 }
+.adminUsers{
+    display: inline-flex;
+    height: 780px;
+}
+.cardOfUser{
+    border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.08);
+}
 .myRow{
     margin-left: 60px;
+}
+.inputProduct{
+    margin: 0 40px;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-content: stretch;
+    flex-wrap: wrap;
+    flex-direction: column;
+    box-shadow: 0 2px 16px rgba(0,0,0,.08);
+    width: 500px;
+    border-radius: 10px;
+
+}
+.col-1{
+    border: none;
+    width: 200px;
+    height: 250px;
+}
+.alert-danger{
+    text-align: center;
+}
+.inputProductDetails{
+    width: 400px;
+    margin-left: 45px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+.fileChoose{
+    margin-left: 120px;
+}
+.createProductMain{
+    margin: 0 40px;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-content: stretch;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+.users{
+    margin-bottom: 30px;
+    width: 100%;
+}
+.btn-success{
+    width: 400px;
+    margin-left: 50px;
 }
 .leaveComment{
     width: 100%;
     margin-left: 600px;
     margin-bottom: 50px;
 }
+.baskets{
+    box-shadow: 0 2px 16px rgba(0,0,0,.08);
+    border-radius: 10px;
+}
 .cartContent{
     align-content: flex-start;
+}
+.favorite-content{
+    display: flex;
+    margin: 0 40px;
+    padding: 20px;
+}
+.cart-main{
+    margin: 0 40px;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-content: stretch;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+.createContent{
+    height: 780px;
+    display: inline-table;
+    margin-left: 450px;
+}
+.successMessageSave{
+    width: 500px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: 80px;
+    text-align: center;
+}
+.favorite-main{
+    background-color: #d2c9ff;
+    height: 780px;
+    display: inline-table;
+    width: 100%;
+}
+.removeFromCart{
+    margin-right: 60px;
+}
+.favoriteMainContent{
+    height: 780px;
+    display: inline-table;
+}
+.orderDetails{
+    width: 600px;
+    height: 200px;
+    display: inline-flex;
+    justify-content: center;
+    align-content: space-between;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+.cards-content-favorite{
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+.list-group{
+    width: 210px;
+    height: 31px;
+    border-radius: 10px;
+}
+.buyButton{
+    margin-top: 40px;
+}
+.navbar-expand-lg{
+    width: 100%;
+}
+.favorite-container{
+    padding-left: 0;
+    margin-left: 85px;
 }
