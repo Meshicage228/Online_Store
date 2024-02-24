@@ -1,7 +1,7 @@
 server:
   port: 8080
   tomcat:
-    max-http-response-header-size: 1MB
+    max-http-response-header-size: 5MB
 spring:
   jackson:
     serialization:
@@ -31,8 +31,9 @@ spring:
         enabled: true
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 15MB
       enabled: true
+      max-request-size: 15MB
 app:
   clients:
     admin:
@@ -49,6 +50,7 @@ app:
       name: order-feign
       url: 127.0.0.1:8083
       path: /v1/orders
+  path-test: 127.0.0.1:8080
 project:
   secretKey : assgaasglnsaggasnklgsankasgnksasnkasgknsdhnasgjahsgvbasghbnvxbzcnb
 logging:
