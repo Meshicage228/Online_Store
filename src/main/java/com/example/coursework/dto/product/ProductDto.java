@@ -22,6 +22,7 @@ public class ProductDto {
     private Float bill;
 
     @CheckFileIsEmpty
+    @NotNull
     @CheckFileSize(maxSizeInMB = 5, message = "{app.file-size-message}")
     private List<MultipartFile> fileImage;
 

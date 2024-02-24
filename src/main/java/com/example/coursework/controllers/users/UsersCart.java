@@ -7,6 +7,7 @@ import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.CurrentUserDto;
 import com.example.coursework.dto.user.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,7 +29,7 @@ public class UsersCart {
     OrderClient orderClient;
 
     @GetMapping
-    public ModelAndView getCart(@AuthenticationPrincipal CurrentUserDto user) {
+    public ModelAndView getCart(@NotNull @AuthenticationPrincipal CurrentUserDto user) {
         ModelAndView modelAndView = new ModelAndView("userCartPage");
         UserDto userDto = usersClient.personalUser(user.getId());
 
@@ -46,7 +47,7 @@ public class UsersCart {
     }
 
     @PostMapping("/order/create")
-    public ModelAndView createPurchase(@AuthenticationPrincipal CurrentUserDto user) {
+    public ModelAndView createPurchase(@NotNull @AuthenticationPrincipal CurrentUserDto user) {
         ModelAndView cart = getCart(user);
         if (isNull(user.getCard())) {
             return cart.addObject("noCardFound", "Не найдена привзянная карта!");
@@ -54,7 +55,6 @@ public class UsersCart {
         if (!orderClient.createPurchase(user.getId())) {
             return cart.addObject("notEnoughMoney", "На карте недостаточно средств!");
         }
-        ;
         cart = getCart(user);
         return cart;
     }
@@ -73,7 +73,7 @@ public class UsersCart {
     }
 
     @PostMapping("/{prod_id}")
-    public String addToCart(@AuthenticationPrincipal CurrentUserDto user,
+    public String addToCart(@NotNull @AuthenticationPrincipal CurrentUserDto user,
                             @PathVariable("prod_id") Integer prod_id,
                             HttpServletRequest request) {
         client.addToCart(user.getId(), prod_id);
