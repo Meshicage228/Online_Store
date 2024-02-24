@@ -26,7 +26,7 @@ public class AdminUsersController {
     @DeleteMapping("/{id}")
     public ModelAndView deleteUser(@PathVariable("id") UUID id) {
         client.deleteUser(id);
-        return new ModelAndView("redirect:/admin/users/0/5");
+        return new ModelAndView("redirect:/admin/users/0/16");
     }
 
     @GetMapping("/{page}/{size}")

@@ -54,12 +54,6 @@ public class UserController {
         return userService.getByid(id);
     }
 
-    @PutMapping("/{user_id}")
-    public UserDto updateUser(@PathVariable("user_id") UUID id,
-                              @ModelAttribute UserDto dto) {
-        return userService.update(id, dto);
-    }
-
     @PostMapping("/{user_id}/add_favorite/{prod_id}")
     public void addToFavorite(@PathVariable("user_id") UUID user_id,
                               @PathVariable("prod_id") Integer prod_id) {

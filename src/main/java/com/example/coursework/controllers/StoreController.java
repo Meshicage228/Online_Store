@@ -35,7 +35,7 @@ public class StoreController {
 
     @GetMapping("/login")
     public ModelAndView getLogin(@ModelAttribute("enterUser") AuthorizeDao dao) {
-        return new ModelAndView("login");
+        return new ModelAndView("loginPage");
     }
 
     @GetMapping("/authorize")

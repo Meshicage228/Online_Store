@@ -8,14 +8,13 @@ import com.example.coursework.dto.user.CurrentUserDto;
 import com.example.coursework.dto.user.UserCard;
 import com.example.coursework.dto.user.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,33 +34,26 @@ public class UsersController {
     OrderClient orderClient;
 
     @GetMapping("/profile")
-    public ModelAndView getProfile(@AuthenticationPrincipal CurrentUserDto user) {
+    public ModelAndView getProfile(@NotNull @AuthenticationPrincipal CurrentUserDto user) {
         UserDto userDto = client.personalUser(user.getId());
         return new ModelAndView("userProfilePage").addObject("userInfo", userDto);
     }
 
     @GetMapping("/favorite")
-    public ModelAndView getFavorite(@AuthenticationPrincipal CurrentUserDto user) {
+    public ModelAndView getFavorite(@NotNull @AuthenticationPrincipal CurrentUserDto user) {
         UserDto userDto = client.personalUser(user.getId());
         return new ModelAndView("userFavoriteProductsPage").addObject("userInfo", userDto);
     }
 
     @PostMapping("/addCard")
-    public String addCard(@AuthenticationPrincipal CurrentUserDto user) {
+    public String addCard(@NotNull @AuthenticationPrincipal CurrentUserDto user) {
         UserCard card = client.addNewCard(user.getId());
         user.setCard(card);
         return "redirect:/store/users/cart";
     }
 
-    @PutMapping
-    public UserDto updateUser(@AuthenticationPrincipal CurrentUserDto user,
-                              @Valid @ModelAttribute UserDto dto,
-                              BindingResult result) {
-        return client.updateUser(user.getId(), dto);
-    }
-
     @GetMapping("/add_favorite/{prod_id}")
-    public String addToFavorite(@AuthenticationPrincipal CurrentUserDto user,
+    public String addToFavorite(@NotNull @AuthenticationPrincipal CurrentUserDto user,
                                 @PathVariable("prod_id") Integer prod_id,
                                 HttpServletRequest request) {
         client.addToFavorite(user.getId(), prod_id);
@@ -69,7 +61,7 @@ public class UsersController {
     }
 
     @GetMapping("/remove_favorite/{prod_id}")
-    public String removeFavorite(@AuthenticationPrincipal CurrentUserDto userDto,
+    public String removeFavorite(@NotNull @AuthenticationPrincipal CurrentUserDto userDto,
                                  @PathVariable("prod_id") Integer prod_id) {
         client.removeFavorite(userDto.getId(), prod_id);
 

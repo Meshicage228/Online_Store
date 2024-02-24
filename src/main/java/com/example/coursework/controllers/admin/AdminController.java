@@ -19,7 +19,7 @@ public class AdminController {
 
     @GetMapping
     public String adminPage() {
-        return "redirect:/admin/products/0/10";
+        return "redirect:/admin/orders/0/10";
     }
 
     @GetMapping("/createProduct")

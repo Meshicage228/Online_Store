@@ -22,7 +22,7 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 
 @Controller
-@RequestMapping("*/orders")
+@RequestMapping("/admin/orders")
 public class OrderController {
     OrderClient client;
 
