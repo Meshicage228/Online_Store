@@ -23,14 +23,14 @@
                      th:errors="*{title}"></div>
             </div>
             <div class="form-group">
-                <input name="price" class="inputProductDetails" placeholder="Цена продукта"
+                <input name="price" min="0" class="inputProductDetails" placeholder="Цена продукта"
                        th:value="${modelToSave.price}" th:field="*{price}" type="number">
                 <div th:if="${#fields.hasErrors('price')}"
                      th:class="${#fields.hasErrors('price')}? 'alert alert-danger'"
                      th:errors="*{price}"></div>
             </div>
             <div class="form-group">
-                <input name="count" class="inputProductDetails" placeholder="Кол-во продукта"
+                <input name="count" min="0" class="inputProductDetails" placeholder="Кол-во продукта"
                        th:value="${modelToSave.count}" th:field="*{count}" type="number">
                 <div th:if="${#fields.hasErrors('count')}"
                      th:class="${#fields.hasErrors('count')}? 'alert alert-danger'"
@@ -48,7 +48,7 @@
             <div th:if="${#fields.hasErrors('fileImage')}"
                  th:class="${#fields.hasErrors('fileImage')}? 'alert alert-danger'"
                  th:errors="*{fileImage}"></div>
-            <button type="submit" class="btn btn-success">Сохранить</button>
+            <button type="submit" class="btn btn-success btn-success-Create">Сохранить</button>
         </form>
     </div>
     <div th:if="${successSave != null}">

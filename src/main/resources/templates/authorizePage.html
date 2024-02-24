@@ -8,6 +8,7 @@
     <title>Title</title>
 </head>
 <body>
+<div th:replace="~{fragments :: header}"></div>
 <section class="vh-100" style="background-color: #508bfc;">
     <div class="container py-5 h-100" th:object="${enterUser}">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -18,32 +19,42 @@
                         <h3 class="mb-5">Authorize</h3>
                         <form th:action="@{/store/authorize}" method="post">
                             <div class="form-outline mb-4">
-                                <input th:field="*{nameAuth}" th:value="*{nameAuth}" type="text" id="typeEmailX-2" class="form-control form-control-lg" name="nameAuth">
-                                <label class="form-label" for="typeEmailX-2">логин</label>
-                                <div th:if="${#fields.hasErrors('nameAuth')}" th:class="${#fields.hasErrors('nameAuth')}? error"
+                                <input th:field="*{nameAuth}" placeholder="Введите логин" th:value="*{nameAuth}"
+                                       type="text" id="typeEmailX-2" class="form-control form-control-lg"
+                                       name="nameAuth">
+                                <div th:if="${#fields.hasErrors('nameAuth')}"
+                                     th:class="${#fields.hasErrors('nameAuth')}? 'alert alert-danger'"
                                      th:errors="*{nameAuth}"></div>
                             </div>
-                            <div th:text="${usersExits}"></div>
 
                             <div class="form-outline mb-4">
-                                <input type="password" id="typePasswordX-2" class="form-control form-control-lg"
+                                <input type="password" placeholder="Придумайте пароль" id="typePasswordX-2"
+                                       class="form-control form-control-lg"
                                        name="password" th:field="*{password}" th:value="*{password}">
-                                <label class="form-label" for="typePasswordX-2">пароль</label>
-                                <div th:if="${#fields.hasErrors('password')}" th:class="${#fields.hasErrors('password')}? error"
+                                <div th:if="${#fields.hasErrors('password')}"
+                                     th:class="${#fields.hasErrors('password')}? 'alert alert-danger'"
                                      th:errors="*{password}"></div>
                             </div>
 
                             <div class="form-outline mb-4">
-                                <input type="password" id="typePasswordX-1" class="form-control form-control-lg"
+                                <input type="password" placeholder="Подтвердите пароль" id="typePasswordX-1"
+                                       class="form-control form-control-lg"
                                        name="doublePass" th:field="*{doublePass}" th:value="*{doublePass}">
-                                <label class="form-label" for="typePasswordX-2">Повторите пароль</label>
-                                <div th:if="${#fields.hasErrors('doublePass')}" th:class="${#fields.hasErrors('doublePass')}? error"
+                                <div th:if="${#fields.hasErrors('doublePass')}"
+                                     th:class="${#fields.hasErrors('doublePass')}? 'alert alert-danger'"
                                      th:errors="*{doublePass}"></div>
                             </div>
 
-                            <button class="btn btn-primary btn-lg btn-block" type="submit">Authorize</button>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Подтвердить</button>
                         </form>
-                        <div th:text="${passNotMatch}"></div>
+                        <div th:if="${passNotMatch != null}">
+                            <div class="alert alert-danger" role="alert" th:text="${passNotMatch}">
+                            </div>
+                        </div>
+                        <div th:if="${usersExits != null}">
+                            <div class="alert alert-danger" role="alert" th:text="${usersExits}">
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -51,7 +62,7 @@
         </div>
     </div>
 </section>
-
+<div th:replace="~{fragments :: footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>

@@ -12,9 +12,8 @@
 <div class="adminUsers">
     <div th:replace="~{fragments :: admin-navigation}"></div>
     <div class="FormContent">
-        <form th:action="@{/admin/users/{page}/{size}(page = ${totalPage.number}, size = ${totalPage.size})}">
-            <input name="name" placeholder="Введите имя">
-            <button type="submit">Найти</button>
+        <form th:action="@{/admin/users/{page}/{size}(page = ${totalPage.number}, size = ${totalPage.size})}" class="inputUsername">
+            <input name="name" placeholder="Введите имя" class="inputUser">
         </form>
         <div class="row row-cols-1 row-cols-md-3 g-4 users">
             <div class="col-1 userCard" th:each="user : ${totalPage.getContent()}">
@@ -27,11 +26,12 @@
                         <p class="card-text" th:text="${user.role}"></p>
                     </div>
                     <form th:action="@{/admin/users/{id}(id = ${user.id})}" th:method="delete">
-                        <button type="submit">Удалить</button>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
                     </form>
                 </div>
             </div>
         </div>
+        <div th:insert="~{fragments :: notFoundByFilter (${totalPage.getContent().size()})}"></div>
         <nav aria-label="..." th:if="${totalPage.getTotalPages() > 1}">
             <ul class="pagination">
                 <li class="page-item">

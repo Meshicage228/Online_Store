@@ -58,7 +58,7 @@
         <div th:each="comment : ${product.getComments()}" class="commentary">
             <div class="user-info">
                 <img th:src="@{'data:image/png;base64,'+${comment.getUserAvatar()}}" alt="avatar"
-                     style="height: 125px;"
+                     style="height: 125px; border-radius: 50%"
                      class="d-block">
                 <div class="NameAndDate">
                     <div th:text="${comment.getName()}"></div>
@@ -70,7 +70,7 @@
                 <div sec:authorize="hasAuthority('ADMIN')">
                     <form th:action="@{/admin/users/deleteComment/{comment_id}/{prod_id}(comment_id = ${comment.id}, prod_id = ${product.id})}"
                           th:method="post">
-                        <button type="submit" style="margin-left: 310px">Удалить</button>
+                        <button type="submit" class="btn btn-danger" style="margin-left: 310px">Удалить</button>
                     </form>
                 </div>
             </div>
@@ -78,7 +78,7 @@
     </div>
     <form th:method="post" th:action="@{/store/users/comment/{prod_id}(prod_id = ${product.id})}" class="leaveComment">
         <input type="text" name="commentary">
-        <button type="submit">Оставить комментарий</button>
+        <button type="submit" class="btn btn-success">Оставить комментарий</button>
     </form>
 </div>
 <div th:replace="~{fragments :: footer}"></div>
