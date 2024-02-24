@@ -17,8 +17,6 @@ public interface UserService {
 
     UserDto getByid(UUID id);
 
-    UserDto update(UUID id, UserDto dto);
-
     boolean addToFavorite(UUID userId, Integer prodId);
 
     Commentary addComment(UUID userId, Integer prodId, String comment);

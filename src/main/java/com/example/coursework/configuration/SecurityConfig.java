@@ -7,8 +7,10 @@ import com.example.coursework.dto.user.CurrentUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,25 +27,26 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain chain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(registry -> {
-            registry.requestMatchers("/store/login").permitAll();
-            registry.requestMatchers("/admin/**").hasAuthority("ADMIN");
-            registry.requestMatchers("/store/authorize").permitAll();
-            registry.requestMatchers("/css/**").permitAll();
-            registry.requestMatchers("/store/users/history/{page}/{size}/**").authenticated();
-            registry.requestMatchers("/orders/**").authenticated();
-            registry.requestMatchers("/store/{page}/{size}/**").permitAll();
-            registry.requestMatchers("/store/products/{id}").permitAll();
-            registry.requestMatchers("/store/users/**").authenticated();
+        http.authorizeHttpRequests(registry -> { registry
+            .requestMatchers("/store/login").permitAll()
+            .requestMatchers("/images/**").permitAll()
+            .requestMatchers("/admin/**").hasAuthority("ADMIN")
+            .requestMatchers("/store/authorize").permitAll()
+            .requestMatchers("/css/**").permitAll()
+            .requestMatchers("/store/users/history/{page}/{size}/**").authenticated()
+            .requestMatchers("/orders/**").authenticated()
+            .requestMatchers("/store/{page}/{size}/**").permitAll()
+            .requestMatchers("/store/products/{id}").permitAll()
+            .requestMatchers("/store/users/**").hasAnyAuthority("USER", "ADMIN");
         });
         http.cors(AbstractHttpConfigurer::disable);
         http.csrf(AbstractHttpConfigurer::disable);
 
-        http.formLogin(cust -> {
-            cust.loginPage("/store/login");
-            cust.usernameParameter("loginAuth");
-            cust.passwordParameter("password");
-            cust.successHandler((request, response, authentication) -> {
+        http.formLogin(cust -> { cust
+            .loginPage("/store/login")
+            .usernameParameter("loginAuth")
+            .passwordParameter("password")
+            .successHandler((request, response, authentication) -> {
                 CurrentUser principal = (CurrentUser)authentication.getPrincipal();
 
                 CurrentUserDto build = CurrentUserDto.builder()
@@ -65,7 +68,7 @@ public class SecurityConfig {
             });
         });
         http.logout(cust -> {
-            cust.logoutUrl("/user/logout");
+            cust.logoutUrl("/store/users/logout");
             cust.invalidateHttpSession(true);
         });
         http.addFilterAfter(generationFilter, LogoutFilter.class);

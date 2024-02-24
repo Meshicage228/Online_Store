@@ -2,7 +2,6 @@ package com.example.orderblservice.service.impl;
 
 import com.example.orderblservice.domain.OrderStatus;
 import com.example.orderblservice.dto.product.OrderDto;
-import com.example.orderblservice.dto.product.OrderRequest;
 import com.example.orderblservice.dto.product.OrderSearchDto;
 import com.example.orderblservice.entity.product.Orders;
 import com.example.orderblservice.entity.product.ProductEntity;
@@ -20,7 +19,6 @@ import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

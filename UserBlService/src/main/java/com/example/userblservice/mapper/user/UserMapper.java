@@ -49,28 +49,12 @@ public abstract class UserMapper {
     })
     public abstract UserEntity toEntity(UserDto dto);
 
-
-    public abstract List<UserDto> toDtos(List<UserEntity> dtos);
-
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "password", source = "password")
-    public abstract UserEntity update(@MappingTarget UserEntity target, UserEntity source);
     public byte[] setDefaultAvatar(){
         try {
             BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/defaultAvatar.jpg")));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             return baos.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public byte[] encodeBytesToString(MultipartFile file){
-        try {
-            return file.getBytes();
-        } catch (NullPointerException e) {
-            return new byte[0];
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

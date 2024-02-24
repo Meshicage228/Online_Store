@@ -24,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor
 @Configuration
-public class ProjectConfig implements WebMvcConfigurer {
+public class ProjectConfig{
     @Bean
     public OkHttpClient client() {
         return new OkHttpClient();
@@ -48,12 +48,6 @@ public class ProjectConfig implements WebMvcConfigurer {
     @Bean
     public JsonFormWriter jsonFormWriter() {
         return new JsonFormWriter();
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**")
-                .addResourceLocations("/resources/");
     }
 
     @Bean

@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 
 import static java.util.Objects.nonNull;
@@ -34,12 +35,13 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @RequiredArgsConstructor
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     ProductRepository productRepository;
     CommentaryRepository commentaryRepository;
     CardRepository cardRepository;
+
     @Override
     @Transactional
     public UserDto save(UserDto dto) {
@@ -72,16 +74,6 @@ public class UserServiceImpl implements UserService{
         UserDto dto = userMapper.toDto(userEntity);
         dto.getBasket().sort(Comparator.comparing(ProductDto::getTitle));
         return dto;
-    }
-
-    @Override
-    @Transactional
-    public UserDto update(UUID id, UserDto dto) {
-        UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
-        UserEntity updated = userMapper.update(userEntity, userMapper.toEntity(dto));
-
-        return userMapper.toDto(updated);
     }
 
     @Override
@@ -124,7 +116,7 @@ public class UserServiceImpl implements UserService{
                     .build());
             return save;
         }
-        if(byId.isEmpty()){
+        if (byId.isEmpty()) {
             throw new UserNotFoundException("Не найдено пользователя");
         }
         return null;
