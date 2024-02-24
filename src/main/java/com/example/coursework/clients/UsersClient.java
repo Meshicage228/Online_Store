@@ -1,6 +1,7 @@
 package com.example.coursework.clients;
 
 import com.example.coursework.configuration.ProjectConfig;
+import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.UserCard;
 import com.example.coursework.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,6 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @FeignClient(
         name = "${app.clients.users.name}",
@@ -34,9 +38,9 @@ public interface UsersClient {
     @GetMapping("/{user_id}")
     UserDto personalUser(@PathVariable("user_id") UUID id);
 
-    @PutMapping("/{user_id}")
-    UserDto updateUser(@PathVariable("user_id") UUID id,
-                       @ModelAttribute UserDto dto);
+    @PutMapping(path = "/{user_id}", consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
+    void updateAvatar(@PathVariable("user_id") UUID id,
+                      @ModelAttribute UserDto dto);
 
     @PostMapping("/{user_id}/add_favorite/{prod_id}")
     void addToFavorite(@PathVariable("user_id") UUID user_id,

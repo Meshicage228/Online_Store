@@ -20,6 +20,7 @@ public class UserDto {
     private Role role;
     private MultipartFile file;
     private String avatar;
+    private byte[] imageToService;
     private List<ProductDto> basket;
     private List<ProductDto> favoriteProducts;
 }

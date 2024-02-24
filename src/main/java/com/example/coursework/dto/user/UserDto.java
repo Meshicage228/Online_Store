@@ -2,7 +2,6 @@ package com.example.coursework.dto.user;
 
 import com.example.coursework.domain.Role;
 import com.example.coursework.dto.product.ProductDto;
-import com.example.coursework.utils.annotations.CheckFileSize;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -29,9 +28,9 @@ public class UserDto {
     private String name;
 
     private Role role;
-    @CheckFileSize(maxSizeInMB = 5, message = "{app.file-size-message}")
     private MultipartFile file;
     private String avatar;
+    private byte[] imageToService;
     private List<ProductDto> basket;
     private List<ProductDto> favoriteProducts;
 }
