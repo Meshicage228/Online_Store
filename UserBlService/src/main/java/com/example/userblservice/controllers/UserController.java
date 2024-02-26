@@ -2,6 +2,7 @@ package com.example.userblservice.controllers;
 
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.dto.user.UserSearchDto;
+import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.user.UserCard;
 import com.example.userblservice.service.impl.UserServiceImpl;
 import lombok.AccessLevel;
@@ -21,7 +22,7 @@ public class UserController {
     UserServiceImpl userService;
 
     @PostMapping("/save")
-    public UserDto saveUser(@ModelAttribute UserDto dto) {
+    public UserDto saveUser(@ModelAttribute("userAuth") UserDto dto) {
         return userService.save(dto);
     }
 
@@ -59,7 +60,7 @@ public class UserController {
                               @PathVariable("prod_id") Integer prod_id) {
         userService.addToFavorite(user_id, prod_id);
     }
-    @GetMapping("/{user_id}/remove_favorite/{prod_id}")
+    @DeleteMapping("/{user_id}/remove_favorite/{prod_id}")
     public void removeFavorite(@PathVariable("user_id") UUID user_id,
                                @PathVariable("prod_id") Integer prod_id){
         userService.removeFavorite(user_id, prod_id);
@@ -67,8 +68,8 @@ public class UserController {
 
     @PostMapping("/{user_id}/comment/{product_id}")
     public void leaveCommentary(@PathVariable("user_id") UUID user_id,
-                                @PathVariable("product_id") Integer prod_id,
-                                @RequestParam("commentary") String comment) {
+                                      @PathVariable("product_id") Integer prod_id,
+                                      @RequestParam("commentary") String comment) {
         userService.addComment(user_id, prod_id, comment);
     }
 

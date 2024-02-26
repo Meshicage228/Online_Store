@@ -2,12 +2,14 @@ package com.example.coursework.controllers.products;
 
 import com.example.coursework.clients.ProductClient;
 import com.example.coursework.dto.product.ProductDto;
-import jakarta.validation.Valid;
+import com.example.coursework.utils.markers.OnCreateMarker;
+import com.example.coursework.utils.markers.OnUpdateMarker;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,7 +35,7 @@ public class ProductsController {
 
     @PutMapping("/{id}/change")
     public ModelAndView update(@PathVariable("id") Integer id,
-                               @Valid @ModelAttribute("modelToUpdate") ProductDto dto,
+                               @Validated(OnUpdateMarker.class) @ModelAttribute("modelToUpdate") ProductDto dto,
                                BindingResult check) {
         if(!check.hasFieldErrors()) {
             ProductDto updated = adminClient.update(id, dto);
@@ -56,7 +58,7 @@ public class ProductsController {
         return "redirect:/admin/products/" + productId;
     }
 
-    @PatchMapping("/{product_id}/image/{image_id}/update")
+    @PostMapping("/{product_id}/image/{image_id}/update")
     public ModelAndView updatePicture(@PathVariable("product_id") Integer idProduct,
                                       @PathVariable(value = "image_id") Integer idImage,
                                       @RequestParam("newImage") MultipartFile file) {
@@ -80,7 +82,7 @@ public class ProductsController {
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@Valid @ModelAttribute(name = "modelToSave") ProductDto dto,
+    public ModelAndView save(@Validated(OnCreateMarker.class) @ModelAttribute(name = "modelToSave") ProductDto dto,
                              BindingResult check) {
         ModelAndView modelAndView = new ModelAndView("createProductAdmin");
         if (!check.hasFieldErrors()) {

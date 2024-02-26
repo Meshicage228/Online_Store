@@ -20,7 +20,6 @@ import java.util.UUID;
 public class OrderController {
     OrderServiceImpl service;
 
-    // TODO: 25.01.2024 Придумать уменьшение параметров
     @GetMapping("/{page}/{size}")
     public Page<OrderDto> getOrders(@PathVariable("page") Integer page,
                                     @PathVariable("size") Integer size,
