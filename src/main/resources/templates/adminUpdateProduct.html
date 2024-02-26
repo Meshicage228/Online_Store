@@ -20,7 +20,7 @@
                      style="height: 280px;width: 280px;border-radius: 20px;">
                 <div class="updateOptions">
                     <form th:action="@{/admin/products/{id_product}/image/{id_image}/update(id_product = ${modelToUpdate.id}, id_image = ${photo.id})}"
-                          th:method="patch" enctype="multipart/form-data" class="changePhoto">
+                          th:method="post" enctype="multipart/form-data" class="changePhoto">
                         <p>Измените это фото : </p>
                         <input type="file" name="newImage">
                         <button type="submit" class="updateButton btn btn-info">Изменить</button>

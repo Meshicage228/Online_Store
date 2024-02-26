@@ -56,7 +56,7 @@ public class ProductController {
         service.deleteImage(imageId);
     }
 
-    @PatchMapping("/image/{image_id}/update")
+    @PostMapping("/image/{image_id}/update")
     public void updatePicture(@PathVariable("image_id") Integer idImage,
                               @RequestPart("file") MultipartFile file) {
         service.update(idImage, file);

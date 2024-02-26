@@ -40,7 +40,7 @@ public interface ProductClient {
     @DeleteMapping("/image/{image_id}/delete")
     void deleteImage(@PathVariable("image_id") Integer imageId);
 
-    @PatchMapping(path = "/image/{image_id}/update", consumes = MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(path = "/image/{image_id}/update", consumes = MULTIPART_FORM_DATA_VALUE)
     void updatePicture(@PathVariable("image_id") Integer idImage,
                        @RequestPart(value = "file") MultipartFile file);
 
