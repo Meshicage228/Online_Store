@@ -52,7 +52,7 @@ public class UserEntity implements UserDetails {
     @ToString.Exclude
     private Set<UsersCart> cart;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_favorite_products",
             joinColumns = @JoinColumn(name = "user_id"),

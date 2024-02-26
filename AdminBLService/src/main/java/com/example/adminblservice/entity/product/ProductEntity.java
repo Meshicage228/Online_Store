@@ -31,19 +31,19 @@ public class ProductEntity {
     private Integer count;
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product", orphanRemoval = true)
+    @OneToMany( mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ProductImage> images;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Purchases> items;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Commentary> comments;
 
-    @ManyToMany(mappedBy = "favoriteProducts")
+    @ManyToMany(mappedBy = "favoriteProducts", cascade = CascadeType.ALL)
     private Set<UserEntity> users_favorites;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<UsersCart> users;
 
     @CreationTimestamp

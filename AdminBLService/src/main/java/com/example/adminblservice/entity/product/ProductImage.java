@@ -19,7 +19,7 @@ public class ProductImage {
     @Lob
     private byte[] image;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
     private ProductEntity product;
 }
