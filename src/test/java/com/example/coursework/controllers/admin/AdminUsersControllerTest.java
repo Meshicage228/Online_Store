@@ -52,11 +52,9 @@ class AdminUsersControllerTest {
 
     @Test
     void getPage() throws Exception {
-        // GIVEN
         List<UserDto> userDtos = List.of(new UserDto(), new UserDto(), new UserDto());
         Page<UserDto> page = new PageImpl<>(userDtos);
 
-        //WHEN
         Mockito.when(client.getAllUsers(Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(page);
 
@@ -68,7 +66,6 @@ class AdminUsersControllerTest {
 
         var users = (Page<UserDto>)modelAndView.getModelMap().get("totalPage");
 
-        //RESULT
         Assertions.assertThat(viewName).isEqualTo("adminUsersPage");
         Assertions.assertThat(users.getContent()).hasSize(userDtos.size());
         Assertions.assertThat(users.getTotalPages()).isEqualTo(1);

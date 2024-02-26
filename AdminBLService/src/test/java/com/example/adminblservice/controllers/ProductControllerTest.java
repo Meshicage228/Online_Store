@@ -5,44 +5,30 @@ import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.entity.product.ProductImage;
 import com.example.adminblservice.exceptions.ProductNotFoundException;
 import com.example.adminblservice.exceptions.handlers.ProductExceptionHandler;
-import com.example.adminblservice.mappers.product.ProductMapper;
 import com.example.adminblservice.repository.ImageRepository;
 import com.example.adminblservice.repository.ProductRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.lang.annotation.Before;
+import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.AssertionsForClassTypes;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.awt.print.Pageable;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -56,9 +42,6 @@ class ProductControllerTest {
     private ObjectMapper mapper;
 
     @Autowired
-    private ProductMapper productMapper;
-
-    @Autowired
     private ProductRepository repository;
 
     @Autowired
@@ -69,24 +52,32 @@ class ProductControllerTest {
         ProductExceptionHandler productExceptionHandler = new ProductExceptionHandler();
     }
     @Test
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (1, 'Product2', 120, 'good Product', 100)", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (14, 'Product10', 120, 'good Product', 100)",
+            executionPhase = BEFORE_TEST_METHOD)
     void getAllSearchPaginatedSortedProducts() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/products/sorted/{page}/{size}", 0, 10)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .param("price", "200")
-                        .param("title", "Product2")
+                        .param("title", "Product10")
                 )
                 .andReturn();
-        Page<ProductDto> page1 = mapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Page<ProductDto>>(){});
+        LinkedHashMap page1 = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), LinkedHashMap.class);
+        Object o = page1.get("content");
+        List<Object> objects2 = Arrays.asList(o);
+        String o1 = (String) ((LinkedHashMap) ((ArrayList) objects2.get(0)).get(0)).get("title");
+
+        Assertions.assertThat(o1).isEqualTo("Product10");
     }
 
     @Test
+    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (15, 'Product10', 120, 'good Product', 100)",
+            executionPhase = BEFORE_TEST_METHOD)
     void findProductById() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/products/{id}", 1)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/products/{id}", 15)).andReturn();
 
         ProductEntity entity = mapper.readValue(mvcResult.getResponse().getContentAsString(), ProductEntity.class);
 
-        Assertions.assertThat(entity).isNotNull();
+        Assertions.assertThat(entity.getId()).isEqualTo(15);
     }
 
     @Test
@@ -97,25 +88,73 @@ class ProductControllerTest {
     }
 
     @Test
-    void update() {
+    @Transactional
+    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (16, 'Product10', 120, 'good Product', 100)",
+            executionPhase = BEFORE_TEST_METHOD)
+    void update() throws Exception {
+        ProductDto build = ProductDto.builder()
+                .title("Product2")
+                .price(1000f)
+                .description("new")
+                .count(200)
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/v1/products/{id}/change", 16)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(build))
+        ).andReturn();
+
+        ProductDto productDto = mapper.readValue(mvcResult.getResponse().getContentAsString(), ProductDto.class);
+
+
+        assertThat(productDto)
+                .extracting("id", "title", "price", "description", "count")
+                .isNotNull()
+                .containsExactly(16, build.getTitle(), build.getPrice(), build.getDescription(), build.getCount());
     }
 
     @Test
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (10, 'Product10', 120, 'good Product', 100)", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (17, 'Product10', 120, 'good Product', 100)",
+         executionPhase = BEFORE_TEST_METHOD)
     void deleteProduct() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/products/{id}/delete", 10)).andReturn();
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/products/{id}/delete", 17));
 
-        Optional<ProductEntity> byId = repository.findById(10);
+        Optional<ProductEntity> byId = repository.findById(17);
+
+        assertTrue(byId.isPresent());
+    }
+
+    @Test
+    @Sql(statements = "INSERT INTO images (image_id, product_product_id, image) VALUES (16, null, null)",
+            executionPhase = BEFORE_TEST_METHOD)
+    void deleteImage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/products/image/{image_id}/delete", 16));
+
+        Optional<ProductImage> byId = imageRepository.findById(16);
 
         assertTrue(byId.isEmpty());
     }
 
     @Test
-    void deleteImage() {
-    }
+    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (18, 'Product10', 120, 'good Product', 100)",
+            executionPhase = BEFORE_TEST_METHOD)
+    @Sql(statements = "INSERT INTO images (image_id, product_product_id, image) VALUES (15, 18, null)",
+            executionPhase = BEFORE_TEST_METHOD)
+    void updatePicture() throws Exception {
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "fileName",
+                "hello.txt",
+                MediaType.APPLICATION_JSON_VALUE,
+                "Hello, Worlds!".getBytes()
+        );
 
-    @Test
-    void updatePicture() {
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/v1/products/image/{image_id}/update", 15)
+                .file("file", mockMultipartFile.getBytes()));
+
+        Optional<ProductImage> byId = imageRepository.findById(15);
+
+        assertTrue(byId.isPresent());
+        Assertions.assertThat(byId.get().getImage()).isEqualTo(mockMultipartFile.getBytes());
     }
 
     @Test
@@ -142,11 +181,12 @@ class ProductControllerTest {
 
         Optional<ProductEntity> byId = repository.findById(productDto.getId());
 
-        Assertions.assertThat(byId.get()).isNotNull();
+        assertTrue(byId.isPresent());
     }
 
     @Test
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (4, 'Product2', 120, 'good Product', 100)", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (19, 'Product10', 120, 'good Product', 100)",
+            executionPhase = BEFORE_TEST_METHOD)
     void addNewImage() throws Exception {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
                 "file",
@@ -154,14 +194,13 @@ class ProductControllerTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 "Hello, World!".getBytes()
         );
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/v1/products/{id}", 4)
-                        .file(mockMultipartFile)
-                )
-                .andReturn();
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/v1/products/{id}", 19)
+                .file(mockMultipartFile)
+        );
 
         Optional<ProductImage> byId = imageRepository.findById(1);
 
-        Assertions.assertThat(byId.get()).isNotNull();
+        assertTrue(byId.isPresent());
 
     }
 }

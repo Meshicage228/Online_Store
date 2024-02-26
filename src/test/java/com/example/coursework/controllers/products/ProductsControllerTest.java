@@ -64,7 +64,7 @@ class ProductsControllerTest {
 
     @Test
     void updateSuccess() throws Exception {
-        //GIVEN
+
         ProductDto build = ProductDto.builder()
                 .title("newTitle")
                 .count(1000)
@@ -77,7 +77,7 @@ class ProductsControllerTest {
                 .price(5000f)
                 .build();
 
-        //WHEN
+
         Mockito.when(client.update(Mockito.any(), Mockito.any())).thenReturn(build);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/admin/products/{id}/change", 2)
@@ -90,7 +90,6 @@ class ProductsControllerTest {
         String viewName = modelAndView.getViewName();
         var productDto = (ProductDto) modelAndView.getModelMap().get("modelToUpdate");
 
-        //THEN
 
         Assertions.assertThat(viewName).isEqualTo("redirect:/admin/products/2");
         Assertions.assertThat(productDto).isEqualTo(build);
@@ -98,7 +97,6 @@ class ProductsControllerTest {
 
     @Test
     void updateFailed() throws Exception {
-        //GIVEN
         ProductDto build = ProductDto.builder()
                 .title("newTitle")
                 .count(-1)
@@ -113,7 +111,6 @@ class ProductsControllerTest {
                 .price(5000f)
                 .build();
 
-        //WHEN
         Mockito.when(client.findProductById(Mockito.any())).thenReturn(fromBd);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/admin/products/{id}/change", 2)
@@ -126,7 +123,6 @@ class ProductsControllerTest {
         String viewName = modelAndView.getViewName();
         var productDto = (ProductDto) modelAndView.getModelMap().get("modelToUpdate");
 
-        //THEN
 
         Assertions.assertThat(viewName).isEqualTo("adminUpdateProduct");
         Assertions.assertThat(productDto).isEqualTo(fromBd);
@@ -147,14 +143,14 @@ class ProductsControllerTest {
     }
     @Test
     void saveProductFailure() throws Exception {
-        //GIVEN
+
         ProductDto build = ProductDto.builder()
                 .title("newTitle")
                 .count(1000)
                 .description("good")
                 .price(5000f)
                 .build();
-        //WHEN
+
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/products/save")
                         .flashAttr("modelToSave", build)
                 )
@@ -164,14 +160,14 @@ class ProductsControllerTest {
         ModelAndView modelAndView = mvcResult.getModelAndView();
         var o = (ProductDto) modelAndView.getModelMap().get("modelToSave");
         String viewName = modelAndView.getViewName();
-        //THEN
+
 
         Assertions.assertThat(o).isEqualTo(build);
         Assertions.assertThat(viewName).isEqualTo("createProductAdmin");
     }
     @Test
     void saveProductSuccess() throws Exception {
-        //GIVEN
+
         ProductDto build = ProductDto.builder()
                 .title("newTitle")
                 .count(1000)
@@ -183,7 +179,7 @@ class ProductsControllerTest {
                         "Hello, World!".getBytes())))
                 .price(5000f)
                 .build();
-        //WHEN
+
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/admin/products/save")
                         .flashAttr("modelToSave", build)
                 )
@@ -193,7 +189,6 @@ class ProductsControllerTest {
         ModelAndView modelAndView = mvcResult.getModelAndView();
         String viewName = modelAndView.getViewName();
         var o = (ProductDto) modelAndView.getModelMap().get("modelToSave");
-        //THEN
 
         Assertions.assertThat(o).isEqualTo(new ProductDto());
         Assertions.assertThat(viewName).isEqualTo("createProductAdmin");

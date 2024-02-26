@@ -3,11 +3,8 @@ package com.example.coursework.controllers.order;
 import com.example.coursework.clients.OrderClient;
 import com.example.coursework.configuration.token.TokenGenerationFilter;
 import com.example.coursework.configuration.token.TokenValidationFilter;
-import com.example.coursework.controllers.admin.AdminUsersController;
 import com.example.coursework.dto.product.OrderDto;
-import com.example.coursework.dto.user.UserDto;
 import com.example.coursework.services.TokenService;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,11 +49,9 @@ class OrderControllerTest {
 
     @Test
     void getOrders() throws Exception {
-        //GIVEN
         List<OrderDto> orderDtos = List.of(new OrderDto(), new OrderDto(), new OrderDto(), new OrderDto(), new OrderDto());
         Page<OrderDto> orders = new PageImpl<>(orderDtos);
 
-        //WHEN
         Mockito.when(client.getOrders(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
                 .thenReturn(orders);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/admin/orders/{page}/{size}", 0, 3))
@@ -66,8 +61,6 @@ class OrderControllerTest {
         String viewName = modelAndView.getViewName();
 
         var ordersDto = (Page<OrderDto>)modelAndView.getModelMap().get("orderContent");
-
-        //THEN
 
         Assertions.assertThat(viewName).isEqualTo("adminOrderPage");
         Assertions.assertThat(ordersDto).hasSize(orderDtos.size());
