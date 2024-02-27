@@ -10,7 +10,7 @@ import com.example.adminblservice.repository.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -28,7 +28,8 @@ import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -47,18 +48,18 @@ class ProductControllerTest {
     @Autowired
     private ImageRepository imageRepository;
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    public static void setUp() {
         ProductExceptionHandler productExceptionHandler = new ProductExceptionHandler();
     }
     @Test
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (14, 'Product10', 120, 'good Product', 100)",
-            executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void getAllSearchPaginatedSortedProducts() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/products/sorted/{page}/{size}", 0, 10)
+        MvcResult mvcResult = mockMvc.perform(get("/v1/products/sorted/{page}/{size}", 0, 10)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .param("price", "200")
-                        .param("title", "Product10")
+                        .param("title", "ProductTest")
                 )
                 .andReturn();
         LinkedHashMap page1 = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), LinkedHashMap.class);
@@ -66,40 +67,40 @@ class ProductControllerTest {
         List<Object> objects2 = Arrays.asList(o);
         String o1 = (String) ((LinkedHashMap) ((ArrayList) objects2.get(0)).get(0)).get("title");
 
-        Assertions.assertThat(o1).isEqualTo("Product10");
+        Assertions.assertThat(o1).isEqualTo("ProductTest");
     }
 
     @Test
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (15, 'Product10', 120, 'good Product', 100)",
-            executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void findProductById() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/products/{id}", 15)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/v1/products/{id}", 1)).andReturn();
 
         ProductEntity entity = mapper.readValue(mvcResult.getResponse().getContentAsString(), ProductEntity.class);
 
-        Assertions.assertThat(entity.getId()).isEqualTo(15);
+        Assertions.assertThat(entity.getId()).isEqualTo(1);
     }
 
     @Test
     void findProductByIdFail() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/products/{id}", 125))
+        mockMvc.perform(get("/v1/products/{id}", 125))
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ProductNotFoundException));
     }
 
     @Test
     @Transactional
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (16, 'Product10', 120, 'good Product', 100)",
-            executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void update() throws Exception {
         ProductDto build = ProductDto.builder()
-                .title("Product2")
+                .title("ProductNew")
                 .price(1000f)
                 .description("new")
                 .count(200)
                 .build();
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/v1/products/{id}/change", 16)
+        MvcResult mvcResult = mockMvc.perform(put("/v1/products/{id}/change", 1)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(mapper.writeValueAsString(build))
         ).andReturn();
@@ -110,36 +111,34 @@ class ProductControllerTest {
         assertThat(productDto)
                 .extracting("id", "title", "price", "description", "count")
                 .isNotNull()
-                .containsExactly(16, build.getTitle(), build.getPrice(), build.getDescription(), build.getCount());
+                .containsExactly(1, build.getTitle(), build.getPrice(), build.getDescription(), build.getCount());
     }
 
     @Test
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (17, 'Product10', 120, 'good Product', 100)",
-         executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void deleteProduct() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/products/{id}/delete", 17));
+        mockMvc.perform(delete("/v1/products/{id}/delete", 1));
 
         Optional<ProductEntity> byId = repository.findById(17);
-
-        assertTrue(byId.isPresent());
-    }
-
-    @Test
-    @Sql(statements = "INSERT INTO images (image_id, product_product_id, image) VALUES (16, null, null)",
-            executionPhase = BEFORE_TEST_METHOD)
-    void deleteImage() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/products/image/{image_id}/delete", 16));
-
-        Optional<ProductImage> byId = imageRepository.findById(16);
 
         assertTrue(byId.isEmpty());
     }
 
     @Test
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (18, 'Product10', 120, 'good Product', 100)",
-            executionPhase = BEFORE_TEST_METHOD)
-    @Sql(statements = "INSERT INTO images (image_id, product_product_id, image) VALUES (15, 18, null)",
-            executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
+    void deleteImage() throws Exception {
+        mockMvc.perform(delete("/v1/products/image/{image_id}/delete", 1));
+
+        Optional<ProductImage> byId = imageRepository.findById(1);
+
+        assertTrue(byId.isEmpty());
+    }
+
+    @Test
+    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void updatePicture() throws Exception {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
                 "fileName",
@@ -148,16 +147,17 @@ class ProductControllerTest {
                 "Hello, Worlds!".getBytes()
         );
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/v1/products/image/{image_id}/update", 15)
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/v1/products/image/{image_id}/update", 1)
                 .file("file", mockMultipartFile.getBytes()));
 
-        Optional<ProductImage> byId = imageRepository.findById(15);
+        Optional<ProductImage> byId = imageRepository.findById(1);
 
         assertTrue(byId.isPresent());
         Assertions.assertThat(byId.get().getImage()).isEqualTo(mockMultipartFile.getBytes());
     }
 
     @Test
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void saveProduct() throws Exception {
         ProductDto build = ProductDto.builder()
                 .title("Product2")
@@ -185,8 +185,8 @@ class ProductControllerTest {
     }
 
     @Test
-    @Sql(statements = "INSERT INTO products (product_id, title, price, description, count) VALUES (19, 'Product10', 120, 'good Product', 100)",
-            executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void addNewImage() throws Exception {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
                 "file",
@@ -194,11 +194,11 @@ class ProductControllerTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 "Hello, World!".getBytes()
         );
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/v1/products/{id}", 19)
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/v1/products/{id}", 1)
                 .file(mockMultipartFile)
         );
 
-        Optional<ProductImage> byId = imageRepository.findById(1);
+        Optional<ProductImage> byId = imageRepository.findById(2);
 
         assertTrue(byId.isPresent());
 

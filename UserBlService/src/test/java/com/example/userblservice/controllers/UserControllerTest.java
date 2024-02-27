@@ -10,7 +10,7 @@ import com.example.userblservice.repository.user.CommentaryRepository;
 import com.example.userblservice.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -27,6 +27,9 @@ import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -47,19 +50,20 @@ class UserControllerTest {
     @Autowired
     private CardRepository cardRepository;
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    public static void setUp() {
         UserExceptionHandler productExceptionHandler = new UserExceptionHandler();
     }
 
     @Test
+    @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void saveUser() throws Exception {
         UserDto build = UserDto.builder()
                 .name("Test")
                 .password("123123")
                 .build();
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/v1/users/save")
+        MvcResult mvcResult = mockMvc.perform(post("/v1/users/save")
                 .param("name", build.getName())
                 .param("password", build.getPassword()))
                 .andReturn();
@@ -74,11 +78,12 @@ class UserControllerTest {
     }
 
     @Test
-    @Sql(statements = "INSERT INTO users (user_id, name, avatar) values ('eab065b8-5a25-4e40-979c-aa79e7dfe030', 'TestOrder', 25535)")
+    @Sql(value = "classpath:/data/user/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void getAllUsers() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/users/{page}/{size}", 0, 10)
+        MvcResult mvcResult = mockMvc.perform(get("/v1/users/{page}/{size}", 0, 10)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .param("name", "TestOrder")
+                        .param("name", "TestUser")
                 )
                 .andReturn();
         LinkedHashMap page1 = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), LinkedHashMap.class);
@@ -86,14 +91,15 @@ class UserControllerTest {
         List<Object> objects2 = Arrays.asList(o);
         String o1 = (String) ((LinkedHashMap) ((ArrayList) objects2.get(0)).get(0)).get("id");
 
-        Assertions.assertThat(o1).isEqualTo("eab065b8-5a25-4e40-979c-aa79e7dfe030");
+        Assertions.assertThat(o1).isEqualTo("aaf5f4bb-1094-3332-a6a3-d2c415425c30");
     }
 
     @Test
-    @Sql(statements = "INSERT INTO users (user_id, name) values ('552c85fc-a43e-47fc-bb2c-057c2b8928e2','test')")
+    @Sql(value = "classpath:/data/user/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void findExists() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/v1/users/find")
-                .param("find", "test")).andReturn();
+        MvcResult mvcResult = mockMvc.perform(post("/v1/users/find")
+                .param("find", "TestUser")).andReturn();
 
         Boolean b = mapper.readValue(mvcResult.getResponse().getContentAsString(), Boolean.class);
 
@@ -101,18 +107,20 @@ class UserControllerTest {
     }
 
     @Test
-    @Sql(statements = "INSERT INTO users (user_id) values ('2d5a4adf-9342-478f-85b3-3b46bf9a2302')")
+    @Sql(value = "classpath:/data/user/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void deleteUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/users/{id}",
-                        UUID.fromString("2d5a4adf-9342-478f-85b3-3b46bf9a2302")));
+        mockMvc.perform(delete("/v1/users/{id}",
+                        UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30")));
 
-        Optional<UserEntity> byId = userRepository.findById(UUID.fromString("2d5a4adf-9342-478f-85b3-3b46bf9a2302"));
+        Optional<UserEntity> byId = userRepository.findById(UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"));
 
         assertTrue(byId.isEmpty());
     }
 
     @Test
-    @Sql(statements = "INSERT INTO users (user_id, password, avatar) values ('aaf5f4bb-1094-3332-a6a3-d2c415425c30', 41212, 5323)")
+    @Sql(value = "classpath:/data/user/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void personalUser() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/users/{id}",
                 UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30")))
@@ -123,26 +131,25 @@ class UserControllerTest {
         assertThat(dto.getId()).isEqualTo(UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"));
     }
     @Test
-    @Sql(statements = "INSERT INTO users (user_id) values ('aaf5f4bb-1094-3332-a6a3-d2c415425c31')")
-    @Sql(statements = "INSERT INTO products (product_id) values (52)")
-    @Sql(statements = "INSERT INTO users_favorite_products (product_id, user_id) values (52, 'aaf5f4bb-1094-3332-a6a3-d2c415425c31')")
+    @Sql(value = "classpath:/data/user/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void removeFavorite() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/users/{user_id}/remove_favorite/{prod_id}",
-                UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c31"), 52
+        mockMvc.perform(delete("/v1/users/{user_id}/remove_favorite/{prod_id}",
+                UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"), 1
         ));
 
-        Optional<UserEntity> byId = userRepository.findById(UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c31"));
+        Optional<UserEntity> byId = userRepository.findById(UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"));
 
         assertTrue(byId.isPresent());
         assertTrue(byId.get().getFavoriteProducts().isEmpty());
     }
 
     @Test
-    @Sql(statements = "INSERT INTO users (user_id) values ('648b1557-0ae3-4f0d-80b6-558ce4025536')")
-    @Sql(statements = "INSERT INTO products (product_id) values (100)")
+    @Sql(value = "classpath:/data/user/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void leaveCommentary() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/v1/users/{user_id}/comment/{product_id}",
-                UUID.fromString("648b1557-0ae3-4f0d-80b6-558ce4025536"), 100)
+        mockMvc.perform(post("/v1/users/{user_id}/comment/{product_id}",
+                UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"), 1)
                                 .param("commentary", "good"));
 
         Optional<Commentary> byId = commentaryRepository.findById(1);
@@ -151,10 +158,11 @@ class UserControllerTest {
     }
 
     @Test
-    @Sql(statements = "INSERT INTO users (user_id) values ('d69a4f7e-bfa9-4624-83b3-69ee6db53b71')")
+    @Sql(value = "classpath:/data/user/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void addNewCard() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/v1/users/card/{user_id}",
-                UUID.fromString("d69a4f7e-bfa9-4624-83b3-69ee6db53b71")))
+        MvcResult mvcResult = mockMvc.perform(post("/v1/users/card/{user_id}",
+                UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30")))
                 .andReturn();
 
         UserCard card = mapper.readValue(mvcResult.getResponse().getContentAsString(), UserCard.class);

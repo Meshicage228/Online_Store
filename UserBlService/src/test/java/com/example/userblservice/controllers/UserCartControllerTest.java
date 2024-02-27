@@ -4,7 +4,7 @@ import com.example.userblservice.entity.user.UsersCart;
 import com.example.userblservice.exceptions.handler.UserExceptionHandler;
 import com.example.userblservice.repository.user.CartRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -13,12 +13,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -30,41 +33,41 @@ class UserCartControllerTest {
     @Autowired
     private CartRepository cartRepository;
 
-    @BeforeEach
-    public void setUp() {
+    @BeforeAll
+    public static void setUp() {
         UserExceptionHandler productExceptionHandler = new UserExceptionHandler();
     }
 
     @Test
-    @Sql(statements = "INSERT INTO users (user_id) values ('aaf5f4bb-1094-4752-a6a3-d2c415425c30')")
-    @Sql(statements = "INSERT INTO products (product_id) values (12)")
-    @Sql(statements = "INSERT INTO user_carts (cart_id, count_to_buy, product_id, user_id) values (5, 5, 12, 'aaf5f4bb-1094-4752-a6a3-d2c415425c30')")
+    @Sql(value = "classpath:/data/cart/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cart/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void changeCountIncrement() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.patch("/v1/users/cart/{cart_id}/changeCount", 5)
+        mockMvc.perform(patch("/v1/users/cart/{cart_id}/changeCount", 2)
                 .param("option", "increment"));
 
-        Optional<UsersCart> incremented = cartRepository.findById(5);
+        Optional<UsersCart> incremented = cartRepository.findById(2);
 
+        assertTrue(incremented.isPresent());
         Assertions.assertThat(incremented.get().getCountToBuy()).isEqualTo(6);
     }
     @Test
-    @Sql(statements = "INSERT INTO users (user_id) values ('5cfdb965-eb0b-40ed-97be-746c63dbc73e')")
-    @Sql(statements = "INSERT INTO products (product_id) values (27)")
-    @Sql(statements = "INSERT INTO user_carts (cart_id, count_to_buy, product_id, user_id) values (2, 5, 27, '5cfdb965-eb0b-40ed-97be-746c63dbc73e')")
+    @Sql(value = "classpath:/data/cart/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cart/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void changeCountDecrement() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.patch("/v1/users/cart/{cart_id}/changeCount", 2)
+        mockMvc.perform(patch("/v1/users/cart/{cart_id}/changeCount", 2)
                 .param("option", "decrement"));
 
         Optional<UsersCart> decremented = cartRepository.findById(2);
 
+        assertTrue(decremented.isPresent());
         Assertions.assertThat(decremented.get().getCountToBuy()).isEqualTo(4);
     }
     @Test
-    @Sql(statements = "INSERT INTO users (user_id) values ('367b968c-a0fc-48eb-9693-e35c37bcd5b0')")
-    @Sql(statements = "INSERT INTO products (product_id) values (105)")
+    @Sql(value = "classpath:/data/cart/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cart/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void addToCart() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/v1/users/cart/{user_id}/{prod_id}",
-                        UUID.fromString("367b968c-a0fc-48eb-9693-e35c37bcd5b0"), 105));
+        mockMvc.perform(post("/v1/users/cart/{user_id}/{prod_id}",
+                        UUID.fromString("5cfdb965-eb0b-40ed-97be-746c63dbc73e"), 2));
 
         Optional<UsersCart> byId = cartRepository.findById(1);
 
