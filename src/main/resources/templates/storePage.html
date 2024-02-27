@@ -50,9 +50,6 @@
         </div>
         <nav aria-label="..." th:if="${totalPage.getTotalPages() > 1}">
             <ul class="pagination">
-                <li class="page-item">
-                    <span class="page-link">Previous</span>
-                </li>
                 <li class="page-item" aria-current="page" th:each="iterPage : ${countPages}">
                     <form th:action="@{/store/{page}/{size}(page = ${iterPage - 1}, size = ${totalPage.size})}"
                           th:method="get">
@@ -61,9 +58,6 @@
                                 th:class="'page-link ' + ${totalPage.number == iterPage - 1 ? 'active' : ''}"
                                 th:name="${sort != null ? 'sortedBy' : ''}"></button>
                     </form>
-                </li>
-                <li class="page-item">
-                    <a class="page-link">Next</a>
                 </li>
             </ul>
         </nav>

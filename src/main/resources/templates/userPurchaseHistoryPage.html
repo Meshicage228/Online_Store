@@ -18,7 +18,6 @@
                       th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}"
                       th:method="get">
                     <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
-                    <input type="hidden" th:value="${searchName}" th:name="${searchName != null ? 'name' : ''}">
                     <input type="hidden" th:value="${status}" th:name="${status != null ? 'status' : ''}">
                     <button value="billUp" name="sortedBy" type="submit" class="btn btn-outline-primary">Счет возрастает</button>
                     <button value="billDown" name="sortedBy" type="submit" class="btn btn-outline-primary">Счет убывает</button>
@@ -27,11 +26,7 @@
                     <input name="title" style="border-radius: 5px;" placeholder="Название продукта">
                 </form>
                 <form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}">
-                    <input name="name" style="border-radius: 5px;" placeholder="Имя пользователя">
-                </form>
-                <form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}">
                     <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
-                    <input type="hidden" th:value="${searchName}" th:name="${searchName != null ? 'name' : ''}">
                     <input type="hidden" th:value="${sort}" th:name="${sort != null ? 'sortedBy' : ''}">
 
                     <button type="submit" value="WAITING" name="status" class="btn btn-info">В ожидании</button>
@@ -68,23 +63,16 @@
             <div th:insert="~{fragments :: notFoundByFilter (${userHistory.getContent().size()})}"></div>
             <nav aria-label="..." th:if="${userHistory.getTotalPages() > 1}">
                 <ul class="pagination">
-                    <li class="page-item">
-                        <span class="page-link">Previous</span>
-                    </li>
                     <li class="page-item" aria-current="page" th:each="iterPage : ${countPages}">
                         <form th:action="@{/store/users/history/{page}/{size}(page = ${iterPage - 1}, size = ${userHistory.size})}"
                               th:method="get">
                             <input type="hidden" th:value="${searchTitle}"
                                    th:name="${searchTitle != null ? 'title' : ''}">
-                            <input type="hidden" th:value="${searchName}" th:name="${searchName != null ? 'name' : ''}">
                             <input type="hidden" th:value="${status}" th:name="${status != null ? 'status' : ''}">
                             <button th:value="${sort}" th:text="${iterPage}"
                                     th:class="'page-link ' + ${userHistory.number == iterPage - 1 ? 'active' : ''}"
                                     th:name="${sort != null ? 'sortedBy' : ''}"></button>
                         </form>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link">Next</a>
                     </li>
                 </ul>
             </nav>
