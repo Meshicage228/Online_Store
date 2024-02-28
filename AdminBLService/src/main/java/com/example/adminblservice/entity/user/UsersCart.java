@@ -1,8 +1,7 @@
-package com.example.adminblservice.dto.user;
+package com.example.adminblservice.entity.user;
 
 
 import com.example.adminblservice.entity.product.ProductEntity;
-import com.example.adminblservice.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

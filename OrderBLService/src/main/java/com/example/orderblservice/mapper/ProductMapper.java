@@ -24,6 +24,4 @@ public interface ProductMapper {
         @Mapping(target = "images", source = "images")
     })
     ProductDto toDto(ProductEntity entity);
-
-    List<ProductDto> toDtos (List<ProductEntity> entities);
 }

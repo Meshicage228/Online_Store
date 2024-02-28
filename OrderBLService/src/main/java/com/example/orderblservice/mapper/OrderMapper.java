@@ -1,9 +1,7 @@
 package com.example.orderblservice.mapper;
 
 import com.example.orderblservice.dto.product.OrderDto;
-import com.example.orderblservice.dto.product.ProductDto;
 import com.example.orderblservice.entity.product.Orders;
-import com.example.orderblservice.entity.product.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

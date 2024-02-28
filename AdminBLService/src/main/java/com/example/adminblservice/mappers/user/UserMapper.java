@@ -25,7 +25,6 @@ public interface UserMapper {
             @Mapping(target = "password", source = "password"),
             @Mapping(target = "role", source = "role"),
             @Mapping(target = "favoriteProducts", source = "favoriteProducts"),
-//            @Mapping(target = "basket", source = "cart") // TODO: 26.01.2024 commited cart
     })
     UserDto toDto(UserEntity entity);
     @Mappings({
@@ -36,15 +35,6 @@ public interface UserMapper {
             @Mapping(target = "role", defaultValue = "USER")
     })
     UserEntity toEntity(UserDto dto);
-
-
-     List<UserDto> toDtos(List<UserEntity> dtos);
-
-    // TODO: 21.01.2024 Resolve update avatar and password
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "password", source = "password")
-    UserEntity update(@MappingTarget UserEntity target, UserEntity source);
 
     default byte[] encodeBytesToString(MultipartFile file){
         try {

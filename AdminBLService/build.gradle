@@ -39,11 +39,6 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
 
-    // Jwt
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.3'
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.3'
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.3'
-
     // Validation
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation group: 'org.hibernate', name: 'hibernate-validator', version: '8.0.1.Final'
@@ -52,10 +47,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'com.h2database:h2'
-
-
-    // For db
-//    implementation 'org.flywaydb:flyway-core'
 }
 
 tasks.named('test') {

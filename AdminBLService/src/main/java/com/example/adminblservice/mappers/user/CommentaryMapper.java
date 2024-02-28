@@ -8,8 +8,6 @@ import org.mapstruct.Mappings;
 
 import java.util.Base64;
 
-import static java.util.Objects.isNull;
-
 @Mapper(
         componentModel = "spring"
 )

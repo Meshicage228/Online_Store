@@ -4,7 +4,6 @@ package com.example.userblservice.entity.product;
 import com.example.userblservice.domain.OrderStatus;
 import com.example.userblservice.entity.user.UserEntity;
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

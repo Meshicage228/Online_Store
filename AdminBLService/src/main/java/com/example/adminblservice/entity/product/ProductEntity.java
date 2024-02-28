@@ -1,6 +1,6 @@
 package com.example.adminblservice.entity.product;
 
-import com.example.adminblservice.dto.user.UsersCart;
+import com.example.adminblservice.entity.user.UsersCart;
 import com.example.adminblservice.entity.user.Commentary;
 import com.example.adminblservice.entity.user.UserEntity;
 import jakarta.persistence.*;

@@ -5,8 +5,6 @@ import com.example.userblservice.entity.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

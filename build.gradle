@@ -33,8 +33,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'io.github.openfeign:feign-okhttp'
-
-
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.0'
 
     // Web
@@ -64,9 +62,6 @@ dependencies {
     //Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-
-    // For db
-//    implementation 'org.flywaydb:flyway-core'
 
 }
 

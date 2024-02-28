@@ -1,7 +1,6 @@
 package com.example.adminblservice.entity.user;
 
 
-import com.example.adminblservice.dto.user.UsersCart;
 import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.entity.product.Purchases;
 import jakarta.persistence.*;
@@ -16,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Builder
-@EqualsAndHashCode(exclude = {"favoriteProducts", "cart", "purchases", "commentaries"})
+@EqualsAndHashCode(exclude = {"favoriteProducts", "carts", "purchases", "commentaries"})
 @Entity
 @Table(name = "users")
 public class UserEntity {

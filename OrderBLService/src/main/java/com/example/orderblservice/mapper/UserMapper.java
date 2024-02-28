@@ -20,8 +20,6 @@ public interface UserMapper {
     })
     UserDto toDto(UserEntity entity);
 
-     List<UserDto> toDtos(List<UserEntity> dtos);
-
     default String decodeStringToBytes(byte[] bytes){
         return Base64.getEncoder().encodeToString(bytes);
     }

@@ -2,7 +2,6 @@ package com.example.userblservice.controllers;
 
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.dto.user.UserSearchDto;
-import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.user.UserCard;
 import com.example.userblservice.service.impl.UserServiceImpl;
 import lombok.AccessLevel;

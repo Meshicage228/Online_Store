@@ -45,12 +45,6 @@ public interface ProductMapper {
 
     List<ProductDto> toDtoFromCart (Set<UsersCart> carts);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "images", ignore = true)
-    @Mapping(target = "creationTime", ignore = true)
-    @Mapping(target = "count", ignore = true)
-    ProductEntity update(@MappingTarget ProductEntity target, ProductEntity source);
-
     default List<ProductImage> mapProductImage(ProductEntity product) {
         return product.getImages();
     }

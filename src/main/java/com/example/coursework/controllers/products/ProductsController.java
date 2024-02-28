@@ -48,7 +48,7 @@ public class ProductsController {
     @DeleteMapping("/{id}/delete")
     public String deleteProduct(@PathVariable("id") Integer id) {
         adminClient.deleteProduct(id);
-        return "redirect:/admin";
+        return "redirect:/store/0/10";
     }
 
     @DeleteMapping("/{product_id}/image/{image_id}/delete")

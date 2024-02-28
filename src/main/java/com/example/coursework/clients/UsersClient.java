@@ -1,7 +1,6 @@
 package com.example.coursework.clients;
 
 import com.example.coursework.configuration.ProjectConfig;
-import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.UserCard;
 import com.example.coursework.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;

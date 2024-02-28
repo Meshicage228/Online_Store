@@ -32,9 +32,6 @@ public interface ProductMapper {
     })
     ProductDto toDto(ProductEntity entity);
 
-    List<ProductDto> toDtos (List<ProductEntity> entities);
-    List<ProductEntity> toEntities (List<ProductDto> dtos);
-
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "title", source = "title")
     @Mapping(target = "description", source = "description")

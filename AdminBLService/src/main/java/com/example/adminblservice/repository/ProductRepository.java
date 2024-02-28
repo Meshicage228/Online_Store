@@ -16,8 +16,4 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer>,
                                            JpaSpecificationExecutor<ProductEntity>,
                                            PagingAndSortingRepository<ProductEntity, Integer> {
-
-    @Modifying
-    @Query(value = "DELETE FROM ProductEntity WHERE id = :prodId")
-    void deleteByHand(Integer prodId);
 }
