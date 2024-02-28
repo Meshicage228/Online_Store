@@ -39,6 +39,8 @@ class OrderControllerTest {
     @Autowired
     private OrderRepository orderRepository;
 
+    private final String USER_ID = "13449768-9791-440e-8cd6-81ac50f991b3";
+
     @BeforeAll
     public static void setUp() {
         OrderExceptionHandler productExceptionHandler = new OrderExceptionHandler();
@@ -66,7 +68,7 @@ class OrderControllerTest {
     @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void createPurchase() throws Exception {
         mockMvc.perform(post("/v1/orders/create/{user_id}",
-                        UUID.fromString("13449768-9791-440e-8cd6-81ac50f991b3")));
+                        UUID.fromString(USER_ID)));
 
         Optional<Orders> byId = orderRepository.findById(1);
 
@@ -80,7 +82,7 @@ class OrderControllerTest {
     void catchExceptionOnCreationOrder() throws Exception {
 
         mockMvc.perform(post("/v1/orders/create/{user_id}",
-                        UUID.fromString("13449768-9791-440e-8cd6-81ac50f991b3")))
+                        UUID.fromString(USER_ID)))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof OutOfStockException));
     }
 
@@ -91,7 +93,7 @@ class OrderControllerTest {
     void notEnoughMoney() throws Exception {
 
         MvcResult mvcResult = mockMvc.perform(post("/v1/orders/create/{user_id}",
-                        UUID.fromString("13449768-9791-440e-8cd6-81ac50f991b3")))
+                        UUID.fromString(USER_ID)))
                 .andReturn();
 
         Boolean b = mapper.readValue(mvcResult.getResponse().getContentAsString(), Boolean.class);

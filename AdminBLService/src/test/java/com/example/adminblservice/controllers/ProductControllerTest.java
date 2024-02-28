@@ -48,6 +48,8 @@ class ProductControllerTest {
     @Autowired
     private ImageRepository imageRepository;
 
+    private final String PRODUCT_TITLE = "ProductTest";
+
     @BeforeAll
     public static void setUp() {
         ProductExceptionHandler productExceptionHandler = new ProductExceptionHandler();
@@ -59,7 +61,7 @@ class ProductControllerTest {
         MvcResult mvcResult = mockMvc.perform(get("/v1/products/sorted/{page}/{size}", 0, 10)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .param("price", "200")
-                        .param("title", "ProductTest")
+                        .param("title", PRODUCT_TITLE)
                 )
                 .andReturn();
         LinkedHashMap page1 = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), LinkedHashMap.class);
@@ -67,7 +69,7 @@ class ProductControllerTest {
         List<Object> objects2 = Arrays.asList(o);
         String o1 = (String) ((LinkedHashMap) ((ArrayList) objects2.get(0)).get(0)).get("title");
 
-        Assertions.assertThat(o1).isEqualTo("ProductTest");
+        Assertions.assertThat(o1).isEqualTo(PRODUCT_TITLE);
     }
 
     @Test

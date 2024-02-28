@@ -50,6 +50,8 @@ class UserControllerTest {
     @Autowired
     private CardRepository cardRepository;
 
+    private final String USER_ID = "aaf5f4bb-1094-3332-a6a3-d2c415425c30";
+
     @BeforeAll
     public static void setUp() {
         UserExceptionHandler productExceptionHandler = new UserExceptionHandler();
@@ -91,7 +93,7 @@ class UserControllerTest {
         List<Object> objects2 = Arrays.asList(o);
         String o1 = (String) ((LinkedHashMap) ((ArrayList) objects2.get(0)).get(0)).get("id");
 
-        Assertions.assertThat(o1).isEqualTo("aaf5f4bb-1094-3332-a6a3-d2c415425c30");
+        Assertions.assertThat(o1).isEqualTo(USER_ID);
     }
 
     @Test
@@ -111,9 +113,9 @@ class UserControllerTest {
     @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void deleteUser() throws Exception {
         mockMvc.perform(delete("/v1/users/{id}",
-                        UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30")));
+                        UUID.fromString(USER_ID)));
 
-        Optional<UserEntity> byId = userRepository.findById(UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"));
+        Optional<UserEntity> byId = userRepository.findById(UUID.fromString(USER_ID));
 
         assertTrue(byId.isEmpty());
     }
@@ -123,22 +125,22 @@ class UserControllerTest {
     @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void personalUser() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/v1/users/{id}",
-                UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30")))
+                UUID.fromString(USER_ID)))
                 .andReturn();
 
         UserDto dto = mapper.readValue(mvcResult.getResponse().getContentAsString(), UserDto.class);
 
-        assertThat(dto.getId()).isEqualTo(UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"));
+        assertThat(dto.getId()).isEqualTo(UUID.fromString(USER_ID));
     }
     @Test
     @Sql(value = "classpath:/data/user/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void removeFavorite() throws Exception {
         mockMvc.perform(delete("/v1/users/{user_id}/remove_favorite/{prod_id}",
-                UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"), 1
+                UUID.fromString(USER_ID), 1
         ));
 
-        Optional<UserEntity> byId = userRepository.findById(UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"));
+        Optional<UserEntity> byId = userRepository.findById(UUID.fromString(USER_ID));
 
         assertTrue(byId.isPresent());
         assertTrue(byId.get().getFavoriteProducts().isEmpty());
@@ -149,7 +151,7 @@ class UserControllerTest {
     @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void leaveCommentary() throws Exception {
         mockMvc.perform(post("/v1/users/{user_id}/comment/{product_id}",
-                UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30"), 1)
+                UUID.fromString(USER_ID), 1)
                                 .param("commentary", "good"));
 
         Optional<Commentary> byId = commentaryRepository.findById(1);
@@ -162,7 +164,7 @@ class UserControllerTest {
     @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void addNewCard() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/v1/users/card/{user_id}",
-                UUID.fromString("aaf5f4bb-1094-3332-a6a3-d2c415425c30")))
+                UUID.fromString(USER_ID)))
                 .andReturn();
 
         UserCard card = mapper.readValue(mvcResult.getResponse().getContentAsString(), UserCard.class);

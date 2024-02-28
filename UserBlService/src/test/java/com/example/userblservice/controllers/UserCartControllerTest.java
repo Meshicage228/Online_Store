@@ -33,6 +33,8 @@ class UserCartControllerTest {
     @Autowired
     private CartRepository cartRepository;
 
+    private final String USER_ID = "5cfdb965-eb0b-40ed-97be-746c63dbc73e";
+
     @BeforeAll
     public static void setUp() {
         UserExceptionHandler productExceptionHandler = new UserExceptionHandler();
@@ -67,7 +69,7 @@ class UserCartControllerTest {
     @Sql(value = "classpath:/data/cart/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void addToCart() throws Exception {
         mockMvc.perform(post("/v1/users/cart/{user_id}/{prod_id}",
-                        UUID.fromString("5cfdb965-eb0b-40ed-97be-746c63dbc73e"), 2));
+                        UUID.fromString(USER_ID), 2));
 
         Optional<UsersCart> byId = cartRepository.findById(1);
 
