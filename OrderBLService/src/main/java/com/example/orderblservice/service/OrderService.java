@@ -11,4 +11,6 @@ public interface OrderService {
     boolean acceptPurchase(UUID id);
 
     Page<OrderDto> findAllWithSort(Integer page, Integer size, OrderSearchDto sortedBy, String sort);
+
+    boolean haveBoughtProd(UUID userId, Integer prodId);
 }

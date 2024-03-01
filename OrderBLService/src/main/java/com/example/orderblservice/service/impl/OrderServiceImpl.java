@@ -11,6 +11,7 @@ import com.example.orderblservice.exceptions.*;
 import com.example.orderblservice.mapper.OrderMapper;
 import com.example.orderblservice.repository.CartRepository;
 import com.example.orderblservice.repository.OrderRepository;
+import com.example.orderblservice.repository.ProductRepository;
 import com.example.orderblservice.repository.UserRepository;
 import com.example.orderblservice.service.OrderService;
 import jakarta.persistence.criteria.Join;
@@ -41,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
     UserRepository userRepository;
     OrderMapper orderMapper;
     CartRepository cartRepository;
+    ProductRepository productRepository;
 
     @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 5)
     @Transactional
@@ -63,9 +65,9 @@ public class OrderServiceImpl implements OrderService {
 
         float totalPurchase = 0;
 
-        for (var obj : userEntity.getCart()){
+        for (var obj : userEntity.getCart()) {
             ProductEntity product = obj.getProduct();
-            if(product.getCount() < obj.getCountToBuy()){
+            if (product.getCount() < obj.getCountToBuy()) {
                 throw new OutOfStockException("Выбрано товара больше, чем присутствует на складе");
             }
             totalPurchase += product.getPrice() * obj.getCountToBuy();
@@ -125,6 +127,16 @@ public class OrderServiceImpl implements OrderService {
                         .map(orderMapper::toDto);
             }
         }
+    }
+
+    @Override
+    public boolean haveBoughtProd(UUID userId, Integer prodId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+        ProductEntity product = productRepository.findById(prodId)
+                .orElseThrow(() -> new ProductNotFoundException("Продкут не найден"));
+
+        return orderRepository.existsByUserAndProduct(user, product);
     }
 
     private Specification<Orders> createSpecification(OrderSearchDto dto) {

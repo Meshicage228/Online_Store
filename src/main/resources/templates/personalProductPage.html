@@ -43,6 +43,12 @@
                 <form th:action="@{/admin/products/{product_id}(product_id = ${product.id})}" th:method="get">
                     <button type="submit" class="change btn btn-danger">Изменить</button>
                 </form>
+                <div th:if="${userNotBought} != null">
+                    <div class="alert alert-danger" role="alert" th:text="${userNotBought}"></div>
+                </div>
+                <div th:if="${emptyCommentary} != null">
+                    <div class="alert alert-danger" role="alert" th:text="${emptyCommentary}"></div>
+                </div>
             </div>
         </div>
         <div class="block-info">

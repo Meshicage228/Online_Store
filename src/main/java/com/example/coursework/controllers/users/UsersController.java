@@ -1,9 +1,11 @@
 package com.example.coursework.controllers.users;
 
 import com.example.coursework.clients.OrderClient;
+import com.example.coursework.clients.ProductClient;
 import com.example.coursework.clients.UsersClient;
 import com.example.coursework.domain.OrderStatus;
 import com.example.coursework.dto.product.OrderDto;
+import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.CurrentUserDto;
 import com.example.coursework.dto.user.UserCard;
 import com.example.coursework.dto.user.UserDto;
@@ -32,6 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class UsersController {
     UsersClient client;
     OrderClient orderClient;
+    ProductClient productClient;
 
     @GetMapping("/profile")
     public ModelAndView getProfile(@NotNull @AuthenticationPrincipal CurrentUserDto user) {
@@ -70,14 +73,20 @@ public class UsersController {
 
     @PostMapping("/comment/{product_id}")
     public ModelAndView leaveCommentary(@RequestParam("commentary") String comment,
-                                        @AuthenticationPrincipal CurrentUserDto user,
+                                        @NotNull @AuthenticationPrincipal CurrentUserDto user,
                                         @PathVariable("product_id") Integer prod_id) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/store/catalog/" + prod_id);
+        ModelAndView error = new ModelAndView("personalProductPage");
+        ProductDto productById = productClient.findProductById(prod_id);
+        error.addObject("product", productById);
         if (isNull(comment) || isBlank(comment)) {
-            return modelAndView;
+            return error.addObject("emptyCommentary", "Пустой комментарий");
         }
-        client.leaveCommentary(user.getId(), prod_id, comment);
-        return modelAndView;
+        else if(orderClient.haveBoughtProduct(user.getId(), prod_id)) {
+            client.leaveCommentary(user.getId(), prod_id, comment);
+            return new ModelAndView("redirect:/store/catalog/" + prod_id);
+        }
+        return error
+                .addObject("userNotBought", "Нельзя комментировать некупленный продукт");
     }
 
     @GetMapping("/history/{page}/{size}")

@@ -24,12 +24,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/products")
 public class ProductsController {
-    ProductClient adminClient;
+    ProductClient productClient;
 
     @GetMapping("/{id}")
     public ModelAndView getById(@PathVariable("id") Integer id,
                                 @ModelAttribute("modelToUpdate") ProductDto showDto) {
-        ProductDto dto = adminClient.findProductById(id);
+        ProductDto dto = productClient.findProductById(id);
         return new ModelAndView("adminUpdateProduct").addObject("modelToUpdate", dto);
     }
 
@@ -38,23 +38,23 @@ public class ProductsController {
                                @Validated(OnUpdateMarker.class) @ModelAttribute("modelToUpdate") ProductDto dto,
                                BindingResult check) {
         if(!check.hasFieldErrors()) {
-            ProductDto updated = adminClient.update(id, dto);
+            ProductDto updated = productClient.update(id, dto);
             return new ModelAndView("redirect:/admin/products/" + id).addObject("modelToUpdate", updated);
         }
-        ProductDto productById = adminClient.findProductById(id);
+        ProductDto productById = productClient.findProductById(id);
         return new ModelAndView("adminUpdateProduct").addObject("modelToUpdate", productById);
     }
 
     @DeleteMapping("/{id}/delete")
     public String deleteProduct(@PathVariable("id") Integer id) {
-        adminClient.deleteProduct(id);
+        productClient.deleteProduct(id);
         return "redirect:/store/0/10";
     }
 
     @DeleteMapping("/{product_id}/image/{image_id}/delete")
     public String deleteImage(@PathVariable("product_id") Integer productId,
                               @PathVariable("image_id") Integer imageId) {
-        adminClient.deleteImage(imageId);
+        productClient.deleteImage(imageId);
         return "redirect:/admin/products/" + productId;
     }
 
@@ -65,7 +65,7 @@ public class ProductsController {
         if(file.getSize() == 0){
             return getById(idProduct, new ProductDto()).addObject("emptyImageUpdate", "Выберите изображение!");
         }
-        adminClient.updatePicture(idImage, file);
+        productClient.updatePicture(idImage, file);
         return new ModelAndView("redirect:/admin/products/" + idProduct);
     }
 
@@ -76,7 +76,7 @@ public class ProductsController {
         if(file.getSize() == 0){
             return getById(prodId, new ProductDto()).addObject("emptyImage", "Выберите новое изображение!");
         }
-        adminClient.addNewImage(prodId, file);
+        productClient.addNewImage(prodId, file);
 
         return new ModelAndView("redirect:/admin/products/" + prodId);
     }
@@ -97,7 +97,7 @@ public class ProductsController {
             });
             dto.setFileImage(null);
             dto.setImagesToThrow(imagesToThrow);
-            adminClient.saveProduct(dto);
+            productClient.saveProduct(dto);
             modelAndView.addObject("successSave", "Товар успешно сохранен!");
             return modelAndView.addObject("modelToSave", new ProductDto());
         }

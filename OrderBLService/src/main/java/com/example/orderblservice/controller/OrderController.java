@@ -41,4 +41,9 @@ public class OrderController {
     public boolean createPurchase(@PathVariable("user_id") UUID id) {
         return service.acceptPurchase(id);
     }
+    @PostMapping("/{user_id}/{prod_id}")
+    boolean haveBoughtProduct(@PathVariable("user_id") UUID user_id,
+                              @PathVariable("prod_id") Integer prod_id){
+        return service.haveBoughtProd(user_id, prod_id);
+    }
 }

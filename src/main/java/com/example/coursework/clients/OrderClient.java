@@ -28,4 +28,8 @@ public interface OrderClient {
 
     @PostMapping("/create/{user_id}")
     boolean createPurchase(@PathVariable("user_id") UUID id);
+
+    @PostMapping("/{user_id}/{prod_id}")
+    boolean haveBoughtProduct(@PathVariable("user_id") UUID user_id,
+                              @PathVariable("prod_id") Integer prod_id);
 }
