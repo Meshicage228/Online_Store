@@ -100,4 +100,16 @@ class OrderControllerTest {
 
         Assertions.assertThat(b).isFalse();
     }
+
+    @Test
+    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
+    void haveBougthProduct() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(post("/v1/orders/{user_id}/{prod_id}",
+                UUID.fromString("13449768-9791-440e-8cd6-81ac50f991b3"), 1)).andReturn();
+
+        Boolean b = mapper.readValue(mvcResult.getResponse().getContentAsString(), Boolean.class);
+
+        assertTrue(b);
+    }
 }
