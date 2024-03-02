@@ -68,7 +68,7 @@
                                                 </form>
                                             </div>
                                             <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                                <h6 class="mb-0" th:text="${product.getBill()}"></h6>
+                                                <h6 class="mb-0" th:text="${product.getBill()} + '  BYN'"></h6>
                                             </div>
                                             <div class="col-md-1 removeFromCart col-lg-1 col-xl-1 text-end">
                                                 <form th:action="@{/store/users/cart/{cart_id}(cart_id = ${product.getCart_id()})}"
@@ -95,7 +95,7 @@
                                                     <div>
                                                         <strong>К оплате</strong>
                                                     </div>
-                                                    <span><strong th:text="${totalBill}"></strong></span>
+                                                    <span><strong th:text="${totalBill} + '  BYN'"></strong></span>
                                                 </li>
                                             </ul>
                                             <form th:method="post" th:action="@{/store/users/cart/order/create}">
@@ -168,7 +168,7 @@
                                                             </div>
                                                         </div>
                                                         <form th:action="@{/store/users/addCard}" th:method="post">
-                                                            <button type="submit">Добавить карту</button>
+                                                            <button type="submit" class="btn btn-success">Добавить карту</button>
                                                         </form>
                                                     </div>
                                                 </div>

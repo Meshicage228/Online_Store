@@ -35,7 +35,8 @@
                 <div th:text="${emptyImageUpdate}" class="alert alert-danger"></div>
             </div>
             <form th:action="@{/admin/products/{prod_id}/addImage(prod_id = ${modelToUpdate.id})}" th:method="post"
-                  enctype="multipart/form-data">
+                  enctype="multipart/form-data" class="addNewImage">
+                <p style="font-weight: 500">Добавления нового изображения</p>
                 <input type="file" name="addImage" placeholder="Добавить изображение">
                 <button type="submit" class="btn btn-info">Добавить</button>
                 <div th:if="${emptyImage != null}">
@@ -46,7 +47,7 @@
         <div class="updateInfo">
             <form th:action="@{/admin/products/{id}/change(id = ${modelToUpdate.id})}" th:method="put">
                 <div class="inputInfo">
-                    <div th:replace="~{fragments :: input-details (${modelToUpdate})}"></div>
+                    <div th:replace="~{fragments :: input-details (${modelToUpdate})}" class="inputs"></div>
                     <button type="submit" class="btn btn-info">Изменить</button>
                 </div>
             </form>

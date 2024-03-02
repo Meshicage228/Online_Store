@@ -41,7 +41,7 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${prod.title}"></h5>
                         <p class="card-text" th:text="${prod.description}"></p>
-                        <p class="card-text" th:text="${prod.price}"></p>
+                        <p class="card-price" th:text="${prod.price} + '  BYN'"></p>
                     </div>
 
                     <div th:replace="~{fragments :: addToCart (${prod.id})}"></div>

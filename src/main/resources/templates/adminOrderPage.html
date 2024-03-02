@@ -50,7 +50,7 @@
                                  class="d-block userAvatar">
                             <div th:text="${order.user.name}" class="userNameOrder"></div>
                         </div>
-                        <div th:text="${order.product.getTitle()}"></div>
+                        <div th:text="${order.product.getTitle()}" style="width: 120px;text-align: center;"></div>
                         <div>
                             <img th:src="@{'data:image/png;base64,'+${order.product.getImages().get(0).getConvertedImage()}}"
                                  alt="product"

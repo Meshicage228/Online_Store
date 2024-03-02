@@ -61,25 +61,37 @@
     </form>
 </div>
 
-<div th:fragment="input-details (variable)">
-    <input name="title" placeholder="title" th:value="${variable.title}" type="text" th:field="*{title}">
+<div th:fragment="input-details (variable)" class="inputs">
+    <label>
+        Название
+        <input name="title" placeholder="title" th:value="${variable.title}" type="text" th:field="*{title}">
+    </label>
     <div th:if="${#fields.hasErrors('title')}" th:class="${#fields.hasErrors('title')}? 'alert alert-danger'"
          th:errors="*{title}"></div>
-    <input name="price" placeholder="price" th:value="${variable.price}" th:field="*{price}" type="number">
+    <label>
+        Цена
+        <input name="price" placeholder="price" th:value="${variable.price}" th:field="*{price}" type="number">
+    </label>
     <div th:if="${#fields.hasErrors('price')}" th:class="${#fields.hasErrors('price')}? 'alert alert-danger'"
          th:errors="*{price}"></div>
-    <input name="count" placeholder="count" th:value="${variable.count}" th:field="*{count}" type="number">
+    <label>
+        Кол-во
+        <input name="count" placeholder="count" th:value="${variable.count}" th:field="*{count}" type="number">
+    </label>
     <div th:if="${#fields.hasErrors('count')}" th:class="${#fields.hasErrors('count')}? 'alert alert-danger'"
          th:errors="*{count}"></div>
-    <input name="description" placeholder="description" th:value="${variable.description}" type="text"
-           th:field="*{description}">
+    <label>
+        Описание
+        <input name="description" placeholder="description" th:value="${variable.description}" type="text"
+               th:field="*{description}">
+    </label>
     <div th:if="${#fields.hasErrors('description')}" th:class="${#fields.hasErrors('description')}? 'alert alert-danger'"
          th:errors="*{description}"></div>
 </div>
 <div th:fragment="header" class="headerMain">
     <div class="headerContent">
-        <a class="nav-link active" aria-current="page" th:href="@{/store/0/10}" style="margin-left: 300px">MY SITE</a>
-        <form th:action="@{/store/0/10}" style="margin-left: 355px;">
+        <a class="nav-link active headerTitle" aria-current="page" th:href="@{/store/0/10}">Vlad's Store</a>
+        <form th:action="@{/store/0/10}" style="margin-left: 392px">
             <input class="inputTitleProduct" name="title" placeholder="Поиск по сайту">
         </form>
         <a th:href="@{/store/users/cart}" style="margin-left: 200px;">

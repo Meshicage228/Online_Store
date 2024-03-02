@@ -47,7 +47,7 @@
                         </div>
                         <div class="aboutOrder">
                             <div><p th:text="'Кол-во : ' + ${order.countOfProduct}"></p></div>
-                            <div><p th:text="'Счет : ' + ${order.bill}"></p></div>
+                            <div><p th:text="'Счет : ' + ${order.bill} + '  BYN'"></p></div>
                             <div><p th:text="'Дата заказа :' + ${order.dateOfPurchase}"></p></div>
 
                             <div th:switch="${order.status.name()}">

@@ -13,6 +13,7 @@
     <div class="favorite-content">
         <div th:replace="~{fragments :: user-navigation}"></div>
         <div class="cards-content-favorite">
+            <div th:insert="~{fragments :: notFoundByFilter (${userInfo.getFavoriteProducts().size()})}"></div>
             <div class="cards">
                 <div th:each="prod : ${userInfo.getFavoriteProducts()}" class="card-product">
                     <div id="carouselExample1" class="carousel slide">
@@ -31,7 +32,7 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${prod.title}"></h5>
                         <p class="card-text" th:text="${prod.description}"></p>
-                        <p class="card-text" th:text="${prod.price}"></p>
+                        <p class="card-price" th:text="${prod.price} + '  BYN'"></p>
                     </div>
 
                     <div th:replace="~{fragments :: addToCart (${prod.id})}"></div>

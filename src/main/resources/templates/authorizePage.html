@@ -16,7 +16,7 @@
                 <div class="card shadow-2-strong" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
 
-                        <h3 class="mb-5">Authorize</h3>
+                        <h3 class="mb-5">Регистрация</h3>
                         <form th:action="@{/store/authorize}" method="post">
                             <div class="form-outline mb-4">
                                 <input th:field="*{nameAuth}" placeholder="Введите логин" th:value="*{nameAuth}"
@@ -55,6 +55,8 @@
                             <div class="alert alert-danger" role="alert" th:text="${usersExits}">
                             </div>
                         </div>
+
+                        <a th:href="@{/store/0/10}" class="text-black-50 fw-bold">На главную</a>
                     </div>
 
                 </div>
