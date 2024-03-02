@@ -76,7 +76,11 @@ public class UsersCart {
     public String addToCart(@NotNull @AuthenticationPrincipal CurrentUserDto user,
                             @PathVariable("prod_id") Integer prod_id,
                             HttpServletRequest request) {
+        String substring = request.getHeader("referer").substring(22);
         client.addToCart(user.getId(), prod_id);
-        return "redirect:/" + request.getHeader("referer").substring(22);
+        if(substring.equals("store/users/comment/" + prod_id)){
+            substring = "store/catalog/" + prod_id;
+        }
+        return "redirect:/" + substring;
     }
 }
