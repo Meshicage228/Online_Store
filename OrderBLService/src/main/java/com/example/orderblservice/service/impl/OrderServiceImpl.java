@@ -150,7 +150,7 @@ public class OrderServiceImpl implements OrderService {
 
             if (isNotBlank(name) && nonNull(name)) {
                 Join<Orders, UserEntity> user = root.join("user");
-                predicates.add(builder.like(user.get("name"), "%" + name + "%"));
+                predicates.add(builder.like(user.get("name"), "%" + name.substring(1).toLowerCase().trim() + "%"));
             }
             if (nonNull(userId)) {
                 Join<Orders, UserEntity> user = root.join("user");
@@ -161,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
             }
             if (isNotBlank(title) && nonNull(title)) {
                 Join<Orders, ProductEntity> product = root.join("product");
-                predicates.add(builder.like(product.get("title"), "%" + title + "%"));
+                predicates.add(builder.like(product.get("title"), "%" + title.substring(1).toLowerCase().trim() + "%"));
             }
             Predicate[] array = predicates.toArray(Predicate[]::new);
 

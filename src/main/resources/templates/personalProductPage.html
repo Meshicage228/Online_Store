@@ -50,7 +50,7 @@
             <p class="card-text" th:text="${product.description}"></p>
         </div>
         <div class="block-buy">
-            <p class="card-text" th:text="${product.price}"></p>
+            <p class="card-price" th:text="${product.price} + '  BYN'"></p>
             <div th:replace="~{fragments :: addToCart (${product.id})}"></div>
         </div>
     </div>

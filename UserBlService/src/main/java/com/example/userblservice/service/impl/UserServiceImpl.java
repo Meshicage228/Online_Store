@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
 
             if (isNotBlank(name) && nonNull(name)) {
                 name.toLowerCase().trim();
-                predicates.add(builder.like(root.get("name"), "%" + name + "%"));
+                predicates.add(builder.like(root.get("name"), "%" + name.substring(1).toLowerCase().trim() + "%"));
             }
 
             Predicate[] array = predicates.toArray(Predicate[]::new);

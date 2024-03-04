@@ -26,9 +26,13 @@
                     <button value="billDown" name="sortedBy" type="submit" class="btn btn-outline-primary">Счет убывает</button>
                 </form>
                 <form th:action="@{/admin/orders/{page}/{size}(page = ${orderContent.number}, size = ${orderContent.size})}">
+                    <input type="hidden" th:value="${searchName}" th:name="${searchName != null ? 'name' : ''}">
+                    <input type="hidden" th:value="${sort}" th:name="${sort != null ? 'sortedBy' : ''}">
                     <input name="title" style="border-radius: 5px;" placeholder="Название продукта">
                 </form>
                 <form th:action="@{/admin/orders/{page}/{size}(page = ${orderContent.number}, size = ${orderContent.size})}">
+                    <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
+                    <input type="hidden" th:value="${sort}" th:name="${sort != null ? 'sortedBy' : ''}">
                     <input name="name" style="border-radius: 5px;" placeholder="Имя пользователя">
                 </form>
                 <form th:action="@{/admin/orders/{page}/{size}(page = ${orderContent.number}, size = ${orderContent.size})}">

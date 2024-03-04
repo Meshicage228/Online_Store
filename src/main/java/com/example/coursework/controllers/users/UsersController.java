@@ -81,7 +81,7 @@ public class UsersController {
         if (isNull(comment) || isBlank(comment)) {
             return error.addObject("emptyCommentary", "Пустой комментарий");
         }
-        else if(orderClient.haveBoughtProduct(user.getId(), prod_id)) {
+        else if(orderClient.haveBoughtProduct(user.getId(), prod_id) || user.getRole().name().equals("ADMIN")) {
             client.leaveCommentary(user.getId(), prod_id, comment);
             return new ModelAndView("redirect:/store/catalog/" + prod_id);
         }

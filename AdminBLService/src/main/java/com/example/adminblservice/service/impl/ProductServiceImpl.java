@@ -10,6 +10,7 @@ import com.example.adminblservice.mappers.product.ProductMapper;
 import com.example.adminblservice.repository.ImageRepository;
 import com.example.adminblservice.repository.ProductRepository;
 import com.example.adminblservice.service.ProductService;
+import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -147,8 +148,7 @@ public class ProductServiceImpl implements ProductService {
             var predicates = new ArrayList<>();
 
             if (isNotBlank(title) && nonNull(title)) {
-                title.toLowerCase().trim();
-                predicates.add(builder.like(root.get("title"), "%" + title + "%"));
+                predicates.add(builder.like(root.get("title"), "%" + title.substring(1).toLowerCase().trim() + "%"));
             }
             if (nonNull(price)) {
                 predicates.add(builder.le(root.get("price"), price));
