@@ -34,6 +34,8 @@ spring:
       max-file-size: 15MB
       enabled: true
       max-request-size: 15MB
+  flyway:
+    enabled: true
 app:
   clients:
     admin:
