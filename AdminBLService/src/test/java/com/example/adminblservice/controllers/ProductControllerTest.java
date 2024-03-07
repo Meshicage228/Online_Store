@@ -48,7 +48,7 @@ class ProductControllerTest {
     @Autowired
     private ImageRepository imageRepository;
 
-    private final String PRODUCT_TITLE = "ProductTest";
+    private final String PRODUCT_TITLE = "Producttest";
 
     @BeforeAll
     public static void setUp() {
@@ -200,7 +200,7 @@ class ProductControllerTest {
                 .file(mockMultipartFile)
         );
 
-        Optional<ProductImage> byId = imageRepository.findById(2);
+        Optional<ProductImage> byId = imageRepository.findById(38);
 
         assertTrue(byId.isPresent());
 

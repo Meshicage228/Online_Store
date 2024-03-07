@@ -85,7 +85,7 @@ class UserControllerTest {
     void getAllUsers() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/v1/users/{page}/{size}", 0, 10)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .param("name", "TestUser")
+                        .param("name", "Testuser")
                 )
                 .andReturn();
         LinkedHashMap page1 = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), LinkedHashMap.class);
@@ -101,7 +101,7 @@ class UserControllerTest {
     @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
     void findExists() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/v1/users/find")
-                .param("find", "TestUser")).andReturn();
+                .param("find", "Testuser")).andReturn();
 
         Boolean b = mapper.readValue(mvcResult.getResponse().getContentAsString(), Boolean.class);
 
@@ -154,7 +154,7 @@ class UserControllerTest {
                 UUID.fromString(USER_ID), 1)
                                 .param("commentary", "good"));
 
-        Optional<Commentary> byId = commentaryRepository.findById(1);
+        Optional<Commentary> byId = commentaryRepository.findById(12);
 
         assertTrue(byId.isPresent());
     }

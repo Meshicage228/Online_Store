@@ -52,7 +52,7 @@ class OrderControllerTest {
         MvcResult mvcResult = mockMvc.perform(get("/v1/orders/{page}/{size}", 0, 10)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .param("status", "DONE")
-                        .param("title", "ProductTest")
+                        .param("title", "Producttest")
                 )
                 .andReturn();
         LinkedHashMap page1 = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), LinkedHashMap.class);
