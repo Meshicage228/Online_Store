@@ -32,7 +32,8 @@ public class ProductController {
                 .title(title)
                 .price(price)
                 .build();
-        return service.getAllProducts(page, size, sortedBy, build);
+        Page<ProductDto> allProducts = service.getAllProducts(page, size, sortedBy, build);
+        return allProducts;
     }
 
     @GetMapping("/{id}")

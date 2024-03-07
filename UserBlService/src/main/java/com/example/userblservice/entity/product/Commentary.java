@@ -16,7 +16,10 @@ import java.util.Date;
 @Table(name = "comments")
 public class Commentary {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "comm_seq",
+            sequenceName = "commentary_sequence",
+            initialValue = 12, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comm_seq")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)

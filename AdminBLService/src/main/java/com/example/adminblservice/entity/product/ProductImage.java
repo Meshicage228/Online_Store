@@ -12,7 +12,10 @@ import lombok.*;
 @Table(name = "images")
 public class ProductImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "img_seq",
+            sequenceName = "image_sequence",
+            initialValue = 38, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "img_seq")
     @Column(name = "image_id")
     private Integer id;
 

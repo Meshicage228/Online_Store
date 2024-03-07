@@ -1,6 +1,6 @@
 INSERT INTO users (user_id, avatar) values ('13449768-9791-440e-8cd6-81ac50f991b3', 12453);
 
-INSERT INTO products (product_id, title, count, price) values (1, 'ProductTest', 100, 20);
+INSERT INTO products (product_id, title, count, price) values (1, 'Producttest', 100, 20);
 
 INSERT INTO users_cards (id, money, user_user_id) values (1, 10000, '13449768-9791-440e-8cd6-81ac50f991b3');
 

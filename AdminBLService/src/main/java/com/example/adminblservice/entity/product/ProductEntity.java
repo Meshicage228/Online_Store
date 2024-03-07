@@ -23,7 +23,10 @@ import java.util.Set;
 @Table(name = "products")
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "prod_seq",
+            sequenceName = "product_sequence",
+            initialValue = 22, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "prod_seq")
     @Column(name = "product_id")
     private Integer id;
     private String title;

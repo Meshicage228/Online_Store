@@ -36,6 +36,10 @@ spring:
       max-request-size: 15MB
   flyway:
     enabled: true
+    baseline-on-migrate: true
+    clean-disabled: false
+    clean-on-validation-error: true
+    baseline-version: 0
 app:
   clients:
     admin:
