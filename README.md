@@ -10,7 +10,7 @@ First, you need to clone this repository into your development environment (for 
 
 Next you need to download the PostgreSQL database to your local machine
 
-Also you should create your own database and connect to it via a yaml file which is located in the project main root folder
+Also you should create your own database and connect to it via a yaml file which is located in the each service "resources" directory
 
 ## Project structure
 
