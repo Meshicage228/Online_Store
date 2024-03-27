@@ -7,7 +7,9 @@ The project was created to hone java backend development skills as well as to un
 ## What is needed for the project
 
 First, you need to clone this repository into your development environment (for example, in InteliJ IDEA)
+
 Next you need to download the PostgreSQL database to your local machine
+
 Also you should create your own database and connect to it via a yaml file which is located in the project main root folder
 
 ## Project structure
