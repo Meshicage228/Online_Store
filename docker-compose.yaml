@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  main-postgresql:
+    image: 'postgres:14.3-alpine'
+    container_name: shop-main-db
+    restart: always
+    ports:
+      - "5430:5432"
+    environment:
+      POSTGRES_USER: shopUser
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: ShopDB
+#product-service
+  product-service:
+    restart: on-failure
+    container_name: Product-module
+    ports:
+      - "8080:8081"
+    build:
+      context: /AdminBLService
+      dockerfile: Dockerfile
+    depends_on:
+      - main-postgresql
+    environment:
+      SPRING_ACTIVE_PROFILES: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB  # Use internal port 5432
+      SPRING_DATASOURCE_USERNAME: shopUser
+      SPRING_DATASOURCE_PASSWORD: 123123
+    # TODO
+##main-service
+#  main-service:
+#    restart: on-failure
+#    container_name: main-module
+#    ports:
+#      - "8082:8080"
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - main-postgresql

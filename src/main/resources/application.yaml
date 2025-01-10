@@ -22,9 +22,9 @@ spring:
         connection:
           dialect : org.hibernate.dialect.PostgreSQL95Dialect
   datasource:
-    password: 28072004
-    username: postgres
-    url: jdbc:postgresql://localhost:5432/course_work
+    password: 123123
+    username: shopUser
+    url: jdbc:postgresql://main-postgresql:5430/ShopDB
   cloud:
     openfeign:
       okhttp:
@@ -44,19 +44,18 @@ app:
   clients:
     admin:
       name: forAdmin-feign
-      url: 127.0.0.1:8081
+      url: product-service:8081
       product-path: /v1/products
     users:
       name : user-feign
       cart-name : cart-feign
-      url: 127.0.0.1:8082
+      url: user-service:8081
       user-path : /v1/users
       cart-path : /v1/users/cart
     orders:
       name: order-feign
-      url: 127.0.0.1:8083
+      url: order-service:8088
       path: /v1/orders
-  path-test: 127.0.0.1:8080
 project:
   secretKey : assgaasglnsaggasnklgsankasgnksasnkasgknsdhnasgjahsgvbasghbnvxbzcnb
 logging:

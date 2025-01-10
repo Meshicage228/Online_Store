@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    password: 123123
+    username: shopUser
+    url: jdbc:postgresql://main-postgresql:5430/ShopDB

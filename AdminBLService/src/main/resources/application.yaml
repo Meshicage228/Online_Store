@@ -12,12 +12,11 @@ spring:
       fail-on-empty-beans: false
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
-        connection:
-          dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        format_sql: true
   datasource:
     password: 28072004
     username: postgres
