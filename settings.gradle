@@ -2,3 +2,4 @@ rootProject.name = 'CourseWork'
 include ('AdminBLService')
 include ('OrderBLService')
 include ('UserBlService')
+include ('MainModule')

@@ -1,8 +1,10 @@
 version: '3.8'
 
 services:
+
+  # main-database
   main-postgresql:
-    image: 'postgres:14.3-alpine'
+    image: 'postgres:14'
     container_name: shop-main-db
     restart: always
     ports:
@@ -11,12 +13,13 @@ services:
       POSTGRES_USER: shopUser
       POSTGRES_PASSWORD: 123123
       POSTGRES_DB: ShopDB
-#product-service
+
+  # product-service
   product-service:
     restart: on-failure
     container_name: Product-module
     ports:
-      - "8080:8081"
+      - "8081:8081"
     build:
       context: /AdminBLService
       dockerfile: Dockerfile
@@ -24,18 +27,53 @@ services:
       - main-postgresql
     environment:
       SPRING_ACTIVE_PROFILES: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB  # Use internal port 5432
+      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB
       SPRING_DATASOURCE_USERNAME: shopUser
       SPRING_DATASOURCE_PASSWORD: 123123
-    # TODO
-##main-service
-#  main-service:
-#    restart: on-failure
-#    container_name: main-module
-#    ports:
-#      - "8082:8080"
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    depends_on:
-#      - main-postgresql
+
+  # user-service
+  user-service:
+    restart: on-failure
+    container_name: user-module
+    ports:
+      - "8082:8082"
+    build:
+      context: /UserBlService
+      dockerfile: Dockerfile
+    depends_on:
+      - main-postgresql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB
+      SPRING_DATASOURCE_USERNAME: shopUser
+      SPRING_DATASOURCE_PASSWORD: 123123
+
+  # order-service
+  order-service:
+    restart: on-failure
+    container_name: order-module
+    ports:
+      - "8083:8083"
+    build:
+      context: /OrderBLService
+      dockerfile: Dockerfile
+    depends_on:
+      - main-postgresql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB
+      SPRING_DATASOURCE_USERNAME: shopUser
+      SPRING_DATASOURCE_PASSWORD: 123123
+
+  # main-service
+  main-service:
+    container_name: main-module
+    ports:
+      - "8080:8080"
+    build:
+      context: /MainModule
+      dockerfile: Dockerfile
+    depends_on:
+      - main-postgresql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB
+      SPRING_DATASOURCE_USERNAME: shopUser
+      SPRING_DATASOURCE_PASSWORD: 123123

@@ -200,7 +200,7 @@ class ProductControllerTest {
                 .file(mockMultipartFile)
         );
 
-        Optional<ProductImage> byId = imageRepository.findById(38);
+        Optional<ProductImage> byId = imageRepository.findById(39);
 
         assertTrue(byId.isPresent());
 
