@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
-
 @FeignClient(name = "${app.clients.admin.name}",
         url = "${app.clients.admin.url}",
         path = "${app.clients.admin.product-path}",

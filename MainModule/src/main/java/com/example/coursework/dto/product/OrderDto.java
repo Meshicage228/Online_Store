@@ -1,6 +1,5 @@
 package com.example.coursework.dto.product;
 
-
 import com.example.coursework.domain.OrderStatus;
 import com.example.coursework.dto.user.UserDto;
 import lombok.AllArgsConstructor;

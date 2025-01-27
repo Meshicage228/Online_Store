@@ -1,6 +1,5 @@
 package com.example.coursework.exceptions.handler;
 
-
 import com.example.coursework.exceptions.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

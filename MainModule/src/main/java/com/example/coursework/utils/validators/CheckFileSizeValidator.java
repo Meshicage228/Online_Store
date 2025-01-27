@@ -23,9 +23,13 @@ public class CheckFileSizeValidator implements ConstraintValidator<CheckFileSize
 
     @Override
     public boolean isValid(List<MultipartFile> value, ConstraintValidatorContext context) {
-        if(isNull(value)) return true;
+        if(isNull(value)) {
+            return true;
+        };
         for(var file : value){
-            if(file.getSize() == 0) return  true;
+            if(file.getSize() == 0) {
+                return true;
+            };
             if(file.getSize() > MB * maxSize){
                 return false;
             }

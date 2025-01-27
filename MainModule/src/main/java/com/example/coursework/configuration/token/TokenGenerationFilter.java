@@ -21,20 +21,24 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
 public class TokenGenerationFilter extends OncePerRequestFilter {
+    private static final String TOKEN_NAME = "token";
+    private static final String PASS_PARAM = "password";
+    private static final String AUTH_PARAM = "loginAuth";
     private final TokenService tokenService;
     private final BCryptPasswordEncoder encoder;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String password = request.getParameter("password");
+        String password = request.getParameter(PASS_PARAM);
 
-        String username = request.getParameter("loginAuth");
+        String username = request.getParameter(AUTH_PARAM);
 
         if (nonNull(username) && isNotBlank(username)) {
             UserDetails userDetails = tokenService.loadUserByUsername(username);
             if(nonNull(userDetails)) {
                 if (encoder.matches(password, userDetails.getPassword())) {
                     String token = tokenService.createToken(userDetails);
-                    response.addCookie(new Cookie("token", token));
+                    response.addCookie(new Cookie(TOKEN_NAME, token));
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.example.coursework.services;
 import com.example.coursework.dto.user.CurrentUser;
 import com.example.coursework.domain.Role;
 import com.example.coursework.dto.user.UserCard;
+import com.example.coursework.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TokenService implements UserDetailsService {
-    private final UserRepos repos;
+    private final UserRepository repos;
 
     @Override
     @Transactional

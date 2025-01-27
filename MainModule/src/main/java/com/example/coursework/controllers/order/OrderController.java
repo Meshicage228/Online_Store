@@ -1,6 +1,5 @@
 package com.example.coursework.controllers.order;
 
-
 import com.example.coursework.clients.OrderClient;
 import com.example.coursework.domain.OrderStatus;
 import com.example.coursework.dto.product.OrderDto;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
-
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor

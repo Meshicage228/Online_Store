@@ -1,6 +1,5 @@
 package com.example.coursework.dto.user;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

@@ -14,24 +14,23 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 
-
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class TokenValidationFilter extends OncePerRequestFilter {
+    private static final String TOKEN_NAME = "token";
     private final TokenService service;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Optional<String> tokenFromCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals("token"))
+        Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(TOKEN_NAME))
                 .findFirst()
-                .map(Cookie::getValue);
-        if(tokenFromCookie.isPresent()){
-            Authentication authentication = service.fromToken(tokenFromCookie.get());
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+                .map(Cookie::getValue)
+                .ifPresent(cookie -> {
+                    Authentication authentication = service.fromToken(cookie);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                });
 
         filterChain.doFilter(request,response);
     }

@@ -1,6 +1,5 @@
 package com.example.coursework.dto.user;
 
-
 import com.example.coursework.domain.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
