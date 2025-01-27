@@ -6,17 +6,17 @@ services:
     container_name: shop-main-db
     restart: always
     ports:
-      - "5430:5432"
+      - "${POSTGRES_LOCAL_PORT}:${POSTGRES_DOCKER_PORT}"
     environment:
-      POSTGRES_USER: shopUser
-      POSTGRES_PASSWORD: 123123
-      POSTGRES_DB: ShopDB
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_TITLE}
   #product-service
   product-service:
     restart: on-failure
     container_name: Product-module
     ports:
-      - "8081:8081"
+      - "${PRODUCT_SERVICE_LOCAL_PORT}:${PRODUCT_SERVICE_DOCKER_PORT}"
     build:
       context: /AdminBLService
       dockerfile: Dockerfile
@@ -29,7 +29,7 @@ services:
     restart: on-failure
     container_name: User-module
     ports:
-      - "8082:8082"
+      - "${USER_SERVICE_LOCAL_PORT}:${USER_SERVICE_DOCKER_PORT}"
     build:
       context: /UserBlService
       dockerfile: Dockerfile
@@ -42,7 +42,7 @@ services:
     restart: on-failure
     container_name: Order-module
     ports:
-      - "8083:8083"
+      - "${ORDER_SERVICE_LOCAL_PORT}:${ORDER_SERVICE_DOCKER_PORT}"
     build:
       context: /OrderBLService
       dockerfile: Dockerfile
@@ -55,7 +55,7 @@ services:
     restart: on-failure
     container_name: main-module
     ports:
-      - "8080:8080"
+      - "${MAIN_SERVICE_LOCAL_PORT}:${MAIN_SERVICE_DOCKER_PORT}"
     build:
       context: /MainModule
       dockerfile: Dockerfile
