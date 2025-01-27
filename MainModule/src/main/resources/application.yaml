@@ -35,12 +35,8 @@ spring:
       max-file-size: 15MB
       enabled: true
       max-request-size: 15MB
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    clean-disabled: false
-    clean-on-validation-error: true
-    baseline-version: 0
+  liquibase:
+    change-log: db/migration/changelog-master.xml
 app:
   clients:
     admin:

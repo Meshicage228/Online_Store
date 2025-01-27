@@ -1,13 +1,6 @@
-buildscript {
-    dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:10.10.0")
-    }
-}
-
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.6'
-    id "org.flywaydb.flyway" version "10.15.2"
+    id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
@@ -30,6 +23,7 @@ repositories {
 
 ext {
     set('springCloudVersion', "2023.0.0")
+    set('liquibase', '4.27.0')
 }
 
 dependencies {
@@ -47,7 +41,7 @@ dependencies {
 
     // Utils
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql:42.7.2'
+    runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation "org.mapstruct:mapstruct:1.5.3.Final"
@@ -57,7 +51,7 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
 
-    implementation 'org.flywaydb:flyway-core'
+    implementation "org.liquibase:liquibase-core:${liquibase}"
 
     // Jwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.3'

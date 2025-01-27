@@ -1,3 +1,7 @@
+--liquibase formatted sql
+
+--changeset meshicage:1
+
 INSERT INTO users (user_id, name, password, role, avatar) values
     ('ce3a891e-eebd-45a6-bbf8-81b71ca22d8b','Gomer228','$2a$10$Ev65eQhNpRhR25wP12Kqau73bIXsxjqWsX8Y4MVfrqE0j10zepXgi','USER',122982),
     ('8d605b4e-a0ab-46d5-b310-2ccb3a032120','checkme','$2a$10$IJs1Riau/6Kgvfx0e7IddeK9HU5VHyKM5tLg7trUerFQo4Ae3LBWC','USER',122988),

@@ -1,3 +1,7 @@
+--liquibase formatted sql
+
+--changeset meshicage:1
+
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS users_cards;

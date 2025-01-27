@@ -1,4 +1,8 @@
-create table users(
+--liquibase formatted sql
+
+--changeset meshicage:1
+
+create table if not exists users(
     user_id uuid not null primary key,
     name varchar(255) unique,
     password varchar(255),
@@ -7,7 +11,7 @@ create table users(
             check ((role)::text = ANY ((ARRAY ['USER':: character varying, 'ADMIN':: character varying])::text[])),
     avatar oid
 );
-create table products(
+create table if not exists products(
     count integer,
     creation_time date,
     price real,
@@ -17,14 +21,14 @@ create table products(
     description varchar(255),
     title varchar(255)
 );
-create table images(
+create table if not exists images(
     image_id serial primary key,
     product_product_id integer
         constraint fkiq15xiv4oib9u8jo07tw5dcji
             references products,
     image oid
 );
-create table comments(
+create table if not exists comments(
     id serial primary key,
     product_product_id integer
         constraint fkaaki4swospsr6lo2nsiib0d4i
@@ -35,7 +39,7 @@ create table comments(
             references users,
     comment varchar(255)
 );
-create table purchases(
+create table if not exists purchases(
     bill real,
     count_of_product integer,
     id serial primary key,
@@ -52,7 +56,7 @@ create table purchases(
             check ((status)::text = ANY
         ((ARRAY ['WAITING'::character varying, 'IN_PROGRESS'::character varying, 'DONE'::character varying])::text[]))
     );
-create table user_carts(
+create table if not exists user_carts(
     cart_id serial primary key,
     count_to_buy integer,
     product_id integer
@@ -65,7 +69,7 @@ create table user_carts(
     constraint ukd2lbcw4tqvlo5av8ct4vm0s4d
         unique (user_id, product_id)
 );
-create table users_cards(
+create table if not exists users_cards(
     id serial primary key,
     money real,
     user_user_id uuid
@@ -73,7 +77,7 @@ create table users_cards(
         constraint fkostpfy3h2src0dhn7osfnian8
             references users
 );
-create table users_favorite_products(
+create table if not exists users_favorite_products(
     product_id integer not null
         constraint fklysemabkl8xiievg7vow5atng
             references products,
