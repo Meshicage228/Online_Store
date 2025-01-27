@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    password: 123123
+    username: shopUser
+    url: jdbc:postgresql://main-postgresql:5432/ShopDB
+    driver-class-name: org.postgresql.Driver
+app:
+  clients:
+    admin:
+      name: forAdmin-feign
+      url: product-service:8081
+      product-path: /v1/products
+    users:
+      name: user-feign
+      cart-name: cart-feign
+      url: user-service:8082
+      user-path: /v1/users
+      cart-path: /v1/users/cart
+    orders:
+      name: order-feign
+      url: order-service:8083
+      path: /v1/orders

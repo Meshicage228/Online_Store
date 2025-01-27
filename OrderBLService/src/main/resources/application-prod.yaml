@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://main-postgresql:5432/ShopDB
+    username: shopUser
+    password: 123123
+    driver-class-name: org.postgresql.Driver

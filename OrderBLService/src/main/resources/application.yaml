@@ -6,7 +6,7 @@ spring:
       fail-on-empty-beans: false
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -15,4 +15,5 @@ spring:
   datasource:
     password: 123123
     username: shopUser
-    url: jdbc:postgresql://main-postgresql:5430/ShopDB
+    url: jdbc:postgresql://localhost:5430/ShopDB
+    driver-class-name: org.postgresql.Driver

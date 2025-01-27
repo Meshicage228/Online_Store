@@ -1,0 +1,12 @@
+tasks.register("buildApplicationBootJars") {
+    group = 'application-custom'
+    description = 'Build necessary bootJars for docker and publishes starters'
+
+    finalizedBy {
+        subprojects.findAll().stream()
+                .filter(pr -> pr.name.endsWith("Service") || pr.name.endsWith("Module"))
+                .filter(pr -> pr.tasks.findByName('bootJar') != null)
+                .map(pr -> pr.tasks.named('bootJar').get())
+                .toArray()
+    }
+}

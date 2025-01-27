@@ -23,9 +23,7 @@ services:
     depends_on:
       - main-postgresql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB
-      SPRING_DATASOURCE_USERNAME: shopUser
-      SPRING_DATASOURCE_PASSWORD: 123123
+      SPRING_PROFILES_ACTIVE: prod
   #user-service
   user-service:
     restart: on-failure
@@ -38,9 +36,7 @@ services:
     depends_on:
       - main-postgresql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB
-      SPRING_DATASOURCE_USERNAME: shopUser
-      SPRING_DATASOURCE_PASSWORD: 123123
+     SPRING_PROFILES_ACTIVE: prod
   #order-service
   order-service:
     restart: on-failure
@@ -53,9 +49,7 @@ services:
     depends_on:
       - main-postgresql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB
-      SPRING_DATASOURCE_USERNAME: shopUser
-      SPRING_DATASOURCE_PASSWORD: 123123
+     SPRING_PROFILES_ACTIVE: prod
   # main-service
   main-service:
     restart: on-failure
@@ -66,23 +60,7 @@ services:
       context: /MainModule
       dockerfile: Dockerfile
     environment:
-      APP_CLIENTS_ADMIN_NAME: forAdmin-feign
-      APP_CLIENTS_ADMIN_URL: product-service:8081
-      APP_CLIENTS_ADMIN_PRODUCT-PATH: /v1/products
-
-      APP_CLIENTS_USERS_NAME: user-feign
-      APP_CLIENTS_USERS_CART-NAME: cart-feign
-      APP_CLIENTS_USERS_URL: user-service:8082
-      APP_CLIENTS_USERS_PRODUCT-PATH: /v1/users
-      APP_CLIENTS_USERS_CART-PATH: /v1/users/carts
-
-      APP_CLIENTS_ORDERS_NAME: order-feign
-      APP_CLIENTS_ORDERS_URL: order-service:8083
-      APP_CLIENTS_ORDERS_PRODUCT-PATH: /v1/orders
-
-      SPRING_DATASOURCE_URL: jdbc:postgresql://main-postgresql:5432/ShopDB
-      SPRING_DATASOURCE_USERNAME: shopUser
-      SPRING_DATASOURCE_PASSWORD: 123123
+     SPRING_PROFILES_ACTIVE: prod
     depends_on:
       - main-postgresql
       - order-service

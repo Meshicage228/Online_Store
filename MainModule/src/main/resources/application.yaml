@@ -41,17 +41,17 @@ app:
   clients:
     admin:
       name: forAdmin-feign
-      url: http://product-service:8081
+      url: http://localhost:8081
       product-path: /v1/products
     users:
       name: user-feign
       cart-name: cart-feign
-      url: http://user-service:8082
+      url: http://localhost:8082
       user-path: /v1/users
       cart-path: /v1/users/cart
     orders:
       name: order-feign
-      url: http://order-service:8083
+      url: http://localhost:8083
       path: /v1/orders
 project:
   secretKey: assgaasglnsaggasnklgsankasgnksasnkasgknsdhnasgjahsgvbasghbnvxbzcnb
