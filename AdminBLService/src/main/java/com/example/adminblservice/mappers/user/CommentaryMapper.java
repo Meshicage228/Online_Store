@@ -5,11 +5,13 @@ import com.example.adminblservice.entity.user.Commentary;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.Base64;
 
 @Mapper(
-        componentModel = "spring"
+        componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface CommentaryMapper {
     @Mappings({

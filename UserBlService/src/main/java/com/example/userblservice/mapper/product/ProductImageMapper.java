@@ -6,12 +6,14 @@ import com.example.userblservice.entity.product.ProductImage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.Base64;
 import java.util.List;
 
 @Mapper(
-        componentModel = "spring"
+        componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface ProductImageMapper {
     @Mappings({

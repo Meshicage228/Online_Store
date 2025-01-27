@@ -20,7 +20,8 @@ import java.util.Objects;
 
 @Mapper(
         componentModel = "spring",
-        uses = {ProductMapper.class, ProductImageMapper.class}
+        uses = {ProductMapper.class, ProductImageMapper.class},
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 @Getter
 public abstract class UserMapper {

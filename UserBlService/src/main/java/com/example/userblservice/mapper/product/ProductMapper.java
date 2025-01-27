@@ -13,7 +13,8 @@ import java.util.Set;
 
 @Mapper(
         componentModel = "spring",
-        uses = ProductImageMapper.class
+        uses = ProductImageMapper.class,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface ProductMapper {
     @Mappings({

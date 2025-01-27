@@ -11,7 +11,8 @@ import java.util.List;
 
 @Mapper(
         componentModel = "spring",
-        uses = {ProductImageMapper.class, CommentaryMapper.class}
+        uses = {ProductImageMapper.class, CommentaryMapper.class},
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface ProductMapper {
     @Mappings({

@@ -14,7 +14,8 @@ import java.util.List;
 
 @Mapper(
         componentModel = "spring",
-        uses = ProductMapper.class
+        uses = ProductMapper.class,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface UserMapper {
 
