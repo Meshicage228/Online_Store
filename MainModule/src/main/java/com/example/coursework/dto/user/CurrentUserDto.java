@@ -19,17 +19,11 @@ import java.util.UUID;
 @Builder
 public class CurrentUserDto implements UserDetails {
     private UUID id;
-
     private String name;
-
     private String password;
-
     private String avatarToShow;
-
     private byte[] avatar;
-
     private Role role;
-
     private UserCard card;
 
     @Override

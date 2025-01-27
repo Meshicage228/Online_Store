@@ -15,18 +15,11 @@ import java.util.Date;
 @Builder
 public class OrderDto {
     private Integer id;
-
     private ProductDto product;
-
     private UserDto user;
-
     private Integer countOfProduct;
-
     private Float priceAtMomentBuying;
-
     private OrderStatus status;
-
     private Date dateOfPurchase;
-
     private Float bill;
 }

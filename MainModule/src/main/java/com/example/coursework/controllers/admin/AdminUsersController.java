@@ -23,6 +23,7 @@ import java.util.stream.IntStream;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminUsersController {
     UsersClient client;
+
     @DeleteMapping("/{id}")
     public ModelAndView deleteUser(@PathVariable("id") UUID id) {
         client.deleteUser(id);

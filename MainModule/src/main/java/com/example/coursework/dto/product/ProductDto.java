@@ -20,7 +20,6 @@ import java.util.List;
 public class ProductDto {
     private Integer id;
     private Integer cart_id;
-
     private Float bill;
 
     @CheckFileIsEmpty(groups = OnCreateMarker.class)

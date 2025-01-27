@@ -44,6 +44,7 @@ public class CurrentUser implements UserDetails {
     public String getUsername() {
         return name;
     }
+
     @Override
     public String getPassword() {
         return password;

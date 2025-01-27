@@ -1,6 +1,7 @@
 package com.example.coursework.configuration;
 
 import com.example.coursework.decoder.FeignErrorDecoder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Logger;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
@@ -33,8 +34,13 @@ public class ProjectConfig{
     }
 
     @Bean
-    public ErrorDecoder decoder() {
-        return new FeignErrorDecoder();
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public ErrorDecoder decoder(ObjectMapper objectMapper) {
+        return new FeignErrorDecoder(objectMapper);
     }
 
     @Bean
