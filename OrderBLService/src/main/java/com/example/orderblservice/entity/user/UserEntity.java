@@ -1,14 +1,11 @@
 package com.example.orderblservice.entity.user;
 
-
 import com.example.orderblservice.domain.Role;
 import com.example.orderblservice.entity.product.Orders;
-import com.example.orderblservice.entity.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor

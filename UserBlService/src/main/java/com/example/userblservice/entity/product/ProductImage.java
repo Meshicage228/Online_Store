@@ -3,7 +3,6 @@ package com.example.userblservice.entity.product;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

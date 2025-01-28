@@ -10,7 +10,6 @@ import com.example.adminblservice.mappers.product.ProductMapper;
 import com.example.adminblservice.repository.ImageRepository;
 import com.example.adminblservice.repository.ProductRepository;
 import com.example.adminblservice.service.ProductService;
-import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -30,13 +29,14 @@ import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RequiredArgsConstructor
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     ProductMapper mapper;
     ImageRepository imageRepository;
+
     @Override
     @Transactional
     public ProductDto save(ProductDto dto) {

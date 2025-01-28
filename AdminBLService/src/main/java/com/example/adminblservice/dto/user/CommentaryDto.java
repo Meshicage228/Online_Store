@@ -10,12 +10,8 @@ import java.util.Date;
 @Builder
 public class CommentaryDto {
     private Integer id;
-
     private String userAvatar;
-
     private String name;
-
     private String comment;
-
     private Date date;
 }

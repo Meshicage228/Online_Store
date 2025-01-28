@@ -1,6 +1,5 @@
 package com.example.adminblservice.mappers.user;
 
-
 import com.example.adminblservice.dto.user.UserDto;
 import com.example.adminblservice.entity.user.UserEntity;
 import com.example.adminblservice.mappers.product.ProductMapper;
@@ -9,8 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
-
 
 @Mapper(
         componentModel = "spring",

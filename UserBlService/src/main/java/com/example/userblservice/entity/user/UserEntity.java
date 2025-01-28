@@ -1,6 +1,5 @@
 package com.example.userblservice.entity.user;
 
-
 import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.product.Purchases;

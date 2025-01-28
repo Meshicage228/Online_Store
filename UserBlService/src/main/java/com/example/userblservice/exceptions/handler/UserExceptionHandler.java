@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class UserExceptionHandler {
+
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorMessage> noProductFound(ProductNotFoundException ex) {
         String message = ex.getMessage();

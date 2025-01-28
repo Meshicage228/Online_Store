@@ -4,7 +4,9 @@ import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.user.UserEntity;
 import com.example.userblservice.entity.user.UsersCart;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CartRepository extends JpaRepository<UsersCart, Integer> {
     Boolean existsByUserAndProduct(UserEntity entity, ProductEntity productEntity);
 }

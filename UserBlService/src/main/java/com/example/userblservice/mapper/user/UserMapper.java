@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Objects;
 
-
-
 @Mapper(
         componentModel = "spring",
         uses = {ProductMapper.class, ProductImageMapper.class},

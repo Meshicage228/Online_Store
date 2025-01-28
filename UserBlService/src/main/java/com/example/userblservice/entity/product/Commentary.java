@@ -1,6 +1,5 @@
 package com.example.userblservice.entity.product;
 
-
 import com.example.userblservice.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,6 +1,5 @@
 package com.example.orderblservice.entity.product;
 
-
 import com.example.orderblservice.domain.OrderStatus;
 import com.example.orderblservice.entity.user.UserEntity;
 import jakarta.persistence.*;

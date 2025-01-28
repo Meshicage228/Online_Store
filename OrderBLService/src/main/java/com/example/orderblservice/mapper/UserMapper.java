@@ -1,13 +1,10 @@
 package com.example.orderblservice.mapper;
 
-
 import com.example.orderblservice.dto.user.UserDto;
 import com.example.orderblservice.entity.user.UserEntity;
 import org.mapstruct.*;
 
 import java.util.Base64;
-import java.util.List;
-
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

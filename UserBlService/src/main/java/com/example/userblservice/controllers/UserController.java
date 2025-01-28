@@ -39,6 +39,7 @@ public class UserController {
     public boolean findExists(@RequestParam("find") String name) {
         return userService.findByName(name);
     }
+
     @PostMapping("/login")
     public boolean login(@RequestParam("nameAuth") String authName, @RequestParam("password") String password){
         return userService.checkExists(authName,password);
@@ -59,6 +60,7 @@ public class UserController {
                               @PathVariable("prod_id") Integer prod_id) {
         userService.addToFavorite(user_id, prod_id);
     }
+
     @DeleteMapping("/{user_id}/remove_favorite/{prod_id}")
     public void removeFavorite(@PathVariable("user_id") UUID user_id,
                                @PathVariable("prod_id") Integer prod_id){

@@ -1,6 +1,5 @@
 package com.example.adminblservice.entity.user;
 
-
 import com.example.adminblservice.entity.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

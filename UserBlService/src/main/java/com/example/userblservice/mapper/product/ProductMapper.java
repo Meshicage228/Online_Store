@@ -1,6 +1,5 @@
 package com.example.userblservice.mapper.product;
 
-
 import com.example.userblservice.dto.product.ProductDto;
 import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.product.ProductImage;
@@ -9,7 +8,6 @@ import org.mapstruct.*;
 
 import java.util.List;
 import java.util.Set;
-
 
 @Mapper(
         componentModel = "spring",

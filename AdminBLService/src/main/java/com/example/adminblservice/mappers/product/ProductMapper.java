@@ -1,13 +1,9 @@
 package com.example.adminblservice.mappers.product;
 
-
 import com.example.adminblservice.dto.product.ProductDto;
 import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.mappers.user.CommentaryMapper;
 import org.mapstruct.*;
-
-import java.util.List;
-
 
 @Mapper(
         componentModel = "spring",

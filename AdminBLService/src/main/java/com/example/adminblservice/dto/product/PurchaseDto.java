@@ -12,14 +12,9 @@ import java.util.Date;
 @Builder
 public class PurchaseDto {
     private ProductDto product;
-
     private UserDto user;
-
     private Integer countOfProduct;
-
     private Float priceAtMomentBuying;
-
     private OrderStatus status;
-
     private Date dateOfPurchase;
 }

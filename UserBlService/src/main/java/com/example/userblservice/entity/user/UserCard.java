@@ -1,6 +1,5 @@
 package com.example.userblservice.entity.user;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

@@ -13,6 +13,5 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID>,
                                         JpaSpecificationExecutor<UserEntity>,
                                         PagingAndSortingRepository<UserEntity, UUID> {
     Boolean existsByName(String name);
-
     Boolean existsByNameAndPassword(String name, String password);
 }

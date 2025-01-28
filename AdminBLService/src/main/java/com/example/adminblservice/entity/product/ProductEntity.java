@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -35,7 +34,7 @@ public class ProductEntity {
     private String description;
 
     @OneToMany( mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ProductImage> images;
+    private List<ProductImage> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Purchases> items;
@@ -61,9 +60,6 @@ public class ProductEntity {
     private Integer version;
 
     public void addImage(byte[] image){
-        if(images == null){
-            images = new ArrayList<>();
-        }
         ProductImage newImage = ProductImage.builder()
                 .product(this)
                 .image(image)
@@ -71,6 +67,7 @@ public class ProductEntity {
 
         images.add(newImage);
     }
+
     @PreRemove
     public void removeProductAssociations(){
         for (var user: this.users_favorites) {
