@@ -18,6 +18,6 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    password: 28072004
-    username: postgres
-    url: jdbc:postgresql://localhost:5432/course_work
+    password: 123123
+    username: shopUser
+    url: jdbc:postgresql://localhost:5430/ShopDB

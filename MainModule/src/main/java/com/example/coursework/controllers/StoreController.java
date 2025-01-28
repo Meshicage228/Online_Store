@@ -66,7 +66,7 @@ public class StoreController {
     }
 
     @GetMapping("/catalog/{prod_id}")
-    ModelAndView getPersonalPage(@PathVariable("prod_id") Integer id) {
+    public ModelAndView getPersonalPage(@PathVariable("prod_id") Integer id) {
         ModelAndView modelAndView = new ModelAndView("personalProductPage");
         ProductDto productById = productClient.findProductById(id);
         modelAndView.addObject("product", productById);

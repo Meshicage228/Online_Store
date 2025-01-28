@@ -1,6 +1,5 @@
 package com.example.adminblservice.service.impl;
 
-
 import com.example.adminblservice.dto.product.ProductDto;
 import com.example.adminblservice.dto.product.ProductSearchDto;
 import com.example.adminblservice.entity.product.ProductEntity;
@@ -45,14 +44,6 @@ public class ProductServiceImpl implements ProductService {
         ProductEntity save = productRepository.save(entity);
 
         return mapper.toDto(save);
-    }
-
-    @Override
-    @Transactional
-    public Page<ProductDto> findAll(Integer page, Integer size, ProductSearchDto search) {
-        Specification<ProductEntity> specification = createSpecification(search);
-        return productRepository.findAll(specification, PageRequest.of(page - 1, size))
-                .map(mapper::toDto);
     }
 
     @Override

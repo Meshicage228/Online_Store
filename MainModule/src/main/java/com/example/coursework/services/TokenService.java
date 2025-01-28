@@ -33,7 +33,8 @@ public class TokenService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repos.findByName(username).orElseThrow(() -> new RuntimeException());
+        return repos.findByName(username)
+                .orElseThrow(RuntimeException::new);
     }
 
     @Value(value = "${project.secretKey}")

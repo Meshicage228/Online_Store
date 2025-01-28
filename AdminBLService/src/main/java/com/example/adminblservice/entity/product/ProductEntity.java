@@ -15,7 +15,8 @@ import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"users_favorites", "users", "items", "comments"})
 @Builder
 @Entity
@@ -60,6 +61,10 @@ public class ProductEntity {
     private Integer version;
 
     public void addImage(byte[] image){
+        if(images.isEmpty()){
+            images = new ArrayList<>();
+        }
+
         ProductImage newImage = ProductImage.builder()
                 .product(this)
                 .image(image)

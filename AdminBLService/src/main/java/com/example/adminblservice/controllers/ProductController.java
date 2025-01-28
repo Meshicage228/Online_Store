@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.apache.tomcat.util.http.fileupload.FileUploadBase.MULTIPART_FORM_DATA;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -62,8 +64,8 @@ public class ProductController {
         service.update(idImage, file);
     }
 
-    @PostMapping("/save")
-    ProductDto saveProduct(@RequestBody ProductDto dto) {
+    @PostMapping(value = "/save", consumes = MULTIPART_FORM_DATA, produces = APPLICATION_JSON_VALUE)
+    public ProductDto saveProduct(@RequestBody ProductDto dto) {
         return service.save(dto);
     }
 
