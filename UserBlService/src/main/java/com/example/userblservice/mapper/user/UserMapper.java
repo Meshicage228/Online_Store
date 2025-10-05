@@ -5,7 +5,9 @@ import com.example.userblservice.entity.user.UserEntity;
 import com.example.userblservice.mapper.product.ProductImageMapper;
 import com.example.userblservice.mapper.product.ProductMapper;
 import lombok.Getter;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -16,15 +18,12 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Objects;
 
-
-
 @Mapper(
         componentModel = "spring",
         uses = {ProductMapper.class, ProductImageMapper.class}
 )
 @Getter
 public abstract class UserMapper {
-
     @Autowired
     private BCryptPasswordEncoder encoder;
 
@@ -49,19 +48,19 @@ public abstract class UserMapper {
 
     public byte[] setDefaultAvatar(){
         try {
-            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/defaultAvatar.jpg")));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/defaultAvatar.jpg")));
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", baos);
             return baos.toByteArray();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public String decodeStringToBytes(byte[] bytes){
+    public String decodeStringToBytes(final byte[] bytes){
         return Base64.getEncoder().encodeToString(bytes);
     }
 
-    public String encodePassword(UserDto dto){
+    public String encodePassword(final UserDto dto){
         return encoder.encode(dto.getPassword());
     }
 

@@ -7,7 +7,9 @@ import com.example.orderblservice.entity.product.Orders;
 import com.example.orderblservice.entity.product.ProductEntity;
 import com.example.orderblservice.entity.user.UserCard;
 import com.example.orderblservice.entity.user.UserEntity;
-import com.example.orderblservice.exceptions.*;
+import com.example.orderblservice.exceptions.OutOfStockException;
+import com.example.orderblservice.exceptions.ProductNotFoundException;
+import com.example.orderblservice.exceptions.UserNotFoundException;
 import com.example.orderblservice.mapper.OrderMapper;
 import com.example.orderblservice.repository.CartRepository;
 import com.example.orderblservice.repository.OrderRepository;
@@ -17,9 +19,7 @@ import com.example.orderblservice.service.OrderService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,22 +27,23 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RequiredArgsConstructor
-
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    OrderRepository orderRepository;
-    UserRepository userRepository;
-    OrderMapper orderMapper;
-    CartRepository cartRepository;
-    ProductRepository productRepository;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final OrderMapper orderMapper;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
 
     @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 5)
     @Transactional
@@ -59,14 +60,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public boolean acceptPurchase(UUID userId) {
-        UserEntity userEntity = userRepository.findById(userId)
+    public boolean acceptPurchase(final UUID userId) {
+        final UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
         float totalPurchase = 0;
 
-        for (var obj : userEntity.getCart()) {
-            ProductEntity product = obj.getProduct();
+        for (final var obj : userEntity.getCart()) {
+            final ProductEntity product = obj.getProduct();
             if (product.getCount() < obj.getCountToBuy()) {
                 throw new OutOfStockException("Выбрано товара больше, чем присутствует на складе");
             }
@@ -82,10 +83,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public void createPurchase(UserEntity user, float totalPurchase) {
-        for (var cartElement : user.getCart()) {
-            ProductEntity productAtMoment = cartElement.getProduct();
-            Orders order = Orders.builder()
+    public void createPurchase(final UserEntity user, final float totalPurchase) {
+        for (final var cartElement : user.getCart()) {
+            final ProductEntity productAtMoment = cartElement.getProduct();
+            final Orders order = Orders.builder()
                     .status(OrderStatus.WAITING)
                     .dateOfPurchase(new Date())
                     .countOfProduct(cartElement.getCountToBuy())
@@ -98,14 +99,15 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.save(order);
             cartRepository.deleteById(cartElement.getId());
         }
-        UserCard userCard = user.getUserCard();
+        final UserCard userCard = user.getUserCard();
         userCard.setMoney(userCard.getMoney() - totalPurchase);
     }
 
     @Override
     @Transactional
-    public Page<OrderDto> findAllWithSort(Integer page, Integer size, OrderSearchDto searchDto, String sortedBy) {
-        Specification<Orders> specification = createSpecification(searchDto);
+    public Page<OrderDto> findAllWithSort(final Integer page, final Integer size,
+                                          final OrderSearchDto searchDto, final String sortedBy) {
+        final Specification<Orders> specification = createSpecification(searchDto);
         switch (sortedBy) {
             case "billUp" -> {
                 return orderRepository.findAll(specification, PageRequest.of(page, size)
@@ -130,10 +132,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean haveBoughtProd(UUID userId, Integer prodId) {
-        UserEntity user = userRepository.findById(userId)
+    public boolean haveBoughtProd(final UUID userId, final Integer prodId) {
+        final UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
-        ProductEntity product = productRepository.findById(prodId)
+        final ProductEntity product = productRepository.findById(prodId)
                 .orElseThrow(() -> new ProductNotFoundException("Продкут не найден"));
 
         return orderRepository.existsByUserAndProduct(user, product);
@@ -141,31 +143,30 @@ public class OrderServiceImpl implements OrderService {
 
     private Specification<Orders> createSpecification(OrderSearchDto dto) {
         return (root, query, builder) -> {
-            String name = dto.getName();
-            OrderStatus status = dto.getStatus();
-            String title = dto.getTitle();
-            UUID userId = dto.getUser_id();
+            final String name = dto.getName();
+            final OrderStatus status = dto.getStatus();
+            final String title = dto.getTitle();
+            final UUID userId = dto.getUser_id();
 
-            var predicates = new ArrayList<>();
+            final var predicates = new ArrayList<>();
 
-            if (isNotBlank(name) && nonNull(name)) {
-                Join<Orders, UserEntity> user = root.join("user");
+            if (isNotBlank(name)) {
+                final Join<Orders, UserEntity> user = root.join("user");
                 predicates.add(builder.like(user.get("name"), "%" + name.substring(1).toLowerCase().trim() + "%"));
             }
             if (nonNull(userId)) {
-                Join<Orders, UserEntity> user = root.join("user");
+                final Join<Orders, UserEntity> user = root.join("user");
                 predicates.add(builder.equal(user.get("id"), userId));
             }
             if (nonNull(status)) {
                 predicates.add(builder.equal(root.get("status"), status));
             }
-            if (isNotBlank(title) && nonNull(title)) {
-                Join<Orders, ProductEntity> product = root.join("product");
+            if (isNotBlank(title)) {
+                final Join<Orders, ProductEntity> product = root.join("product");
                 predicates.add(builder.like(product.get("title"), "%" + title.substring(1).toLowerCase().trim() + "%"));
             }
-            Predicate[] array = predicates.toArray(Predicate[]::new);
 
-            return builder.and(array);
+            return builder.and(predicates.toArray(Predicate[]::new));
         };
     }
 }

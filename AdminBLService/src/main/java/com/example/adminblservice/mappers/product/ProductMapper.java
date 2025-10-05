@@ -1,13 +1,13 @@
 package com.example.adminblservice.mappers.product;
 
-
 import com.example.adminblservice.dto.product.ProductDto;
 import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.mappers.user.CommentaryMapper;
-import org.mapstruct.*;
-
-import java.util.List;
-
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 
 @Mapper(
         componentModel = "spring",
@@ -15,20 +15,20 @@ import java.util.List;
 )
 public interface ProductMapper {
     @Mappings({
-        @Mapping(target = "title", source = "title"),
-        @Mapping(target = "description", source = "description"),
-        @Mapping(target = "price", source = "price")
+            @Mapping(target = "title", source = "title"),
+            @Mapping(target = "description", source = "description"),
+            @Mapping(target = "price", source = "price")
     })
     ProductEntity toEntity(ProductDto dto);
 
     @Mappings({
-        @Mapping(target = "id", source = "id"),
-        @Mapping(target = "title", source = "title"),
-        @Mapping(target = "description", source = "description"),
-        @Mapping(target = "price", source = "price"),
-        @Mapping(target = "images", source = "images"),
-        @Mapping(target = "comments", source = "comments"),
-        @Mapping(target = "count", source = "count")
+            @Mapping(target = "id", source = "id"),
+            @Mapping(target = "title", source = "title"),
+            @Mapping(target = "description", source = "description"),
+            @Mapping(target = "price", source = "price"),
+            @Mapping(target = "images", source = "images"),
+            @Mapping(target = "comments", source = "comments"),
+            @Mapping(target = "count", source = "count")
     })
     ProductDto toDto(ProductEntity entity);
 

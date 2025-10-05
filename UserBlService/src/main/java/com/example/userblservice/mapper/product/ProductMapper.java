@@ -1,15 +1,15 @@
 package com.example.userblservice.mapper.product;
 
-
 import com.example.userblservice.dto.product.ProductDto;
 import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.product.ProductImage;
 import com.example.userblservice.entity.user.UsersCart;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 import java.util.Set;
-
 
 @Mapper(
         componentModel = "spring",
@@ -45,11 +45,11 @@ public interface ProductMapper {
 
     List<ProductDto> toDtoFromCart (Set<UsersCart> carts);
 
-    default List<ProductImage> mapProductImage(ProductEntity product) {
+    default List<ProductImage> mapProductImage(final ProductEntity product) {
         return product.getImages();
     }
 
-    default Float countBill(UsersCart cart){
+    default Float countBill(final UsersCart cart){
         return cart.getProduct().getPrice() * cart.getCountToBuy();
     }
 }

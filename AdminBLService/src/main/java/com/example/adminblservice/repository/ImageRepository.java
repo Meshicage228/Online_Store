@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ImageRepository extends JpaRepository<ProductImage, Integer> {
-    // TODO: 13.01.2024 Странно, почему не работет удаление по айди от хибера
     @Modifying
     @Query("delete from ProductImage where id = :id")
     void deleteByHand(Integer id);

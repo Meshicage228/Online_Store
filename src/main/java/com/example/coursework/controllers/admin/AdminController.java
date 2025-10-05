@@ -1,18 +1,15 @@
 package com.example.coursework.controllers.admin;
 
 import com.example.coursework.dto.product.ProductDto;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RequiredArgsConstructor
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/admin")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
@@ -23,7 +20,7 @@ public class AdminController {
     }
 
     @GetMapping("/createProduct")
-    public String createProductPage(@ModelAttribute("modelToSave") ProductDto dto) {
+    public String createProductPage(@ModelAttribute("modelToSave") final ProductDto dto) {
         return "createProductAdmin";
     }
 }

@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Configuration
-public class ProjectConfig{
+public class ProjectConfig {
     @Bean
     public OkHttpClient client() {
         return new OkHttpClient();
@@ -50,7 +50,7 @@ public class ProjectConfig{
 
     @Bean
     public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource
+        final ReloadableResourceBundleMessageSource messageSource
                 = new ReloadableResourceBundleMessageSource();
 
         messageSource.setBasename("classpath:messages");
@@ -60,7 +60,7 @@ public class ProjectConfig{
 
     @Bean
     public LocalValidatorFactoryBean getValidator() {
-        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        final LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource());
         return bean;
     }

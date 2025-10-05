@@ -3,7 +3,11 @@ package com.example.orderblservice.entity.user;
 
 import com.example.orderblservice.entity.product.ProductEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor

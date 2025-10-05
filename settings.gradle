@@ -1,1 +1,5 @@
 rootProject.name = 'CourseWork'
+include 'AdminBLService'
+include 'MainModule'
+include 'OrderBLService'
+include 'UserBlService'

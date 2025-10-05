@@ -6,7 +6,7 @@ import lombok.Getter;
 public class NegativeProductCountException extends RuntimeException {
     private final String message;
 
-    public NegativeProductCountException(String message) {
+    public NegativeProductCountException(final String message) {
         this.message = message;
     }
 }

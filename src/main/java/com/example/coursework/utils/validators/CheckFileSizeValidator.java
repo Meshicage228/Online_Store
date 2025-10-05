@@ -17,16 +17,16 @@ public class CheckFileSizeValidator implements ConstraintValidator<CheckFileSize
     private long maxSize;
 
     @Override
-    public void initialize(CheckFileSize constraintAnnotation) {
+    public void initialize(final CheckFileSize constraintAnnotation) {
         this.maxSize = constraintAnnotation.maxSizeInMB();
     }
 
     @Override
-    public boolean isValid(List<MultipartFile> value, ConstraintValidatorContext context) {
-        if(isNull(value)) return true;
-        for(var file : value){
-            if(file.getSize() == 0) return  true;
-            if(file.getSize() > MB * maxSize){
+    public boolean isValid(final List<MultipartFile> value, final ConstraintValidatorContext context) {
+        if (isNull(value)) return true;
+        for (final var file : value) {
+            if (file.getSize() == 0) return true;
+            if (file.getSize() > MB * maxSize) {
                 return false;
             }
         }

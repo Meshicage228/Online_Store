@@ -6,27 +6,28 @@ import com.example.coursework.dto.product.ProductDto;
 import com.example.coursework.dto.user.AuthorizeDao;
 import com.example.coursework.dto.user.UserDto;
 import com.example.coursework.utils.markers.AuthorizeValidationMarker;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RequiredArgsConstructor
-
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/store")
 public class StoreController {
-    UsersClient usersClient;
-    ProductClient productClient;
+    private final UsersClient usersClient;
+    private final ProductClient productClient;
 
     @GetMapping
     public ModelAndView getMainPage() {
@@ -34,19 +35,19 @@ public class StoreController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLogin(@ModelAttribute("enterUser") AuthorizeDao dao) {
+    public ModelAndView getLogin(@ModelAttribute("enterUser") final AuthorizeDao dao) {
         return new ModelAndView("loginPage");
     }
 
     @GetMapping("/authorize")
-    public ModelAndView getAuthorize(@ModelAttribute("enterUser") AuthorizeDao dao) {
+    public ModelAndView getAuthorize(@ModelAttribute("enterUser") final AuthorizeDao dao) {
         return new ModelAndView("authorizePage");
     }
 
     @PostMapping("/authorize")
-    public ModelAndView authorize(@Validated(value = AuthorizeValidationMarker.class) @ModelAttribute("enterUser") AuthorizeDao dao,
-                                  BindingResult result) {
-        ModelAndView login = new ModelAndView("authorizePage");
+    public ModelAndView authorize(@Validated(value = AuthorizeValidationMarker.class) @ModelAttribute("enterUser") final AuthorizeDao dao,
+                                  final BindingResult result) {
+        final ModelAndView login = new ModelAndView("authorizePage");
 
         if (result.hasFieldErrors()) {
             return login.addObject("enterUser", dao);
@@ -66,27 +67,27 @@ public class StoreController {
     }
 
     @GetMapping("/catalog/{prod_id}")
-    ModelAndView getPersonalPage(@PathVariable("prod_id") Integer id) {
-        ModelAndView modelAndView = new ModelAndView("personalProductPage");
-        ProductDto productById = productClient.findProductById(id);
+    ModelAndView getPersonalPage(@PathVariable("prod_id") final Integer id) {
+        final ModelAndView modelAndView = new ModelAndView("personalProductPage");
+        final ProductDto productById = productClient.findProductById(id);
         modelAndView.addObject("product", productById);
         return modelAndView;
     }
 
     @GetMapping("/{page}/{size}")
-    public ModelAndView getPage(@PathVariable(value = "page") Integer page,
-                                @PathVariable(value = "size") Integer size,
-                                @RequestParam(value = "title", required = false) String title,
-                                @RequestParam(value = "price", required = false) Float price,
-                                @RequestParam(value = "sortedBy", required = false) String sortedBy) {
+    public ModelAndView getPage(@PathVariable(value = "page") final Integer page,
+                                @PathVariable(value = "size") final Integer size,
+                                @RequestParam(value = "title", required = false) final String title,
+                                @RequestParam(value = "price", required = false) final Float price,
+                                @RequestParam(value = "sortedBy", required = false) final String sortedBy) {
 
-        ModelAndView modelAndView = new ModelAndView("storePage");
-        Page<ProductDto> pageContent = productClient.getAllSearchPaginatedSortedProducts(page, size, title, price, sortedBy);
+        final ModelAndView modelAndView = new ModelAndView("storePage");
+        final Page<ProductDto> pageContent = productClient.getAllSearchPaginatedSortedProducts(page, size, title, price, sortedBy);
 
         modelAndView.addObject("totalPage", pageContent);
-        int totalPages = pageContent.getTotalPages();
+        final int totalPages = pageContent.getTotalPages();
         if (totalPages > 0) {
-            List<Integer> countOfButtons = IntStream.rangeClosed(1, totalPages)
+            final List<Integer> countOfButtons = IntStream.rangeClosed(1, totalPages)
                     .boxed()
                     .toList();
             modelAndView.addObject("countPages", countOfButtons);

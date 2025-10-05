@@ -1,15 +1,18 @@
 package com.example.coursework.dto.user;
 
-
 import com.example.coursework.domain.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
-
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -46,6 +49,7 @@ public class CurrentUser implements UserDetails {
     public String getUsername() {
         return name;
     }
+
     @Override
     public String getPassword() {
         return password;

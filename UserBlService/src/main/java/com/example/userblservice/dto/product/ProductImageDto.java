@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductImageDto {
     private Integer id;
-
     private String convertedImage;
 }

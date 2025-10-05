@@ -6,7 +6,7 @@ import lombok.Getter;
 public class ProductNotFoundException extends RuntimeException {
     private final String message;
 
-    public ProductNotFoundException(String message) {
+    public ProductNotFoundException(final String message) {
         this.message = message;
     }
 }

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class UserExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ErrorMessage> noProductFound(ProductNotFoundException ex) {
-        String message = ex.getMessage();
+    public ResponseEntity<ErrorMessage> noProductFound(final ProductNotFoundException ex) {
+        final String message = ex.getMessage();
 
-        ErrorMessage build = ErrorMessage.builder()
+        final ErrorMessage build = ErrorMessage.builder()
                 .message(message)
                 .serviceName("product-service")
                 .build();
@@ -23,10 +23,10 @@ public class UserExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorMessage> noUserFound(UserNotFoundException ex) {
-        String message = ex.getMessage();
+    public ResponseEntity<ErrorMessage> noUserFound(final UserNotFoundException ex) {
+        final String message = ex.getMessage();
 
-        ErrorMessage build = ErrorMessage.builder()
+        final ErrorMessage build = ErrorMessage.builder()
                 .message(message)
                 .serviceName("user-service")
                 .build();

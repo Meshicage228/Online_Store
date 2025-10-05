@@ -14,13 +14,13 @@ import static org.apache.commons.lang3.StringUtils.startsWith;
 public class FeignErrorDecoder implements ErrorDecoder {
 
     @Override
-    public Exception decode(String methodKey, Response response) {
+    public Exception decode(final String methodKey, final Response response) {
         ErrorMessage message = null;
         try {
-            byte[] arr = response.body().asInputStream().readAllBytes();
-            var mapper = new ObjectMapper();
+            final byte[] arr = response.body().asInputStream().readAllBytes();
+            final var mapper = new ObjectMapper();
             message = mapper.readValue(arr, ErrorMessage.class);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return new Exception(e.getMessage());
         }
         if (response.status() > 400 && response.status() < 500) {

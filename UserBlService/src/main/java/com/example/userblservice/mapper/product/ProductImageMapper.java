@@ -1,6 +1,5 @@
 package com.example.userblservice.mapper.product;
 
-
 import com.example.userblservice.dto.product.ProductImageDto;
 import com.example.userblservice.entity.product.ProductImage;
 import org.mapstruct.Mapper;
@@ -29,10 +28,10 @@ public interface ProductImageMapper {
     List<ProductImageDto> toDtos (List<ProductImage> entities);
     List<ProductImage> toEntities (List<ProductImageDto> dtos);
 
-    default String convertBytesToString(byte[] arr){
+    default String convertBytesToString(final byte[] arr){
         return Base64.getEncoder().encodeToString(arr);
     }
-    default byte[] convertStringToBytes(String encoded){
+    default byte[] convertStringToBytes(final String encoded){
         return Base64.getDecoder().decode(encoded);
     }
 }

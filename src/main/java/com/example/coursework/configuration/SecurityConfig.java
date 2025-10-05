@@ -24,43 +24,45 @@ public class SecurityConfig {
     private final TokenGenerationFilter generationFilter;
 
     @Bean
-    public SecurityFilterChain chain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(registry -> { registry
-            .requestMatchers("/store/login").permitAll()
-            .requestMatchers("/images/**").permitAll()
-            .requestMatchers("/admin/**").hasAuthority("ADMIN")
-            .requestMatchers("/store/authorize").permitAll()
-            .requestMatchers("/css/**").permitAll()
-            .requestMatchers("/store/users/history/{page}/{size}/**").authenticated()
-            .requestMatchers("/orders/**").authenticated()
-            .requestMatchers("/store/{page}/{size}/**").permitAll()
-            .requestMatchers("/store/products/{id}").permitAll()
-            .requestMatchers("/store/users/**").hasAnyAuthority("USER", "ADMIN");
+    public SecurityFilterChain chain(final HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(registry -> {
+            registry
+                    .requestMatchers("/store/login").permitAll()
+                    .requestMatchers("/images/**").permitAll()
+                    .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                    .requestMatchers("/store/authorize").permitAll()
+                    .requestMatchers("/css/**").permitAll()
+                    .requestMatchers("/store/users/history/{page}/{size}/**").authenticated()
+                    .requestMatchers("/orders/**").authenticated()
+                    .requestMatchers("/store/{page}/{size}/**").permitAll()
+                    .requestMatchers("/store/products/{id}").permitAll()
+                    .requestMatchers("/store/users/**").hasAnyAuthority("USER", "ADMIN");
         });
         http.cors(AbstractHttpConfigurer::disable);
         http.csrf(AbstractHttpConfigurer::disable);
 
-        http.formLogin(cust -> { cust
-            .loginPage("/store/login")
-            .usernameParameter("loginAuth")
-            .passwordParameter("password")
-            .successHandler((request, response, authentication) -> {
-                CurrentUser principal = (CurrentUser)authentication.getPrincipal();
+        http.formLogin(cust -> {
+            cust
+                    .loginPage("/store/login")
+                    .usernameParameter("loginAuth")
+                    .passwordParameter("password")
+                    .successHandler((request, response, authentication) -> {
+                        final CurrentUser principal = (CurrentUser) authentication.getPrincipal();
 
-                CurrentUserDto build = CurrentUserDto.builder()
-                        .role(principal.getRole())
-                        .id(principal.getId())
-                        .password(principal.getPassword())
-                        .name(principal.getName())
-                        .card(principal.getCard())
-                        .avatarToShow(Base64.getEncoder().encodeToString(principal.getAvatar()))
-                        .build();
+                        final CurrentUserDto build = CurrentUserDto.builder()
+                                .role(principal.getRole())
+                                .id(principal.getId())
+                                .password(principal.getPassword())
+                                .name(principal.getName())
+                                .card(principal.getCard())
+                                .avatarToShow(Base64.getEncoder().encodeToString(principal.getAvatar()))
+                                .build();
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(build, null, build.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                        final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(build, null, build.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
-                response.sendRedirect("/store/0/10");
-            });
+                        response.sendRedirect("/store/0/10");
+                    });
             cust.failureHandler((request, response, exception) -> {
                 response.sendRedirect("/store/login");
             });

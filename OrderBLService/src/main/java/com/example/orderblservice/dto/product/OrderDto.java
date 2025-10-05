@@ -1,6 +1,5 @@
 package com.example.orderblservice.dto.product;
 
-
 import com.example.orderblservice.domain.OrderStatus;
 import com.example.orderblservice.dto.user.UserDto;
 import lombok.AllArgsConstructor;
@@ -16,18 +15,11 @@ import java.util.Date;
 @Builder
 public class OrderDto {
     private Integer id;
-
     private ProductDto product;
-
     private UserDto user;
-
     private Integer countOfProduct;
-
     private Float priceAtMomentBuying;
-
     private OrderStatus status;
-
     private Date dateOfPurchase;
-
     private Float bill;
 }

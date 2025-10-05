@@ -14,24 +14,26 @@ import java.util.List;
 )
 public interface ProductImageMapper {
     @Mappings({
-        @Mapping(target = "id", ignore = true),
-        @Mapping(target = "image", expression = "java(convertStringToBytes(dto.getConvertedImage()))")
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "image", expression = "java(convertStringToBytes(dto.getConvertedImage()))")
     })
     ProductImage toEntity(ProductImageDto dto);
 
     @Mappings({
-        @Mapping(target = "id", source = "id"),
-        @Mapping(target = "convertedImage", expression = "java(convertBytesToString(entity.getImage()))"),
+            @Mapping(target = "id", source = "id"),
+            @Mapping(target = "convertedImage", expression = "java(convertBytesToString(entity.getImage()))"),
     })
     ProductImageDto toDto(ProductImage entity);
 
-    List<ProductImageDto> toDtos (List<ProductImage> entities);
-    List<ProductImage> toEntities (List<ProductImageDto> dtos);
+    List<ProductImageDto> toDtos(List<ProductImage> entities);
 
-    default String convertBytesToString(byte[] arr){
-       return Base64.getEncoder().encodeToString(arr);
+    List<ProductImage> toEntities(List<ProductImageDto> dtos);
+
+    default String convertBytesToString(final byte[] arr) {
+        return Base64.getEncoder().encodeToString(arr);
     }
-    default byte[] convertStringToBytes(String encoded){
+
+    default byte[] convertStringToBytes(final String encoded) {
         return Base64.getDecoder().decode(encoded);
     }
 }

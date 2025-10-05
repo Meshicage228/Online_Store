@@ -1,12 +1,30 @@
 package com.example.userblservice.entity.user;
 
-
+import com.example.userblservice.domain.Role;
 import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.product.Purchases;
-import jakarta.persistence.*;
-import lombok.*;
-import com.example.userblservice.domain.Role;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,7 +78,7 @@ public class UserEntity implements UserDetails {
     )
     private Set<ProductEntity> favoriteProducts;
 
-    public boolean AddToFavorite(ProductEntity entity) {
+    public boolean AddToFavorite(final ProductEntity entity) {
         if (isNull(favoriteProducts)) {
             favoriteProducts = new HashSet<>();
         }
@@ -68,7 +86,8 @@ public class UserEntity implements UserDetails {
         entity.getUsers_favorites().add(this);
         return true;
     }
-    public void removeFavorite(ProductEntity entity){
+
+    public void removeFavorite(final ProductEntity entity) {
         this.favoriteProducts.remove(entity);
         entity.getUsers().remove(this);
     }
@@ -82,6 +101,7 @@ public class UserEntity implements UserDetails {
     public String getUsername() {
         return name;
     }
+
     @Override
     public String getPassword() {
         return password;

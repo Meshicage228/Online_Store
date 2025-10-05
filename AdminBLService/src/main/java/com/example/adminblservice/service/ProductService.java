@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public interface ProductService {
     ProductDto save(ProductDto dto) throws IOException;
+
     Page<ProductDto> findAll(Integer page, Integer size, ProductSearchDto search);
 
     void update(Integer id, MultipartFile file);

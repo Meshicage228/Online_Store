@@ -11,7 +11,7 @@ import static java.util.Objects.isNull;
 
 public class FileExistenceValidator implements ConstraintValidator<CheckFileIsEmpty, List<MultipartFile>> {
     @Override
-    public boolean isValid(List<MultipartFile> value, ConstraintValidatorContext context) {
+    public boolean isValid(final List<MultipartFile> value, final ConstraintValidatorContext context) {
         if(isNull(value)) return true;
         return value.get(0).getSize() != 0;
     }

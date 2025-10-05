@@ -10,7 +10,7 @@ import static java.util.Objects.isNull;
 @Component
 public class CheckNumberIsZeroValidator implements ConstraintValidator<CheckIsZero, Float> {
     @Override
-    public boolean isValid(Float value, ConstraintValidatorContext context) {
+    public boolean isValid(final Float value, final ConstraintValidatorContext context) {
         return !isNull(value) && value != 0;
     }
 }

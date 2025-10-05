@@ -1,6 +1,5 @@
 package com.example.adminblservice.entity.user;
 
-
 import com.example.adminblservice.entity.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,15 +21,15 @@ public class UsersCart {
 
     @ManyToOne
     @JoinColumn(
-       name = "product_id",
-       foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT)
+            name = "product_id",
+            foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT)
     )
     private ProductEntity product;
 
     @ManyToOne
     @JoinColumn(
-       name = "user_id",
-       foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT)
+            name = "user_id",
+            foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT)
     )
     private UserEntity user;
 

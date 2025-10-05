@@ -1,4 +1,5 @@
 package com.example.orderblservice.dto.user;
+
 import com.example.orderblservice.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;

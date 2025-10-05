@@ -1,8 +1,10 @@
 package com.example.adminblservice.dto.product;
 
 import com.example.adminblservice.dto.user.CommentaryDto;
-import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;

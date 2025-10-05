@@ -10,25 +10,22 @@ import com.example.userblservice.repository.user.CartRepository;
 import com.example.userblservice.repository.user.UserRepository;
 import com.example.userblservice.service.CartService;
 import jakarta.transaction.Transactional;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RequiredArgsConstructor
-
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class CartServiceImpl implements CartService {
-    CartRepository cartRepository;
-    UserRepository userRepository;
-    ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+
     @Override
-    public void changeCount(Integer id, String option) {
-        UsersCart usersCart = cartRepository.findById(id).get();
+    public void changeCount(final Integer id, final String option) {
+        final UsersCart usersCart = cartRepository.findById(id).get();
         Integer currentCount = usersCart.getCountToBuy();
         switch (option){
             case "increment" -> usersCart.setCountToBuy(++currentCount);
@@ -40,10 +37,10 @@ public class CartServiceImpl implements CartService {
         }
     }
     @Override
-    public void addToCart(UUID userId, Integer prodId) {
-        UserEntity userEntity = userRepository.findById(userId)
+    public void addToCart(final UUID userId, final Integer prodId) {
+        final UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
-        ProductEntity productEntity = productRepository.findById(prodId)
+        final ProductEntity productEntity = productRepository.findById(prodId)
                 .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
         if(!cartRepository.existsByUserAndProduct(userEntity, productEntity)) {
             cartRepository.save(
@@ -55,7 +52,7 @@ public class CartServiceImpl implements CartService {
         }
     }
     @Override
-    public void deleteFromCart(Integer cartId) {
+    public void deleteFromCart(final Integer cartId) {
         cartRepository.deleteById(cartId);
     }
 }

@@ -20,7 +20,7 @@ public interface ProductImageMapper {
 
     List<ProductImageDto> toDtos (List<ProductImage> entities);
 
-    default String convertBytesToString(byte[] arr){
+    default String convertBytesToString(final byte[] arr){
        return Base64.getEncoder().encodeToString(arr);
     }
 }

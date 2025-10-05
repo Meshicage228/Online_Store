@@ -21,7 +21,7 @@ public interface CommentaryMapper {
     })
     CommentaryDto toDto(Commentary entity);
 
-    default String getStringAvatar(byte[] avatar){
+    default String getStringAvatar(final byte[] avatar) {
         return Base64.getEncoder().encodeToString(avatar);
     }
 }

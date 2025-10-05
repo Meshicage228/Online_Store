@@ -1,10 +1,14 @@
 package com.example.adminblservice.entity.product;
 
-import com.example.adminblservice.entity.user.UsersCart;
 import com.example.adminblservice.entity.user.Commentary;
 import com.example.adminblservice.entity.user.UserEntity;
+import com.example.adminblservice.entity.user.UsersCart;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,7 +37,7 @@ public class ProductEntity {
     private Integer count;
     private String description;
 
-    @OneToMany( mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ProductImage> images;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -60,20 +63,21 @@ public class ProductEntity {
     @Version
     private Integer version;
 
-    public void addImage(byte[] image){
-        if(images == null){
+    public void addImage(byte[] image) {
+        if (images == null) {
             images = new ArrayList<>();
         }
-        ProductImage newImage = ProductImage.builder()
+        final ProductImage newImage = ProductImage.builder()
                 .product(this)
                 .image(image)
                 .build();
 
         images.add(newImage);
     }
+
     @PreRemove
-    public void removeProductAssociations(){
-        for (var user: this.users_favorites) {
+    public void removeProductAssociations() {
+        for (final var user : this.users_favorites) {
             user.getFavoriteProducts().remove(this);
         }
     }

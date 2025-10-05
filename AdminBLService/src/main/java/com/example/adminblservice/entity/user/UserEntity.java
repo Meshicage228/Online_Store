@@ -1,11 +1,15 @@
 package com.example.adminblservice.entity.user;
 
 
+import com.example.adminblservice.domain.Role;
 import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.entity.product.Purchases;
 import jakarta.persistence.*;
-import lombok.*;
-import com.example.adminblservice.domain.Role;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Set;
