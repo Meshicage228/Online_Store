@@ -1,10 +1,10 @@
 package com.example.userblservice.service.impl;
 
+import com.example.applicationexceptionstarter.exception.ProductNotFoundException;
+import com.example.applicationexceptionstarter.exception.UserNotFoundException;
 import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.user.UserEntity;
 import com.example.userblservice.entity.user.UsersCart;
-import com.example.userblservice.exceptions.ProductNotFoundException;
-import com.example.userblservice.exceptions.UserNotFoundException;
 import com.example.userblservice.repository.product.ProductRepository;
 import com.example.userblservice.repository.user.CartRepository;
 import com.example.userblservice.repository.user.UserRepository;

@@ -1,5 +1,7 @@
 package com.example.userblservice.service.impl;
 
+import com.example.applicationexceptionstarter.exception.ProductNotFoundException;
+import com.example.applicationexceptionstarter.exception.UserNotFoundException;
 import com.example.userblservice.dto.product.ProductDto;
 import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.dto.user.UserSearchDto;
@@ -7,8 +9,6 @@ import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.product.ProductEntity;
 import com.example.userblservice.entity.user.UserCard;
 import com.example.userblservice.entity.user.UserEntity;
-import com.example.userblservice.exceptions.ProductNotFoundException;
-import com.example.userblservice.exceptions.UserNotFoundException;
 import com.example.userblservice.mapper.user.UserMapper;
 import com.example.userblservice.repository.product.ProductRepository;
 import com.example.userblservice.repository.user.CardRepository;
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserCard addCard(UUID userId) {
+    public UserCard addCard(final UUID userId) {
         final Optional<UserEntity> byId = userRepository.findById(userId);
         if (byId.isPresent()) {
             final UserCard save = cardRepository.save(UserCard.builder()

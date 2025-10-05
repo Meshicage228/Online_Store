@@ -3,10 +3,10 @@ package com.example.adminblservice.controllers;
 import com.example.adminblservice.dto.product.ProductDto;
 import com.example.adminblservice.entity.product.ProductEntity;
 import com.example.adminblservice.entity.product.ProductImage;
-import com.example.adminblservice.exceptions.ProductNotFoundException;
-import com.example.adminblservice.exceptions.handlers.ProductExceptionHandler;
 import com.example.adminblservice.repository.ImageRepository;
 import com.example.adminblservice.repository.ProductRepository;
+import com.example.applicationexceptionstarter.exception.ProductNotFoundException;
+import com.example.applicationexceptionstarter.handler.ProjectExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
@@ -24,12 +24,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,7 +59,7 @@ class ProductControllerTest {
 
     @BeforeAll
     public static void setUp() {
-        ProductExceptionHandler productExceptionHandler = new ProductExceptionHandler();
+        ProjectExceptionHandler productExceptionHandler = new ProjectExceptionHandler();
     }
     @Test
     @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)

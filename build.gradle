@@ -1,78 +1,114 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.1'
+    id 'org.springframework.boot' version '3.2.1' apply false
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
+allprojects {
+    group = 'by.zherko'
+    version = '0.0.1-SNAPSHOT'
 
-java {
-    sourceCompatibility = '17'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+    repositories {
+        mavenCentral()
+        mavenLocal()
     }
 }
 
-repositories {
-    mavenCentral()
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
 
-ext {
-    set('springCloudVersion', "2023.0.0")
-}
+    java {
+        sourceCompatibility = '17'
+    }
 
-dependencies {
-    //Starters
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    implementation 'io.github.openfeign:feign-okhttp'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.0'
+    ext {
+        springBootVersion = '3.2.1'
+        postgresqlVersion = '42.7.1'
+        h2Version = '2.2.220'
+        lombokVersion = '1.18.30'
+        mapstructVersion = '1.5.3.Final'
+        lombokMapstructBindingVersion = '0.2.0'
+        commonsCollections4Version = '4.4'
+        commonsLang3Version = '3.13.0'
+        validationApiVersion = '2.0.1.Final'
+        hibernateValidatorVersion = '8.0.1.Final'
+        jjwtVersion = '0.12.3'
+        flywayVersion = '9.22.3'
+        springCloudVersion = '2023.0.0'
+    }
 
-    // Web
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
 
-    // Utils
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
+    dependencyManagement {
+        imports {
+            mavenBom SpringBootPlugin.BOM_COORDINATES
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
 
-    implementation "org.mapstruct:mapstruct:1.5.3.Final"
-    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
-    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.3.Final"
+    dependencies {
+        // Common starters
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
+        // Utils
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    implementation 'org.flywaydb:flyway-core'
+        implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+        annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+        annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-    // Jwt
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.3'
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.3'
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.3'
+        implementation "org.apache.commons:commons-collections4:${commonsCollections4Version}"
+        implementation "org.apache.commons:commons-lang3:${commonsLang3Version}"
 
-    // Validation
-    implementation 'javax.validation:validation-api:2.0.1.Final'
-    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '8.0.1.Final'
+        // Database
+        runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
 
-    //Test
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+        // Validation
+        implementation "javax.validation:validation-api:${validationApiVersion}"
+        implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
 
-}
+        // Test
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.security:spring-security-test'
+        testRuntimeOnly "com.h2database:h2:${h2Version}"
+    }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    tasks.named('test') {
+        useJUnitPlatform()
     }
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+tasks.register('publishStarters') {
+    group = 'cab-custom-tasks'
+    description = 'Publishes starters to local maven repository'
+
+    dependsOn {
+        subprojects.findAll { it.name.endsWith('-starter') }
+                .collect { it.tasks.named('publishToMavenLocal') }
+    }
+}
+
+tasks.register('buildBootJars') {
+    group = 'cab-custom-tasks'
+    description = 'Builds bootJars for whole application'
+
+    dependsOn("publishStarters")
+
+    dependsOn {
+        subprojects.findAll {
+            it.name.endsWith('-service') ||
+                    it.name.endsWith('-gateway') ||
+                    it.name.endsWith('-server')
+        }.collect { it.tasks.named('bootJar') }
+    }
 }

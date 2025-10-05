@@ -1,6 +1,8 @@
 server:
   port: 8083
 spring:
+  application:
+    name: order-service
   jackson:
     serialization:
       fail-on-empty-beans: false

@@ -1,7 +1,6 @@
 package com.example.orderblservice.controller;
 
 import com.example.orderblservice.entity.product.Orders;
-import com.example.orderblservice.exceptions.OutOfStockException;
 import com.example.orderblservice.exceptions.handler.OrderExceptionHandler;
 import com.example.orderblservice.repository.OrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

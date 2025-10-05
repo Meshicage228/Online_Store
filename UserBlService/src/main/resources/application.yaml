@@ -3,6 +3,8 @@ server:
   tomcat:
     max-http-response-header-size: 5MB
 spring:
+  application:
+    name: user-service
   servlet:
     multipart:
       max-file-size: 5MB
