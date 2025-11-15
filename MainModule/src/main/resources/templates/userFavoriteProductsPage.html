@@ -1,49 +1,82 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Избранные товары | Магазин</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="/css/App.css" rel="stylesheet">
-    <title>Title</title>
 </head>
 <body>
 <div th:replace="~{fragments :: header}"></div>
-<div class="favoriteMainContent">
-    <div class="favorite-content">
-        <div th:replace="~{fragments :: user-navigation}"></div>
-        <div class="cards-content-favorite">
-            <div th:insert="~{fragments :: notFoundByFilter (${userInfo.getFavoriteProducts().size()})}"></div>
-            <div class="cards">
-                <div th:each="prod : ${userInfo.getFavoriteProducts()}" class="card-product">
-                    <div id="carouselExample1" class="carousel slide">
-                        <div><a th:href="@{/store/catalog/{prod_id}(prod_id = ${prod.id})}">
-                            <img th:src="@{'data:image/png;base64,'+${prod.getImages().get(0).convertedImage}}"
-                                 alt="product" class="d-block prodImage">
-                        </a>
-                            <a th:href="@{/store/users/remove_favorite/{prod_id}(prod_id = ${prod.id})}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                     class="bi bi-heart" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-                                </svg>
-                            </a>
+
+<main class="favorites-page">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <div th:replace="~{fragments :: user-navigation}"></div>
+            </div>
+
+            <div class="col-lg-9 col-md-8">
+                <div class="favorites-main">
+                    <div class="favorites-header">
+                        <div class="header-content">
+                            <div class="title-section">
+                                <i class="fas fa-heart title-icon"></i>
+                                <div>
+                                    <h1 class="page-title">Избранное</h1>
+                                    <p class="page-subtitle">Товары, которые вам понравились</p>
+                                </div>
+                            </div>
+                            <div class="counter-badge" th:text="${userInfo.getFavoriteProducts().size()} + ' товаров'"></div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${prod.title}"></h5>
-                        <p class="card-text" th:text="${prod.description}"></p>
-                        <p class="card-price" th:text="${prod.price} + '  BYN'"></p>
-                    </div>
 
-                    <div th:replace="~{fragments :: addToCart (${prod.id})}"></div>
+                    <div class="favorites-content">
+                        <div th:replace="~{fragments :: notFoundByFilter(${userInfo.getFavoriteProducts().size()})}"></div>
+
+                        <div class="products-grid">
+                            <div th:each="prod : ${userInfo.getFavoriteProducts()}" class="product-card">
+                                <div class="card-image">
+                                    <a th:href="@{/store/catalog/{prod_id}(prod_id = ${prod.id})}" class="image-link">
+                                        <img th:src="@{'data:image/png;base64,'+${prod.getImages().get(0).convertedImage}}"
+                                             alt="Изображение товара"
+                                             class="product-img">
+                                        <div class="image-overlay">
+                                            <span class="view-text">Посмотреть товар</span>
+                                        </div>
+                                    </a>
+
+                                    <a th:href="@{/store/users/remove_favorite/{prod_id}(prod_id = ${prod.id})}"
+                                       class="remove-btn"
+                                       title="Удалить из избранного">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+
+                                    <div th:if="${prod.id % 7 == 0}" class="product-label new-label">Новинка</div>
+                                </div>
+
+                                <div class="card-body">
+                                    <h3 class="product-name" th:text="${prod.title}"></h3>
+                                    <p class="product-desc" th:text="${prod.description}"></p>
+
+                                    <div class="card-footer">
+                                        <div class="price" th:text="${prod.price} + ' BYN'"></div>
+                                        <div th:replace="~{fragments :: addToCart(${prod.id})}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>
+
 <div th:replace="~{fragments :: footer}"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

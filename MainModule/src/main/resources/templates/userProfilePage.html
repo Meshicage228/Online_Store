@@ -1,35 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль | Vlad's Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="/css/App.css" rel="stylesheet">
-    <title>Title</title>
 </head>
 <body>
 <div th:replace="~{fragments :: header}"></div>
 
-<div class="userPageMain">
-    <div class="userPageContent">
-            <div class="personalInfo">
-                <img th:src="@{'data:image/png;base64,'+${#authentication.principal.avatarToShow}}" alt="avatar"
-                     class="avatarProfile">
-                <p th:text="${#authentication.name}" class="userName"><a th:href="@{/store/users/profile}"></a></p>
-                <a class="quitButt btn btn-primary" th:href="@{/store/users/logout}">Выйти</a>
+<main class="profile-page">
+    <div class="profile-container">
+        <div class="profile-layout">
+            <div th:replace="~{fragments :: user-navigation}"></div>
+
+            <div class="profile-content">
+                <div class="profile-header">
+                    <img th:src="@{'data:image/png;base64,'+${#authentication.principal.avatarToShow}}"
+                         alt="Аватар профиля"
+                         class="profile-avatar">
+                    <h1 class="profile-name" th:text="${#authentication.name}"></h1>
+                    <p class="profile-email">Добро пожаловать в ваш профиль!</p>
+                </div>
+
+                <div class="profile-actions">
+                    <a th:href="@{/store/users/logout}" class="logout-btn">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Выйти из аккаунта
+                    </a>
+                </div>
+
+                <div class="profile-options">
+                    <a th:href="@{/store/users/history/{page}/{size}(page = 0, size = 10)}" class="profile-option-card">
+                        <div class="option-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3 class="option-title">История покупок</h3>
+                        <p class="option-description">Просмотрите ваши предыдущие заказы и покупки</p>
+                    </a>
+
+                    <a th:href="@{/store/users/favorite}" class="profile-option-card">
+                        <div class="option-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="option-title">Избранные товары</h3>
+                        <p class="option-description">Товары, которые вы добавили в избранное</p>
+                    </a>
+
+                    <a th:href="@{/store/users/cart}" class="profile-option-card">
+                        <div class="option-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3 class="option-title">Корзина</h3>
+                        <p class="option-description">Товары, готовые к оформлению заказа</p>
+                    </a>
+                </div>
             </div>
-        <div class="userOptions">
-            <a th:href="@{/store/users/history/{page}/{size}(page = 0, size = 10)}"><p>История покупок</p></a>
-
-            <a th:href="@{/store/users/favorite}"><p>Избранные товары</p></a>
-
-            <a th:href="@{/store/users/cart}"><p>Корзина</p></a>
         </div>
     </div>
-</div>
+</main>
+
 <div th:replace="~{fragments :: footer}"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчеты - Админ панель</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/App.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+
+<div class="admin-page">
+    <div class="admin-container">
+        <div class="admin-layout">
+            <div th:replace="~{fragments :: admin-navigation}"></div>
+
+            <div class="admin-content">
+                <div class="admin-header">
+                    <h1 class="admin-title">
+                        <i class="fas fa-chart-line me-3"></i>
+                        Отчеты и аналитика
+                    </h1>
+                </div>
+
+                <div class="reports-content p-4">
+                    <div class="report-card mb-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h4 class="card-title mb-2">
+                                            <i class="fas fa-file-excel text-success me-2"></i>
+                                            Полный отчет
+                                        </h4>
+                                        <p class="card-text text-muted mb-0">
+                                            Содержит полную статистику по маркетингу, продажам, пользователям и товарам
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <a th:href="@{/admin/reports/full}" class="btn btn-success btn-lg">
+                                            <i class="fas fa-download me-2"></i>
+                                            Скачать отчет
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="report-card mb-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h4 class="card-title mb-2">
+                                            <i class="fas fa-chart-bar text-primary me-2"></i>
+                                            Отчет по продажам
+                                        </h4>
+                                        <p class="card-text text-muted mb-3">
+                                            Детальная статистика продаж за выбранный период
+                                        </p>
+                                        <form th:action="@{/admin/reports/sales}" method="get" class="row g-3"
+                                              id="salesForm">
+                                            <div class="col-md-5">
+                                                <label class="form-label">Начальная дата</label>
+                                                <input type="date" name="startDate" class="form-control" id="startDate">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="form-label">Конечная дата</label>
+                                                <input type="date" name="endDate" class="form-control" id="endDate">
+                                            </div>
+                                            <div class="col-md-2 d-flex align-items-end">
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    <i class="fas fa-download me-1"></i>
+                                                    Скачать
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="report-card mb-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h4 class="card-title mb-2">
+                                            <i class="fas fa-brain text-warning me-2"></i>
+                                            Бизнес-аналитика
+                                        </h4>
+                                        <p class="card-text text-muted mb-0">
+                                            Расширенная аналитика: экономические показатели, аналитика клиентов,
+                                            инвентарь и сезонность
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <a th:href="@{/admin/reports/business-intelligence}"
+                                           class="btn btn-warning btn-lg">
+                                            <i class="fas fa-download me-2"></i>
+                                            Скачать отчет
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date();
+        const lastMonth = new Date();
+        lastMonth.setMonth(today.getMonth() - 1);
+
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        document.getElementById('startDate').value = formatDate(lastMonth);
+        document.getElementById('endDate').value = formatDate(today);
+    });
+</script>
+</body>
+</html>

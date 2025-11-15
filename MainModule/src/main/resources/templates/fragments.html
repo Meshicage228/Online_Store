@@ -1,128 +1,219 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фрагменты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="/css/App.css" rel="stylesheet">
 </head>
 <body>
-<div class="navigator" th:fragment="admin-navigation">
-    <div class="list-group" style="width: 210px; height: 100%; border-radius: 0px">
-        <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/admin/createProduct}">Создать товар</a></button>
+<div th:fragment="admin-navigation" class="sidebar-navigation">
+    <div class="nav-header">
+        <h3 class="nav-title">Панель администратора</h3>
+    </div>
+    <ul class="nav-list">
+        <li class="nav-item">
+            <a th:href="@{/admin/createProduct}" class="nav-link">
+                <i class="fas fa-plus-circle nav-icon"></i>
+                Создать товар
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/admin/orders/{page}/{size}(page = 0, size = 10)}" class="nav-link">
+                <i class="fas fa-shopping-bag nav-icon"></i>
+                Заказы
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/admin/users/{page}/{size}(page = 0, size = 16)}" class="nav-link">
+                <i class="fas fa-users nav-icon"></i>
+                Пользователи
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/admin/reports}" class="nav-link">
+                <i class="fas fa-chart-line nav-icon"></i>
+                Отчеты
+            </a>
+        </li>
+    </ul>
+</div>
 
-        <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/admin/orders/{page}/{size}(page = 0, size = 10)}">Заказы</a></button>
+<div th:fragment="user-navigation" class="sidebar-navigation">
+    <div class="nav-header">
+        <h3 class="nav-title">Личный кабинет</h3>
+    </div>
+    <ul class="nav-list">
+        <li class="nav-item">
+            <a th:href="@{/store/users/profile}" class="nav-link">
+                <i class="fas fa-user nav-icon"></i>
+                Профиль
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/store/users/history/{page}/{size}(page = 0, size = 10)}" class="nav-link">
+                <i class="fas fa-history nav-icon"></i>
+                История покупок
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/store/users/favorite}" class="nav-link">
+                <i class="fas fa-heart nav-icon"></i>
+                Избранные товары
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/store/users/cart}" class="nav-link">
+                <i class="fas fa-shopping-cart nav-icon"></i>
+                Корзина
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/store/users/logout}" class="nav-link">
+                <i class="fas fa-sign-out-alt nav-icon"></i>
+                Выйти
+            </a>
+        </li>
+    </ul>
+</div>
 
-        <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/admin/users/{page}/{size}(page = 0, size = 16)}">Пользователи</a></button>
+<div th:fragment="notFoundByFilter(size)">
+    <div class="empty-state-compact" th:if="${size == 0}">
+        <i class="fas fa-search empty-icon"></i>
+        <h4 class="empty-title">Ничего не найдено</h4>
+        <p class="empty-text">Попробуйте изменить параметры поиска</p>
     </div>
 </div>
-<div th:fragment="notFoundByFilter (size)">
-    <div class="noFound" th:if="${size == 0}">
-        <div class="alert alert-info notFoundAlert" role="alert">
-            <p>По вашему запросу ничего не нашлось!</p>
-        </div>
-    </div>
-</div>
-<div class="navigator" th:fragment="user-navigation">
-    <div class="list-group" style="width: 210px; height: 100%; border-radius: 0px">
-        <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/store/users/profile}">Профиль</a></button>
 
-        <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/store/users/history/{page}/{size}(page = 0, size = 10)}">История покупок</a></button>
-
-        <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/store/users/favorite}">Избранные товары</a></button>
-
-        <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/store/users/cart}">Корзина</a></button>
-
-        <button type="button" class="list-group-item list-group-item-action"><a
-                th:href="@{/store/users/logout}">Выйти</a></button>
-    </div>
-</div>
-<div th:fragment="addToCart (product_id)">
+<div th:fragment="addToCart(product_id)">
     <form th:method="post" th:action="@{/store/users/cart/{prod_id}(prod_id = ${product_id})}">
-        <button type="submit" class="addToCartButton">В корзину
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart"
-                 viewBox="0 0 16 16">
-                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-            </svg>
+        <button type="submit" class="btn-cart">
+            <i class="fas fa-shopping-cart"></i>
+            В корзину
         </button>
     </form>
 </div>
 
-<div th:fragment="toFavorite (product_id)">
+<div th:fragment="toFavorite(product_id)">
     <form th:method="post" th:action="@{/store/users/add_favorite/{prod_id}(prod_id = ${product_id})}">
-        <button type="submit">В избранное</button>
+        <button type="submit" class="btn-favorite">
+            <i class="fas fa-heart"></i>
+            В избранное
+        </button>
     </form>
 </div>
 
-<div th:fragment="input-details (variable)" class="inputs">
-    <label>
-        Название
-        <input name="title" placeholder="title" th:value="${variable.title}" type="text" th:field="*{title}">
-    </label>
-    <div th:if="${#fields.hasErrors('title')}" th:class="${#fields.hasErrors('title')}? 'alert alert-danger'"
-         th:errors="*{title}"></div>
-    <label>
-        Цена
-        <input name="price" placeholder="price" th:value="${variable.price}" th:field="*{price}" type="number">
-    </label>
-    <div th:if="${#fields.hasErrors('price')}" th:class="${#fields.hasErrors('price')}? 'alert alert-danger'"
-         th:errors="*{price}"></div>
-    <label>
-        Кол-во
-        <input name="count" placeholder="count" th:value="${variable.count}" th:field="*{count}" type="number">
-    </label>
-    <div th:if="${#fields.hasErrors('count')}" th:class="${#fields.hasErrors('count')}? 'alert alert-danger'"
-         th:errors="*{count}"></div>
-    <label>
-        Описание
-        <input name="description" placeholder="description" th:value="${variable.description}" type="text"
-               th:field="*{description}">
-    </label>
-    <div th:if="${#fields.hasErrors('description')}" th:class="${#fields.hasErrors('description')}? 'alert alert-danger'"
-         th:errors="*{description}"></div>
-</div>
-<div th:fragment="header" class="headerMain">
-    <div class="headerContent">
-        <a class="nav-link active headerTitle" aria-current="page" th:href="@{/store/0/10}">Vlad's Store</a>
-        <form th:action="@{/store/0/10}" style="margin-left: 392px">
-            <input class="inputTitleProduct" name="title" placeholder="Поиск по сайту">
-        </form>
-        <a th:href="@{/store/users/cart}" style="margin-left: 200px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="55" fill="currentColor" class="bi bi-cart"
-                 viewBox="0 0 16 16">
-                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-            </svg>
-        </a>
-        <div sec:authorize="!isAuthenticated()">
-            <div style="margin-left: 90px;">
-                <a th:href="@{/store/users/profile}" class="btn btn-primary">Профиль</a>
-            </div>
+<div th:fragment="input-details(variable)" class="form-container">
+    <div class="form-group">
+        <label class="form-label">Название товара</label>
+        <input type="text"
+               th:field="*{title}"
+               th:value="${variable.title}"
+               class="form-input"
+               placeholder="Введите название товара"
+               th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''">
+        <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
+            <i class="fas fa-exclamation-circle me-1"></i>
+            <span th:errors="*{title}"></span>
         </div>
-        <div sec:authorize="isAuthenticated()">
-            <div class="avatar-Name">
-                <a th:href="@{/store/users/profile}">
-                    <img th:src="@{'data:image/png;base64,'+${#authentication.principal.avatarToShow}}" alt="avatar"
-                         class="avatar">
-                </a>
-                <p th:text="${#authentication.name}" class="userName"><a th:href="@{/store/users/profile}"></a>
-                </p>
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Цена (BYN)</label>
+        <input type="number"
+               th:field="*{price}"
+               th:value="${variable.price}"
+               class="form-input"
+               placeholder="Введите цену"
+               th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''">
+        <div th:if="${#fields.hasErrors('price')}" class="invalid-feedback">
+            <i class="fas fa-exclamation-circle me-1"></i>
+            <span th:errors="*{price}"></span>
         </div>
-        <div sec:authorize="hasAuthority('ADMIN')" style="margin-left: 40px;">
-            <a th:href="@{/admin/orders/0/10}" class="btn btn-info">Панель админа</a>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Количество</label>
+        <input type="number"
+               th:field="*{count}"
+               th:value="${variable.count}"
+               class="form-input"
+               placeholder="Введите количество"
+               th:classappend="${#fields.hasErrors('count')} ? 'is-invalid' : ''">
+        <div th:if="${#fields.hasErrors('count')}" class="invalid-feedback">
+            <i class="fas fa-exclamation-circle me-1"></i>
+            <span th:errors="*{count}"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Описание</label>
+        <input type="text"
+               th:field="*{description}"
+               th:value="${variable.description}"
+               class="form-input"
+               placeholder="Введите описание товара"
+               th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''">
+        <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback">
+            <i class="fas fa-exclamation-circle me-1"></i>
+            <span th:errors="*{description}"></span>
         </div>
     </div>
 </div>
-<footer th:fragment="footer" class="footerMy">
-    <div class="text-center p-3">
-        © 2024 Made by Zherko Vladislav
+
+<header th:fragment="header" class="main-header">
+    <div class="header-content">
+        <a th:href="@{/store/0/10}" class="brand">
+            <i class="fas fa-store me-2"></i>
+            Vlad's Store
+        </a>
+
+        <form th:action="@{/store/0/10}" class="search-form">
+            <input type="text"
+                   name="title"
+                   class="search-input"
+                   placeholder="Поиск товаров...">
+        </form>
+
+        <div class="header-actions">
+            <a th:href="@{/store/users/cart}" class="cart-btn">
+                <i class="fas fa-shopping-cart fa-lg"></i>
+                <span class="cart-count">0</span>
+            </a>
+
+            <div sec:authorize="!isAuthenticated()">
+                <a th:href="@{/store/users/profile}" class="profile-btn">
+                    <i class="fas fa-user me-1"></i>
+                    Войти
+                </a>
+            </div>
+
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{/store/users/profile}" class="user-profile">
+                    <img th:src="@{'data:image/png;base64,'+${#authentication.principal.avatarToShow}}"
+                         alt="Аватар"
+                         class="user-avatar">
+                    <span class="user-name" th:text="${#authentication.name}"></span>
+                </a>
+            </div>
+
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/admin/orders/0/10}" class="admin-btn">
+                    <i class="fas fa-cog me-1"></i>
+                    Админ-панель
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Footer -->
+<footer th:fragment="footer" class="main-footer">
+    <div class="footer-content">
+        <p class="mb-0">© 2024 Made by Zherko Vladislav</p>
     </div>
 </footer>
 </body>

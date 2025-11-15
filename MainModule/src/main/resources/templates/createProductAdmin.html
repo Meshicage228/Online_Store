@@ -1,64 +1,189 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание товара | Админ-панель</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="/css/App.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{fragments :: header}"></div>
-<div class="createContent">
-    <div class="createProductMain">
-        <div th:replace="~{fragments :: admin-navigation}"></div>
-        <form th:action="@{/admin/products/save}" th:object="${modelToSave}" th:method="post"
-              enctype="multipart/form-data" class="inputProduct">
-            <div class="form-group">
-                <input name="title" class="inputProductDetails" placeholder="Название продукта"
-                       th:value="${modelToSave.title}" type="text" th:field="*{title}">
-                <div th:if="${#fields.hasErrors('title')}"
-                     th:class="${#fields.hasErrors('title')} ? 'alert alert-danger'"
-                     th:errors="*{title}"></div>
+
+<main class="admin-page">
+    <div class="admin-container">
+        <div class="admin-layout">
+            <div th:replace="~{fragments :: admin-navigation}"></div>
+
+            <div class="admin-content">
+                <div class="admin-header">
+                    <h1 class="admin-title">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Создание нового товара
+                    </h1>
+                </div>
+
+                <div class="create-form-section">
+                    <form th:action="@{/admin/products/save}" th:object="${modelToSave}" th:method="post"
+                          enctype="multipart/form-data" class="create-product-form">
+
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Основная информация
+                            </h3>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-tag me-2"></i>
+                                        Название товара
+                                    </label>
+                                    <input type="text"
+                                           name="title"
+                                           class="form-input"
+                                           placeholder="Введите название товара"
+                                           th:value="${modelToSave.title}"
+                                           th:field="*{title}">
+                                    <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        <span th:errors="*{title}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-dollar-sign me-2"></i>
+                                        Цена (BYN)
+                                    </label>
+                                    <input type="number"
+                                           name="price"
+                                           min="0"
+                                           class="form-input"
+                                           placeholder="Введите цену"
+                                           th:value="${modelToSave.price}"
+                                           th:field="*{price}">
+                                    <div th:if="${#fields.hasErrors('price')}" class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        <span th:errors="*{price}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-boxes me-2"></i>
+                                        Количество
+                                    </label>
+                                    <input type="number"
+                                           name="count"
+                                           min="0"
+                                           class="form-input"
+                                           placeholder="Введите количество"
+                                           th:value="${modelToSave.count}"
+                                           th:field="*{count}">
+                                    <div th:if="${#fields.hasErrors('count')}" class="invalid-feedback">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        <span th:errors="*{count}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-align-left me-2"></i>
+                                Описание товара
+                            </h3>
+                            <div class="form-group">
+                                    <textarea name="description"
+                                              class="form-textarea"
+                                              placeholder="Подробно опишите товар..."
+                                              th:field="*{description}"
+                                              rows="4"></textarea>
+                                <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback">
+                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                    <span th:errors="*{description}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-images me-2"></i>
+                                Изображения товара
+                            </h3>
+                            <div class="file-upload-section">
+                                <div class="file-upload-area">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <h4 class="upload-title">Перетащите файлы или нажмите для выбора</h4>
+                                    <p class="upload-subtitle">Поддерживаются JPG, PNG, GIF. Максимум 5 файлов</p>
+                                    <input type="file"
+                                           class="file-input-hidden"
+                                           id="files"
+                                           name="fileImage"
+                                           multiple
+                                           accept="image/*">
+                                    <button type="button" class="btn-upload" onclick="document.getElementById('files').click()">
+                                        <i class="fas fa-folder-open me-2"></i>
+                                        Выбрать файлы
+                                    </button>
+                                </div>
+                                <div class="file-preview" id="filePreview"></div>
+                                <div th:if="${#fields.hasErrors('fileImage')}" class="invalid-feedback">
+                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                    <span th:errors="*{fileImage}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-create">
+                                <i class="fas fa-save me-2"></i>
+                                Создать товар
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div th:if="${successSave != null}" class="success-message">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span th:text="${successSave}"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <input name="price" min="0" class="inputProductDetails" placeholder="Цена продукта"
-                       th:value="${modelToSave.price}" th:field="*{price}" type="number">
-                <div th:if="${#fields.hasErrors('price')}"
-                     th:class="${#fields.hasErrors('price')}? 'alert alert-danger'"
-                     th:errors="*{price}"></div>
-            </div>
-            <div class="form-group">
-                <input name="count" min="0" class="inputProductDetails" placeholder="Кол-во продукта"
-                       th:value="${modelToSave.count}" th:field="*{count}" type="number">
-                <div th:if="${#fields.hasErrors('count')}"
-                     th:class="${#fields.hasErrors('count')}? 'alert alert-danger'"
-                     th:errors="*{count}"></div>
-            </div>
-            <div class="form-group">
-                <input name="description" class="inputProductDetails" placeholder="Описание продукта"
-                       th:value="${modelToSave.description}" type="text"
-                       th:field="*{description}">
-                <div th:if="${#fields.hasErrors('description')}"
-                     th:class="${#fields.hasErrors('description')}? 'alert alert-danger'"
-                     th:errors="*{description}"></div>
-            </div>
-            <input type="file" class="fileChoose" id="files" name="fileImage" multiple><br><br>
-            <div th:if="${#fields.hasErrors('fileImage')}"
-                 th:class="${#fields.hasErrors('fileImage')}? 'alert alert-danger'"
-                 th:errors="*{fileImage}"></div>
-            <button type="submit" class="btn btn-success btn-success-Create">Сохранить</button>
-        </form>
-    </div>
-    <div th:if="${successSave != null}">
-        <div class="alert alert-success successMessageSave" role="alert" th:text="${successSave}">
         </div>
     </div>
-</div>
+</main>
+
 <div th:replace="~{fragments :: footer}"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.getElementById('files').addEventListener('change', function(e) {
+        const preview = document.getElementById('filePreview');
+        preview.innerHTML = '';
+
+        const files = e.target.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    previewItem.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                            <span class="file-name">${file.name}</span>
+                        `;
+                    preview.appendChild(previewItem);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+</script>
 </body>
 </html>

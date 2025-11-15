@@ -1,87 +1,159 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История заказов | Магазин</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="/css/App.css" rel="stylesheet">
-    <title>Title</title>
 </head>
 <body>
 <div th:replace="~{fragments :: header}"></div>
-<div class="orderMain">
-    <div class="OrderContent">
-        <div th:replace="~{fragments :: user-navigation}"></div>
-        <div class="orderContent">
-            <div class="filtersOrder">
-                <form class="form-inline my-2 my-lg-0"
-                      th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}"
-                      th:method="get">
-                    <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
-                    <input type="hidden" th:value="${status}" th:name="${status != null ? 'status' : ''}">
-                    <button value="billUp" name="sortedBy" type="submit" class="btn btn-outline-primary">Счет возрастает</button>
-                    <button value="billDown" name="sortedBy" type="submit" class="btn btn-outline-primary">Счет убывает</button>
-                </form>
-                <form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}">
-                    <input name="title" style="border-radius: 5px;" placeholder="Название продукта">
-                </form>
-                <form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}">
-                    <input type="hidden" th:value="${searchTitle}" th:name="${searchTitle != null ? 'title' : ''}">
-                    <input type="hidden" th:value="${sort}" th:name="${sort != null ? 'sortedBy' : ''}">
 
-                    <button type="submit" value="WAITING" name="status" class="btn btn-info">В ожидании</button>
-                    <button type="submit" value="IN_PROGRESS" name="status" class="btn btn-warning">Обрабатывается</button>
-                    <button type="submit" value="DONE" name="status" class="btn btn-success">Готов</button>
-                </form>
+<main class="orders-history-page">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <div th:replace="~{fragments :: user-navigation}"></div>
             </div>
-            <div class="orders">
-                <div th:each="order, number : ${userHistory.getContent()}">
-                    <div class="orderDetails">
-                        <div><p style="margin: 0;" th:text="'№ : ' + ${order.id}"></p></div>
-                        <div th:text="${order.product.getTitle()}"></div>
-                        <div>
-                                <img th:src="@{'data:image/png;base64,'+${order.product.getImages().get(0).getConvertedImage()}}"
-                                     alt="product"
-                                     style="height: 200px; width: 200px; border-radius: 10px"
-                                     class="d-block">
-                        </div>
-                        <div class="aboutOrder">
-                            <div><p th:text="'Кол-во : ' + ${order.countOfProduct}"></p></div>
-                            <div><p th:text="'Счет : ' + ${order.bill} + '  BYN'"></p></div>
-                            <div><p th:text="'Дата заказа :' + ${order.dateOfPurchase}"></p></div>
 
-                            <div th:switch="${order.status.name()}">
-                                <div class="alert alert-info" th:case="WAITING"><p th:text="${order.status}"></p></div>
-                                <div class="alert alert-warning" th:case="IN_PROGRESS"><p th:text="${order.status}"></p>
+            <div class="col-lg-9 col-md-8">
+                <div class="orders-main">
+                    <div class="orders-header">
+                        <div class="header-content">
+                            <div class="title-section">
+                                <i class="fas fa-history title-icon"></i>
+                                <div>
+                                    <h1 class="page-title">История заказов</h1>
+                                    <p class="page-subtitle">Ваши предыдущие покупки</p>
                                 </div>
-                                <div class="alert alert-success" th:case="DONE"><p th:text="${order.status}"></p></div>
+                            </div>
+                            <div class="counter-badge" th:text="${userHistory.getTotalElements()} + ' заказов'"></div>
+                        </div>
+                    </div>
+
+                    <div class="filters-section">
+                        <div class="filters-grid">
+                            <div class="filter-group">
+                                <label class="filter-label">Сортировка по сумме</label>
+                                <form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}" method="get">
+                                    <input type="hidden" th:value="${searchTitle}" name="title">
+                                    <input type="hidden" th:value="${status}" name="status">
+                                    <div class="filter-buttons">
+                                        <button type="submit" name="sortedBy" value="billUp"
+                                                th:class="'filter-btn ' + (${sort == 'billUp'} ? 'active' : '')">
+                                            <i class="fas fa-sort-amount-up me-1"></i>
+                                            Возрастает
+                                        </button>
+                                        <button type="submit" name="sortedBy" value="billDown"
+                                                th:class="'filter-btn ' + (${sort == 'billDown'} ? 'active' : '')">
+                                            <i class="fas fa-sort-amount-down me-1"></i>
+                                            Убывает
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="filter-group">
+                                <label class="filter-label">Поиск по товару</label>
+                                <form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}">
+                                    <input type="text" name="title" class="filter-input"
+                                           placeholder="Название товара" th:value="${searchTitle}">
+                                </form>
+                            </div>
+
+                            <div class="filter-group">
+                                <label class="filter-label">Статус заказа</label>
+                                <form th:action="@{/store/users/history/{page}/{size}(page = ${userHistory.number}, size = ${userHistory.size})}">
+                                    <input type="hidden" th:value="${searchTitle}" name="title">
+                                    <input type="hidden" th:value="${sort}" name="sortedBy">
+                                    <div class="filter-buttons">
+                                        <button type="submit" name="status" value="WAITING"
+                                                th:class="'status-btn status-waiting ' + (${status == 'WAITING'} ? 'active' : '')">
+                                            В ожидании
+                                        </button>
+                                        <button type="submit" name="status" value="IN_PROGRESS"
+                                                th:class="'status-btn status-progress ' + (${status == 'IN_PROGRESS'} ? 'active' : '')">
+                                            Обрабатывается
+                                        </button>
+                                        <button type="submit" name="status" value="DONE"
+                                                th:class="'status-btn status-done ' + (${status == 'DONE'} ? 'active' : '')">
+                                            Готов
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
+
+                    <div class="orders-content">
+                        <div th:replace="~{fragments :: notFoundByFilter(${userHistory.getContent().size()})}"></div>
+
+                        <div class="orders-list">
+                            <div th:each="order : ${userHistory.getContent()}" class="order-card">
+                                <div class="order-header">
+                                    <div class="order-info">
+                                        <span class="order-number">Заказ #<span th:text="${order.id}"></span></span>
+                                        <span class="order-date" th:text="${order.dateOfPurchase}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="order-body">
+                                    <div class="order-product">
+                                        <img th:src="@{'data:image/png;base64,'+${order.product.getImages().get(0).getConvertedImage()}}"
+                                             alt="Товар" class="product-image-history">
+                                        <div class="product-details">
+                                            <h4 class="product-title" th:text="${order.product.getTitle()}"></h4>
+                                            <div class="product-meta">
+                                                <span class="product-quantity" th:text="'Количество: ' + ${order.countOfProduct}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-summary">
+                                        <div class="order-bill" th:text="${order.bill} + ' BYN'"></div>
+                                    </div>
+
+                                    <div class="order-status">
+                                        <div th:switch="${order.status.name()}">
+                                                <span th:case="WAITING" class="status-badge status-waiting">
+                                                    <i class="fas fa-clock me-1"></i>Ожидание
+                                                </span>
+                                            <span th:case="IN_PROGRESS" class="status-badge status-progress">
+                                                    <i class="fas fa-cog me-1"></i>В работе
+                                                </span>
+                                            <span th:case="DONE" class="status-badge status-done">
+                                                    <i class="fas fa-check me-1"></i>Завершен
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <nav th:if="${userHistory.getTotalPages() > 1}" class="pagination-section">
+                            <ul class="pagination">
+                                <li class="page-item" th:each="iterPage : ${countPages}">
+                                    <form th:action="@{/store/users/history/{page}/{size}(page = ${iterPage - 1}, size = ${userHistory.size})}" method="get">
+                                        <input type="hidden" th:value="${searchTitle}" name="title">
+                                        <input type="hidden" th:value="${status}" name="status">
+                                        <button type="submit" th:value="${sort}" th:text="${iterPage}" name="sortedBy"
+                                                th:class="'page-link ' + (${userHistory.number == iterPage - 1} ? 'active' : '')">
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
-            <div th:insert="~{fragments :: notFoundByFilter (${userHistory.getContent().size()})}"></div>
-            <nav aria-label="..." th:if="${userHistory.getTotalPages() > 1}">
-                <ul class="pagination">
-                    <li class="page-item" aria-current="page" th:each="iterPage : ${countPages}">
-                        <form th:action="@{/store/users/history/{page}/{size}(page = ${iterPage - 1}, size = ${userHistory.size})}"
-                              th:method="get">
-                            <input type="hidden" th:value="${searchTitle}"
-                                   th:name="${searchTitle != null ? 'title' : ''}">
-                            <input type="hidden" th:value="${status}" th:name="${status != null ? 'status' : ''}">
-                            <button th:value="${sort}" th:text="${iterPage}"
-                                    th:class="'page-link ' + ${userHistory.number == iterPage - 1 ? 'active' : ''}"
-                                    th:name="${sort != null ? 'sortedBy' : ''}"></button>
-                        </form>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </div>
-</div>
+</main>
+
 <div th:replace="~{fragments :: footer}"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

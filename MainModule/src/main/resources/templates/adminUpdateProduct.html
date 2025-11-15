@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Редактирование товара</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="/css/App.css" rel="stylesheet">
 </head>
 <body>
@@ -21,26 +20,38 @@
                 <div class="updateOptions">
                     <form th:action="@{/admin/products/{id_product}/image/{id_image}/update(id_product = ${modelToUpdate.id}, id_image = ${photo.id})}"
                           th:method="post" enctype="multipart/form-data" class="changePhoto">
-                        <p>Измените это фото : </p>
+                        <p><i class="fas fa-sync me-1"></i>Измените это фото : </p>
                         <input type="file" name="newImage">
-                        <button type="submit" class="updateButton btn btn-info">Изменить</button>
+                        <button type="submit" class="updateButton btn btn-info">
+                            <i class="fas fa-edit me-1"></i>Изменить
+                        </button>
                     </form>
                     <form th:action="@{/admin/products/{id_product}/image/{id_image}/delete(id_product = ${modelToUpdate.id}, id_image = ${photo.id})}"
                           th:method="delete">
-                        <button type="submit" class="btn btn-danger">Удалить фото</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Удалить фото
+                        </button>
                     </form>
                 </div>
             </div>
             <div th:if="${emptyImageUpdate != null}">
-                <div th:text="${emptyImageUpdate}" class="alert alert-danger"></div>
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    <span th:text="${emptyImageUpdate}"></span>
+                </div>
             </div>
             <form th:action="@{/admin/products/{prod_id}/addImage(prod_id = ${modelToUpdate.id})}" th:method="post"
                   enctype="multipart/form-data" class="addNewImage">
-                <p style="font-weight: 500">Добавления нового изображения</p>
+                <p style="font-weight: 500"><i class="fas fa-plus-circle me-1"></i>Добавления нового изображения</p>
                 <input type="file" name="addImage" placeholder="Добавить изображение">
-                <button type="submit" class="btn btn-info">Добавить</button>
+                <button type="submit" class="btn btn-info">
+                    <i class="fas fa-upload me-1"></i>Добавить
+                </button>
                 <div th:if="${emptyImage != null}">
-                    <div th:text="${emptyImage}" class="alert alert-danger"></div>
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        <span th:text="${emptyImage}"></span>
+                    </div>
                 </div>
             </form>
         </div>
@@ -48,18 +59,21 @@
             <form th:action="@{/admin/products/{id}/change(id = ${modelToUpdate.id})}" th:method="put">
                 <div class="inputInfo">
                     <div th:replace="~{fragments :: input-details (${modelToUpdate})}" class="inputs"></div>
-                    <button type="submit" class="btn btn-info">Изменить</button>
+                    <button type="submit" class="btn btn-info">
+                        <i class="fas fa-save me-1"></i>Изменить
+                    </button>
                 </div>
             </form>
             <form th:action="@{/admin/products/{id}/delete(id = ${modelToUpdate.id})}" th:method="delete">
-                <button type="submit" class="btn btn-danger">Удалить продукт</button>
+                <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Вы уверены, что хотите удалить этот товар?')">
+                    <i class="fas fa-trash me-1"></i>Удалить продукт
+                </button>
             </form>
         </div>
     </div>
 </div>
 <div th:replace="~{fragments :: footer}"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
