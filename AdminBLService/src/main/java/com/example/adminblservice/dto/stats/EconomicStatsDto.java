@@ -15,8 +15,8 @@ import java.util.Map;
 public class EconomicStatsDto {
     private BigDecimal totalRevenue;
     private BigDecimal averageOrderValue;
-    private BigDecimal revenueGrowth; // % роста выручки
+    private BigDecimal revenueGrowth;
     private BigDecimal customerLifetimeValue;
-    private BigDecimal profitMargin; // Маржа прибыли
-    private Map<String, BigDecimal> revenueByCategory; // Выручка по категориям
+    private BigDecimal profitMargin;
+    private Map<String, BigDecimal> revenueByCategory;
 }

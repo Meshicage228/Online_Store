@@ -15,6 +15,6 @@ public class ProductPerformanceDto {
     private String productName;
     private Long unitsSold;
     private BigDecimal revenue;
-    private Double sellThroughRate; // % продаж от запаса
+    private Double sellThroughRate;
     private Integer daysOfSupply;
 }

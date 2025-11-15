@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, String> {
-    // Базовые методы достаточно, специфичная логика в PurchaseRepository
 }
