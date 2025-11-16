@@ -23,4 +23,12 @@ public interface PurchaseRepository extends JpaRepository<Purchases, Integer> {
 
     @Query("SELECT COUNT(DISTINCT p.user) FROM Purchases p")
     Long findDistinctUsersWithPurchases();
+
+    Long countByDateOfPurchaseBetween(LocalDateTime start, LocalDateTime end);
+
+    @Query("SELECT COUNT(DISTINCT p.user) FROM Purchases p WHERE p.countOfProduct > 0")
+    Long countDistinctUsersWithPurchases();
+
+    @Query("SELECT COUNT(DISTINCT p.user) FROM Purchases p WHERE p.countOfProduct > 0")
+    Long countDistinctUsersWithCarts();
 }
