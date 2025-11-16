@@ -106,9 +106,7 @@ tasks.register('buildBootJars') {
 
     dependsOn {
         subprojects.findAll {
-            it.name.endsWith('-service') ||
-                    it.name.endsWith('-gateway') ||
-                    it.name.endsWith('-server')
+            it.name.endsWith('-service')
         }.collect { it.tasks.named('bootJar') }
     }
 }

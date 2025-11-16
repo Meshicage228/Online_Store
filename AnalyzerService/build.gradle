@@ -1,0 +1,20 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+ext {
+    apachePoi = '5.2.4'
+    xmlgraphics = '2.9'
+    compress = '1.26.0'
+}
+
+dependencies {
+    implementation "by.meshicage:application-exception-starter:0.0.2"
+
+    implementation "org.apache.poi:poi:${apachePoi}"
+    implementation "org.apache.poi:poi-ooxml:${apachePoi}"
+    implementation "org.apache.poi:poi-ooxml-full:${apachePoi}"
+
+    implementation "org.apache.xmlgraphics:xmlgraphics-commons:${xmlgraphics}"
+    implementation "org.apache.commons:commons-compress:${compress}"
+}

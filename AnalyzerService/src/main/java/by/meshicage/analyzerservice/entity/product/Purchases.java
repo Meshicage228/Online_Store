@@ -1,0 +1,51 @@
+package by.meshicage.analyzerservice.entity.product;
+
+import by.meshicage.analyzerservice.domain.OrderStatus;
+import by.meshicage.analyzerservice.entity.user.UserEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Entity
+@Table(name = "purchases")
+public class Purchases {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne
+    @ToString.Exclude
+    private ProductEntity product;
+
+    @ManyToOne
+    @ToString.Exclude
+    private UserEntity user;
+
+    private Integer countOfProduct;
+
+    private Float priceAtMomentBuying;
+
+    @Enumerated(value = EnumType.STRING)
+    private OrderStatus status;
+
+    @CreationTimestamp
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date dateOfPurchase;
+
+}

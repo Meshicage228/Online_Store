@@ -58,11 +58,11 @@ app:
       path: /v1/orders
     reports:
       name: reports-client
-      url: 127.0.0.1:8081
+      url: 127.0.0.1:8084
       path: /v1/reports
     dashboard:
       name: dashboard-client
-      url: 127.0.0.1:8081
+      url: 127.0.0.1:8084
       path: /v1/dashboard
 project:
   secretKey : assgaasglnsaggasnklgsankasgnksasnkasgknsdhnasgjahsgvbasghbnvxbzcnb
