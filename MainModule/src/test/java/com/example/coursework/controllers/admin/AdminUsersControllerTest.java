@@ -27,7 +27,6 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-
 @WebMvcTest(value = AdminUsersController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class AdminUsersControllerTest {

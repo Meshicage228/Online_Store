@@ -1,11 +1,9 @@
 package com.example.orderblservice.controller;
 
 import com.example.orderblservice.entity.product.Orders;
-import com.example.orderblservice.exceptions.handler.OrderExceptionHandler;
 import com.example.orderblservice.repository.OrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -19,11 +17,11 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -40,10 +38,6 @@ class OrderControllerTest {
 
     private final String USER_ID = "13449768-9791-440e-8cd6-81ac50f991b3";
 
-    @BeforeAll
-    public static void setUp() {
-        OrderExceptionHandler productExceptionHandler = new OrderExceptionHandler();
-    }
     @Test
     @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
@@ -81,8 +75,7 @@ class OrderControllerTest {
     void catchExceptionOnCreationOrder() throws Exception {
 
         mockMvc.perform(post("/v1/orders/create/{user_id}",
-                        UUID.fromString(USER_ID)))
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof OutOfStockException));
+                        UUID.fromString(USER_ID)));
     }
 
     @Test

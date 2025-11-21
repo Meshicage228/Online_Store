@@ -16,12 +16,6 @@
         <div class="container">
             <form th:action="@{/store/{page}/{size}(page = ${totalPage.number}, size = ${totalPage.size})}"
                   th:method="get" class="search-form">
-                <input type="text"
-                       th:value="${searchTitle}"
-                       th:name="${searchTitle != null ? 'title' : ''}"
-                       class="search-input"
-                       placeholder="Поиск товаров...">
-
                 <div class="filter-buttons">
                     <button type="submit"
                             name="sortedBy"

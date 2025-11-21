@@ -4,13 +4,11 @@ import com.example.userblservice.dto.user.UserDto;
 import com.example.userblservice.entity.product.Commentary;
 import com.example.userblservice.entity.user.UserCard;
 import com.example.userblservice.entity.user.UserEntity;
-import com.example.userblservice.exceptions.handler.UserExceptionHandler;
 import com.example.userblservice.repository.user.CardRepository;
 import com.example.userblservice.repository.user.CommentaryRepository;
 import com.example.userblservice.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -26,7 +24,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -51,11 +50,6 @@ class UserControllerTest {
     private CardRepository cardRepository;
 
     private final String USER_ID = "aaf5f4bb-1094-3332-a6a3-d2c415425c30";
-
-    @BeforeAll
-    public static void setUp() {
-        UserExceptionHandler productExceptionHandler = new UserExceptionHandler();
-    }
 
     @Test
     @Sql(value = "classpath:/data/user/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)

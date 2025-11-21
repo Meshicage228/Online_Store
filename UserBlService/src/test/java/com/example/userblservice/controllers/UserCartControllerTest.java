@@ -1,10 +1,8 @@
 package com.example.userblservice.controllers;
 
 import com.example.userblservice.entity.user.UsersCart;
-import com.example.userblservice.exceptions.handler.UserExceptionHandler;
 import com.example.userblservice.repository.user.CartRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -34,11 +32,6 @@ class UserCartControllerTest {
     private CartRepository cartRepository;
 
     private final String USER_ID = "5cfdb965-eb0b-40ed-97be-746c63dbc73e";
-
-    @BeforeAll
-    public static void setUp() {
-        UserExceptionHandler productExceptionHandler = new UserExceptionHandler();
-    }
 
     @Test
     @Sql(value = "classpath:/data/cart/insertData.sql", executionPhase = BEFORE_TEST_METHOD)

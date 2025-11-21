@@ -27,8 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @WebMvcTest(value = StoreController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")

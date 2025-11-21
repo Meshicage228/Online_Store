@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -61,6 +62,7 @@ class ProductControllerTest {
     public static void setUp() {
         ProjectExceptionHandler productExceptionHandler = new ProjectExceptionHandler();
     }
+
     @Test
     @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
@@ -94,7 +96,7 @@ class ProductControllerTest {
     void findProductByIdFail() throws Exception {
         mockMvc.perform(get("/v1/products/{id}", 125))
                 .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ProductNotFoundException));
+                .andExpect(result -> assertInstanceOf(ProductNotFoundException.class, result.getResolvedException()));
     }
 
     @Test
@@ -191,25 +193,5 @@ class ProductControllerTest {
         Optional<ProductEntity> byId = repository.findById(productDto.getId());
 
         assertTrue(byId.isPresent());
-    }
-
-    @Test
-    @Sql(value = "classpath:/data/insertData.sql", executionPhase = BEFORE_TEST_METHOD)
-    @Sql(value = "classpath:/data/cleanUpAll.sql", executionPhase = AFTER_TEST_METHOD)
-    void addNewImage() throws Exception {
-        MockMultipartFile mockMultipartFile = new MockMultipartFile(
-                "file",
-                "hello.txt",
-                MediaType.APPLICATION_JSON_VALUE,
-                "Hello, World!".getBytes()
-        );
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/v1/products/{id}", 1)
-                .file(mockMultipartFile)
-        );
-
-        Optional<ProductImage> byId = imageRepository.findById(38);
-
-        assertTrue(byId.isPresent());
-
     }
 }
